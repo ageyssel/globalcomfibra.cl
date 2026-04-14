@@ -37,54 +37,56 @@
 </head>
 <body class="font-sans text-gray-800 bg-gray-50 antialiased">
 
-    <nav class="bg-brand-accent py-4 px-6 shadow-xl sticky top-0 z-50 border-b border-white/20">
+    <nav class="bg-brand-dark py-5 px-6 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             
             <div class="flex items-center">
                 <a href="index.html">
-                    <img src="img/logo.png" alt="Globalcom Logo" class="h-32 object-contain filter drop-shadow-lg">
+                    <img src="img/logo.png" alt="Globalcom Logo" class="h-20 md:h-24 object-contain">
                 </a>
             </div>
             
-            <div class="hidden md:flex space-x-3 text-base font-bold text-white">
-                <a href="#servicios" class="px-5 py-2.5 bg-white/10 hover:bg-white/25 rounded-xl border border-white/20 shadow-sm transition-all duration-300">Servicios</a>
-                <a href="#diferenciadores" class="px-5 py-2.5 bg-white/10 hover:bg-white/25 rounded-xl border border-white/20 shadow-sm transition-all duration-300">Por qué Globalcom</a>
-                <a href="#soporte" class="px-5 py-2.5 bg-white/10 hover:bg-white/25 rounded-xl border border-white/20 shadow-sm transition-all duration-300">Soporte y SLA</a>
+            <div class="hidden md:flex space-x-4 text-sm font-semibold text-gray-300">
+                <a href="#servicios" class="px-4 py-2 hover:text-white transition-colors duration-300">Servicios</a>
+                <a href="#diferenciadores" class="px-4 py-2 hover:text-white transition-colors duration-300">Por qué Globalcom</a>
+                <a href="#soporte" class="px-4 py-2 hover:text-white transition-colors duration-300">Soporte y SLA</a>
             </div>
             
-            <a href="#contacto" class="bg-brand-dark text-white px-8 py-3.5 rounded-xl text-base font-bold hover:bg-blue-900 transition-all duration-300 shadow-lg border border-white/10">
+            <a href="#contacto" class="bg-brand-accent text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-orange-600 transition-all duration-300 shadow-lg shadow-orange-500/20">
                 Contactar
             </a>
         </div>
     </nav>
 
-    <section class="relative bg-brand-dark text-white overflow-hidden py-24 lg:py-32">
-        <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-light rounded-full opacity-20 blur-3xl"></div>
-        <div class="absolute bottom-0 left-0 w-1/2 h-full bg-gradient-to-r from-black/40 to-transparent"></div>
+    <section class="relative bg-brand-dark text-white overflow-hidden pb-24 pt-10 lg:pb-32 lg:pt-16">
+        <div class="absolute -top-32 -right-24 w-[500px] h-[500px] bg-brand-light rounded-full opacity-10 blur-[100px] pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-1/2 h-full bg-gradient-to-r from-black/20 to-transparent pointer-events-none"></div>
         
         <div class="relative max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div class="space-y-6 z-10">
+            <div class="space-y-8 z-10">
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
                     Soluciones de internet y <span class="text-brand-light">transporte de datos</span>
                 </h1>
                 <p class="text-lg text-gray-300 font-light max-w-lg leading-relaxed">
                     Garantizando velocidad, soporte personalizado y calidad, adaptados a las necesidades de empresas de todos los tamaños, con confianza, seriedad e innovación.
                 </p>
-                <div class="pt-4 flex space-x-4">
-                    <a href="#servicios" class="bg-brand-accent text-white font-semibold px-8 py-4 rounded-full shadow-lg hover:bg-orange-600 transition duration-300">
+                <div class="pt-2">
+                    <a href="#servicios" class="inline-block bg-brand-accent text-white font-semibold px-8 py-4 rounded-full shadow-lg hover:bg-orange-600 transition duration-300 shadow-orange-500/20">
                         Nuestros Servicios
                     </a>
                 </div>
             </div>
             
             <div class="hidden md:flex justify-end z-10">
-                <div class="bg-white/10 p-8 rounded-3xl backdrop-blur-md border border-white/20 shadow-2xl">
-                    <h3 class="text-xl font-bold mb-4">Cobertura Nacional</h3>
-                    <p class="text-sm font-light text-gray-200">
+                <div class="bg-white/5 p-8 rounded-3xl backdrop-blur-sm border border-white/10 shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-brand-light opacity-20 blur-2xl rounded-full"></div>
+                    
+                    <h3 class="text-xl font-bold mb-4 relative z-10">Cobertura Nacional</h3>
+                    <p class="text-sm font-light text-gray-300 relative z-10">
                         Red propia de fibra óptica con cobertura nacional desde la Región de Valparaíso hasta la Región del BíoBío.
                     </p>
-                    <div class="mt-6 flex items-center space-x-3">
-                        <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                    <div class="mt-6 flex items-center space-x-3 relative z-10">
+                        <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(74,222,128,0.5)]"></div>
                         <span class="text-sm font-semibold">Backbone con Alta Disponibilidad</span>
                     </div>
                 </div>
