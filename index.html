@@ -3,26 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Globalcom | Telecomunicaciones y Fibra Óptica</title>
+    <title>Globalcom | Conectividad Dedicada de Zapallar al Biobío</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
+        .map-gradient { background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); }
+        .pin-glow { animation: pin-glow 2s infinite; }
+        @keyframes pin-glow { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
+        /* Ocultar scrollbar visualmente pero permitir scroll en la lista de ciudades si es necesario en móviles muy pequeños */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="bg-white text-slate-800">
 
     <nav class="w-full bg-white/95 backdrop-blur-md border-b border-slate-200 fixed top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center">
+        <div class="max-w-7xl mx-auto px-4 py-2 flex flex-col md:flex-row justify-between items-center">
             <a href="index.html" class="w-full md:w-auto flex justify-center md:justify-start">
-                <img src="img/logo.png" alt="Globalcom" class="h-10 md:h-12 object-contain">
+                <img src="img/logo.png" alt="Globalcom" class="w-[20%] md:w-auto md:h-10 object-contain">
             </a>
             
-            <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
+            <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600 mt-2 md:mt-0">
                 <a href="#servicios" class="hover:text-blue-600 transition">Servicios</a>
-                <a href="#cobertura" class="hover:text-blue-600 transition">Red y Cobertura</a>
+                <a href="#mapa" class="hover:text-blue-600 transition">Mapa de Red</a>
                 <a href="#soporte" class="hover:text-blue-600 transition">Soporte SLA</a>
-                <a href="#faq" class="hover:text-blue-600 transition">Preguntas Frecuentes</a>
+                <a href="#faq" class="hover:text-blue-600 transition">FAQ</a>
             </div>
             <a href="portal.html" class="hidden md:block bg-[#1a1f2e] text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-blue-600 transition shadow-lg">
                 Portal Clientes
@@ -61,11 +67,11 @@
                         </li>
                         <li class="flex items-start">
                             <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Interconectar todas tus sedes y sucursales para optimizar operaciones.
+                            Interconectar todas tus sedes y sucursales.
                         </li>
                         <li class="flex items-start">
                             <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Garantizar la disponibilidad de todos nuestros servicios (SLA 98.99%).
+                            Garantizar disponibilidad de servicios (SLA 98.99%).
                         </li>
                     </ul>
                 </div>
@@ -73,19 +79,93 @@
         </div>
     </header>
 
-    <section id="cobertura" class="py-20 px-6 bg-slate-50">
-        <div class="max-w-7xl mx-auto text-center max-w-3xl">
-            <h2 class="text-3xl font-black text-[#1a1f2e] mb-6">Backbone con Alta Disponibilidad</h2>
-            <p class="text-slate-600 leading-relaxed mb-8">
-                Contamos con una red propia de fibra óptica con cobertura nacional desde la Región de Valparaíso hasta la Región del BíoBío. Nuestra red posee un backbone de transporte en alta disponibilidad con un anillo troncal principal a través de la Ruta 5 Sur.
-            </p>
-            <div class="bg-white inline-block px-6 py-3 rounded-full border border-slate-200 shadow-sm text-sm font-semibold text-blue-700">
-                🚀 Incluye acceso a CDNs Nacionales: Google, Facebook, Youtube, Netflix, Microsoft, Amazon.
+    <section id="mapa" class="py-24 px-6 map-gradient border-b border-slate-100">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-black text-[#1a1f2e] mb-4">Presencia y Factibilidad Nacional</h2>
+                <p class="text-slate-500 max-w-2xl mx-auto">Nuestra red de fibra oscura y transporte de datos se extiende estratégicamente para conectar los polos industriales más importantes del país, con un anillo troncal a través de la Ruta 5 Sur.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-5 bg-white rounded-[3rem] p-8 shadow-xl border border-slate-200 relative h-[700px] overflow-hidden no-scrollbar flex justify-center">
+                    
+                    <div class="absolute left-1/2 top-10 bottom-10 w-1.5 bg-gradient-to-b from-blue-300 via-blue-500 to-orange-400 -translate-x-1/2 rounded-full opacity-50"></div>
+                    
+                    <div class="relative z-10 w-full h-full flex flex-col justify-between py-4">
+                        
+                        <script>
+                            const ciudades = [
+                                { nombre: "Zapallar", hl: true }, { nombre: "Valparaíso", hl: false },
+                                { nombre: "Algarrobo", hl: false }, { nombre: "Santiago", hl: true },
+                                { nombre: "Rancagua", hl: false }, { nombre: "San Fernando", hl: false },
+                                { nombre: "Romeral", hl: false }, { nombre: "Teno", hl: false },
+                                { nombre: "Curicó", hl: true }, { nombre: "Talca", hl: true },
+                                { nombre: "San Javier", hl: false }, { nombre: "Villa Alegre", hl: false },
+                                { nombre: "Linares", hl: false }, { nombre: "Parral", hl: false },
+                                { nombre: "Ñuble", hl: true }, { nombre: "Chillán", hl: false },
+                                { nombre: "Biobío", hl: true }
+                            ];
+                            
+                            document.write(ciudades.map((c, index) => `
+                                <div class="flex items-center w-full relative">
+                                    <div class="w-1/2 text-right pr-6 ${index % 2 !== 0 ? 'invisible' : ''}">
+                                        <span class="${c.hl ? 'bg-[#1a1f2e] text-white px-3 py-1 rounded-md shadow-md text-[10px] uppercase font-black' : 'text-[11px] font-bold text-slate-500 uppercase'}">${c.nombre}</span>
+                                    </div>
+                                    
+                                    <div class="absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
+                                        ${c.hl ? `
+                                        <div class="relative flex h-3 w-3">
+                                            <span class="pin-glow absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                                            <span class="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
+                                        </div>
+                                        ` : `
+                                        <div class="h-2 w-2 bg-blue-500 rounded-full border border-white"></div>
+                                        `}
+                                    </div>
+
+                                    <div class="w-1/2 text-left pl-6 ${index % 2 === 0 ? 'invisible' : ''}">
+                                        <span class="${c.hl ? 'bg-[#1a1f2e] text-white px-3 py-1 rounded-md shadow-md text-[10px] uppercase font-black' : 'text-[11px] font-bold text-slate-500 uppercase'}">${c.nombre}</span>
+                                    </div>
+                                </div>
+                            `).join(''));
+                        </script>
+
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 space-y-8">
+                    <h3 class="text-2xl font-black text-[#1a1f2e]">Cobertura Industrial Garantizada</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        Desplegamos infraestructura de red robusta para satisfacer la alta demanda de conectividad. Desde el corazón financiero en <strong>Santiago</strong>, pasando por la agroindustria de <strong>Rancagua, Curicó y Talca</strong>, hasta el polo industrial del <strong>Biobío</strong>.
+                    </p>
+                    
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center mb-4 text-blue-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            </div>
+                            <h4 class="font-bold text-[#1a1f2e] mb-2">Backbone Propio</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">Fibra óptica dedicada punto a punto sin sobreventa en toda la extensión de la red.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center mb-4 text-orange-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                            </div>
+                            <h4 class="font-bold text-[#1a1f2e] mb-2">SLA del 98.99%</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">Garantizamos acuerdos de nivel de servicio en cualquiera de estas 17 ubicaciones estratégicas.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl mt-4">
+                        <p class="text-sm text-blue-800 italic font-medium">"Acceso incluido a CDNs nacionales en toda nuestra red: Google, Facebook, Netflix, Microsoft y Amazon."</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="servicios" class="py-20 px-6 bg-white border-t border-slate-100">
+    <section id="servicios" class="py-20 px-6 bg-white border-b border-slate-100">
         <div class="max-w-7xl mx-auto">
             <h2 class="text-3xl md:text-4xl font-black text-center text-[#1a1f2e] mb-16">Nuestros Servicios</h2>
             
@@ -191,25 +271,10 @@
                         <span class="text-2xl mr-3">✓</span>
                         <div>
                             <strong class="text-white block text-base">Escalamiento 24/7.</strong>
-                            Chat WhatsApp de emergencias, Soporte 2do nivel, y línea directa con Gerencia de Operaciones.
+                            Chat WhatsApp de emergencias, Soporte 2do nivel (soporte@globalcomfibra.cl), y línea directa con Operaciones.
                         </div>
                     </li>
                 </ul>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-12 bg-slate-50 border-y border-slate-200">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Tecnología y Certificaciones</h4>
-            <div class="flex flex-wrap justify-center gap-8 md:gap-16 opacity-60 grayscale font-bold text-slate-600">
-                <span>Google Cloud</span>
-                <span>AWS</span>
-                <span>Microsoft Azure</span>
-                <span>Cisco</span>
-                <span>Fortinet</span>
-                <span>MikroTik</span>
-                <span>Furukawa</span>
             </div>
         </div>
     </section>
@@ -227,9 +292,9 @@
             </p>
 
             <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8 mb-8 text-sm">
-                <a href="mailto:contacto@globalcomfibra.cl" class="flex items-center hover:text-white transition">
+                <a href="mailto:soporte@globalcomfibra.cl" class="flex items-center hover:text-white transition">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    contacto@globalcomfibra.cl
+                    soporte@globalcomfibra.cl
                 </a>
                 <a href="#" class="flex items-center hover:text-white transition">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
@@ -238,11 +303,11 @@
             </div>
 
             <div class="flex justify-center space-x-4 mb-12">
-                <a href="#" class="text-slate-400 hover:text-white transition">
+                <a href="https://www.instagram.com/globalcom.chile?igsh=MWxzbnYzOHltbDByNw==" target="_blank" class="text-slate-400 hover:text-white transition">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.20 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
                 </a>
-                <a href="#" class="text-slate-400 hover:text-white transition">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                <a href="https://www.linkedin.com/company/globalcom-fibra" target="_blank" class="text-slate-400 hover:text-white transition">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                 </a>
             </div>
 
