@@ -18,8 +18,8 @@ serve(async (req) => {
 
     // Creamos el cliente administrativo usando las variables de entorno de Supabase
     const supabaseAdmin = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      Deno.env.get('GLOBALCOM_URL') ?? '',
+      Deno.env.get('GLOBALCOM_KEY') ?? ''
     )
 
     // PASO A: Crear el usuario en la sección "Auth" (Sin confirmar correo)
