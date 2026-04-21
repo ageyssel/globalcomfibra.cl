@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Portal | Globalcom</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fdfcff; }
+        .gradient-bg { background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.15), transparent 60%); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-center items-center p-6 relative overflow-hidden">
+    
+    <div class="absolute inset-0 gradient-bg -z-10"></div>
+    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-purple-200 rounded-full blur-[100px] opacity-40 -z-10"></div>
+
+    <div class="w-full max-w-md relative z-10">
+        
+        <div class="text-center mb-10">
+            <a href="index.html" class="inline-block">
+                <img src="img/logo.png" alt="Globalcom" class="h-12 mx-auto hover:opacity-80 transition">
+            </a>
+            <h2 class="mt-8 text-3xl font-extrabold text-slate-900 tracking-tight">Bienvenido de vuelta</h2>
+            <p class="text-sm text-slate-500 mt-2">Ingresa tus credenciales corporativas</p>
+        </div>
+
+        <div class="bg-white rounded-[2.5rem] p-10 shadow-[0_32px_64px_-16px_rgba(139,92,246,0.15)] border border-purple-50">
+            
+            <form action="portal.html" class="space-y-6">
+                
+                <div>
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Corporativo</label>
+                    <input type="email" required placeholder="tu@empresa.cl" 
+                           class="w-full mt-2 bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-sm focus:bg-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 outline-none transition shadow-inner">
+                </div>
+                
+                <div>
+                    <div class="flex justify-between items-center ml-1 mb-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Contraseña</label>
+                        <a href="#" class="text-[10px] font-bold text-purple-600 hover:text-purple-800 transition">¿Olvidaste tu clave?</a>
+                    </div>
+                    <input type="password" required placeholder="••••••••" 
+                           class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-sm focus:bg-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 outline-none transition shadow-inner">
+                </div>
+
+                <button type="submit" class="w-full bg-slate-950 text-white font-bold py-4 rounded-2xl hover:bg-purple-600 transition-all shadow-xl hover:shadow-purple-200 mt-4">
+                    Iniciar Sesión →
+                </button>
+            </form>
+
+        </div>
+
+        <div class="text-center mt-12">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                <span class="text-purple-500 mr-1">🔒</span> Conexión Segura End-to-End
+            </p>
+        </div>
+
+    </div>
+</body>
+</html>
