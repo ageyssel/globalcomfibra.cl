@@ -130,20 +130,48 @@
         </div>
     </main>
 
+    <div id="modal-ticket" class="hidden fixed inset-0 bg-[#1a1f2e]/60 backdrop-blur-sm z-50 flex justify-center items-center p-4">
+        <div class="bg-white rounded-[2rem] p-8 w-full max-w-lg shadow-2xl relative border border-slate-200">
+            <button onclick="document.getElementById('modal-ticket').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-red-500 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h3 class="text-2xl font-black mb-2 text-[#1a1f2e]">Generar Ticket</h3>
+            <p class="text-sm text-slate-500 mb-6">Describe tu problema. Nuestro equipo técnico responderá en menos de 10 minutos.</p>
+            <form class="space-y-5" onsubmit="event.preventDefault(); alert('Ticket enviado con éxito a soporte@globalcomfibra.cl. Te contactaremos a la brevedad.'); document.getElementById('modal-ticket').classList.add('hidden');">
+                <div>
+                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Asunto</label>
+                    <input type="text" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Ej: Falla de conectividad">
+                </div>
+                <div>
+                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Prioridad (SLA)</label>
+                    <select class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
+                        <option>Baja (Consultas/Administrativo)</option>
+                        <option>Media (Degradación de servicio)</option>
+                        <option>Alta (Caída total del enlace)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Descripción</label>
+                    <textarea required rows="4" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Detalla el problema..."></textarea>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg mt-2">
+                    Enviar Ticket a Soporte
+                </button>
+            </form>
+        </div>
+    </div>
+
     <footer class="bg-[#161b28] text-slate-400 py-8 text-center text-sm mt-12">
         <p>© 2026 Globalcom Telecomunicaciones. Todos los derechos reservados.</p>
     </footer>
 
     <script>
-        // Configura aquí tus credenciales de Supabase
         const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
                 
-        // CORRECCIÓN: Le cambiamos el nombre a clienteSupabase
         const clienteSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // Verificamos si existe una sesión usando clienteSupabase
             const { data: { session }, error: sessionError } = await clienteSupabase.auth.getSession();
             
             if (!session) {
@@ -154,32 +182,32 @@
             document.getElementById('cuerpoPagina').classList.remove('hidden');
             const emailUsuario = session.user.email;
 
-            // Buscamos la info del cliente usando clienteSupabase
+            // maybeSingle es más seguro: Si la tabla aún no tiene datos de este cliente, no crashea
             const { data: cliente, error } = await clienteSupabase
                 .from('clientes')
                 .select('*')
                 .eq('email', emailUsuario)
-                .single();
+                .maybeSingle();
 
             if (cliente) {
-                document.getElementById('lblEmpresa').textContent = cliente.empresa || "Empresa Demo";
-                document.getElementById('lblId').textContent = cliente.id_cliente || "GCOM-0000";
-                document.getElementById('lblPlan').textContent = cliente.plan || "Internet Dedicado";
+                document.getElementById('lblEmpresa').textContent = cliente.empresa || emailUsuario;
+                document.getElementById('lblId').textContent = cliente.id_cliente || "GCOM-NUEVO";
+                document.getElementById('lblPlan').textContent = cliente.plan || "Asignando Plan...";
                 document.getElementById('lblBajada').textContent = cliente.bajada || "0";
                 document.getElementById('lblSubida').textContent = cliente.subida || "0";
                 document.getElementById('lblLatencia').textContent = cliente.latencia || "0";
-                document.getElementById('lblIp').textContent = cliente.ip || "0.0.0.0";
+                document.getElementById('lblIp').textContent = cliente.ip || "Pendiente";
 
-                const palabras = (cliente.empresa || "Empresa Demo").split(' ');
+                const palabras = (cliente.empresa || emailUsuario).split(' ');
                 let iniciales = palabras[0].charAt(0);
                 if(palabras.length > 1) iniciales += palabras[1].charAt(0);
                 document.getElementById('lblIniciales').textContent = iniciales.toUpperCase();
             } else {
-                console.error("No se encontraron datos", error);
+                // Si el usuario existe en Auth pero no en la tabla "clientes", mostramos su email temporalmente
+                document.getElementById('lblEmpresa').textContent = emailUsuario;
             }
         });
 
-        // Función para cerrar sesión usando clienteSupabase
         async function cerrarSesion() {
             await clienteSupabase.auth.signOut();
             window.location.href = 'index.html';

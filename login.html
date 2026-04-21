@@ -52,17 +52,16 @@
             </form>
 
             <script>
-                // 2. Configura aquí tus credenciales de Supabase
                 const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co';
                 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
                 
-                // CORRECCIÓN: Le cambiamos el nombre a clienteSupabase
                 const clienteSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
                 document.getElementById('loginForm').addEventListener('submit', async function(e) {
                     e.preventDefault();
                     
-                    const email = document.getElementById('email').value;
+                    // Trim evita errores si el cliente deja un espacio en blanco al final del correo
+                    const email = document.getElementById('email').value.trim().toLowerCase();
                     const password = document.getElementById('password').value;
                     const errorAlert = document.getElementById('errorAlert');
                     const btnSubmit = document.getElementById('btnSubmit');
@@ -70,14 +69,13 @@
                     btnSubmit.textContent = "Validando...";
                     btnSubmit.classList.add('opacity-50');
 
-                    // Usamos clienteSupabase en lugar de supabase
                     const { data, error } = await clienteSupabase.auth.signInWithPassword({
                         email: email,
                         password: password,
                     });
 
                     if (error) {
-                        errorAlert.textContent = "Error: " + error.message;
+                        errorAlert.textContent = "Error: Credenciales incorrectas";
                         errorAlert.classList.remove('hidden');
                         btnSubmit.textContent = "Iniciar Sesión";
                         btnSubmit.classList.remove('opacity-50');
