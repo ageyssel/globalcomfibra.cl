@@ -12,7 +12,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col hidden" id="cuerpoPagina">
-    
     <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-4">
@@ -39,7 +38,7 @@
         <div class="mb-8 flex justify-between items-end">
             <div>
                 <h1 class="text-3xl font-black text-[#1a1f2e] tracking-tight">Panel de Control</h1>
-                <p class="text-slate-500 text-sm mt-1">Gestión integral de servicio y conectividad.</p>
+                <p class="text-slate-500 text-sm mt-1">Monitorea tu enlace dedicado y gestiona requerimientos técnicos.</p>
             </div>
             <div id="statusBadge" class="hidden md:flex bg-green-50 border border-green-200 px-4 py-2 rounded-full items-center space-x-2">
                 <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -48,83 +47,92 @@
         </div>
 
         <div class="grid lg:grid-cols-3 gap-8">
-            
-            <div class="lg:col-span-2 bg-white rounded-[2rem] shadow-lg border border-slate-200 overflow-hidden min-h-[600px] flex flex-col relative group">
-                <div class="absolute inset-0 bg-[#0f172a] overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2072" 
-                         class="w-full h-full object-cover opacity-30 grayscale group-hover:scale-105 transition-transform duration-1000" 
-                         alt="Network Background">
+            <div class="lg:col-span-2 bg-white rounded-[2rem] shadow-lg border border-slate-200 overflow-hidden min-h-[550px] flex flex-col relative group">
+                <div class="px-6 py-4 flex justify-between items-center border-b border-slate-50 bg-slate-50/50 absolute top-0 w-full z-20">
+                    <div>
+                       <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">Monitoreo de Enlace en Tiempo Real</p>
+                       <h2 class="text-xl font-black text-blue-600">NOC Live Feed</h2>
+                    </div>
+                </div>
+                
+                <div class="absolute inset-0 bg-[#0f172a] overflow-hidden mt-16">
+                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2072" class="w-full h-full object-cover opacity-30 grayscale group-hover:scale-105 transition-transform duration-1000" alt="Network Background">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent"></div>
                 </div>
 
-                <div class="absolute inset-0 flex flex-col items-center justify-center p-12 text-center z-10">
-                    <div class="w-24 h-24 bg-blue-600/20 backdrop-blur-xl rounded-full flex items-center justify-center mb-8 border border-blue-500/30 animate-pulse">
-                        <svg class="w-12 h-12 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-12 text-center z-10 mt-16">
+                    <div class="w-20 h-20 bg-blue-600/20 backdrop-blur-xl rounded-full flex items-center justify-center mb-6 border border-blue-500/30 animate-pulse">
+                        <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
                     
-                    <h3 class="text-2xl font-black text-white uppercase tracking-tighter mb-4">NOC Live Management</h3>
-                    <p class="text-slate-400 max-w-sm mx-auto mt-2 mb-10 text-sm leading-relaxed">
-                        Acceda a la consola de monitoreo dedicada de Purple Hackers para gestionar su latencia y tráfico en tiempo real.
-                    </p>
+                    <h3 class="text-2xl font-black text-white uppercase tracking-tighter mb-2">NOC Live Management</h3>
+                    <p class="text-slate-400 max-w-sm mx-auto mb-6 text-sm leading-relaxed">Acceda a la consola de monitoreo dedicada de Purple Hackers para gestionar su latencia en tiempo real.</p>
                     
-                    <a id="btnLinkDashboard" href="https://app.purplehackers.com/login/" target="_blank" 
-                       class="bg-blue-600 text-white px-10 py-4 rounded-2xl font-black hover:bg-blue-500 transition-all shadow-[0_0_40px_rgba(37,99,235,0.3)] hover:shadow-[0_0_60px_rgba(37,99,235,0.5)] text-xs uppercase tracking-widest flex items-center gap-3">
+                    <div id="boxCredencialesNoc" class="hidden bg-slate-900/60 backdrop-blur-md border border-slate-700 rounded-xl p-4 mb-6 text-left w-full max-w-sm shadow-xl">
+                        <p class="text-[10px] text-blue-400 font-bold uppercase tracking-widest mb-3 border-b border-slate-700 pb-2">Tus Credenciales de Acceso</p>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-slate-400">Usuario:</span>
+                                <code id="lblUserNoc" class="text-xs font-bold text-white bg-slate-800 px-3 py-1 rounded-md select-all">---</code>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-slate-400">Contraseña:</span>
+                                <code id="lblPassNoc" class="text-xs font-bold text-white bg-slate-800 px-3 py-1 rounded-md select-all">---</code>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a id="btnLinkDashboard" href="https://app.purplehackers.com/login/" target="_blank" class="bg-blue-600 text-white px-10 py-4 rounded-2xl font-black hover:bg-blue-500 transition-all shadow-[0_0_40px_rgba(37,99,235,0.3)] text-xs uppercase tracking-widest flex items-center gap-3">
                         Abrir Consola de Monitoreo
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
-
-                    <p class="mt-8 text-[10px] text-slate-500 font-bold uppercase tracking-widest">Conexión Segura vía Globalcom Fiber</p>
                 </div>
             </div>
 
             <div class="flex flex-col space-y-8">
-                
                 <div class="bg-white rounded-[2rem] p-8 shadow-lg border border-slate-200">
                     <h3 class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-6">Servicio Contratado</h3>
                     <div class="space-y-5">
                         <div>
                             <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Plan Actual</p>
-                            <p id="lblPlan" class="text-lg font-black text-[#1a1f2e] leading-tight">-</p>
+                            <p id="lblPlan" class="text-lg font-black text-[#1a1f2e]">Cargando...</p>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">IP Pública</p>
-                                <code id="lblIp" class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-md">0.0.0.0</code>
-                            </div>
-                            <div>
-                                <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Estado</p>
-                                <span class="text-[10px] font-black text-green-600 uppercase">Operativo</span>
+                        <div>
+                            <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">IP Pública Asignada</p>
+                            <div class="inline-block bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg">
+                                <code id="lblIp" class="text-sm font-bold text-blue-600">0.0.0.0</code>
                             </div>
                         </div>
+                    </div>
+                    
+                    <div class="mt-8 pt-6 border-t border-slate-100">
+                        <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-3">Vigencia del Contrato</p>
+                        <div class="flex items-center justify-between gap-4">
+                            <div class="bg-slate-50 border border-slate-100 rounded-xl p-4 w-1/2 text-center">
+                                <p id="lblMesesTotales" class="text-2xl font-black text-[#1a1f2e]">0</p>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Meses totales</p>
+                            </div>
+                            <div class="bg-orange-50 border border-orange-100 rounded-xl p-4 w-1/2 text-center">
+                                <p id="lblMesesRestantes" class="text-2xl font-black text-orange-600">0</p>
+                                <p class="text-[9px] font-bold text-orange-500 uppercase tracking-widest mt-1">Restantes</p>
+                            </div>
+                        </div>
+                        <p id="lblFechaHabilitacion" class="text-[10px] text-slate-400 mt-3 italic text-center font-medium">Habilitado el: --/--/--</p>
                         
-                        <div class="pt-5 border-t border-slate-100">
-                            <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Vigencia del Contrato</p>
-                            <div class="flex items-center justify-between">
-                                <div class="text-center bg-slate-50 border border-slate-100 rounded-2xl p-3 w-[48%]">
-                                    <p id="lblMesesTotales" class="text-xl font-black text-[#1a1f2e]">0</p>
-                                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Meses totales</p>
-                                </div>
-                                <div class="text-center bg-orange-50 border border-orange-100 rounded-2xl p-3 w-[48%]">
-                                    <p id="lblMesesRestantes" class="text-xl font-black text-orange-600">0</p>
-                                    <p class="text-[9px] font-bold text-orange-400 uppercase tracking-tighter">Restantes</p>
-                                </div>
-                            </div>
-                            <p id="lblFechaHabilitacion" class="text-[10px] text-slate-400 mt-3 italic text-center font-medium">Habilitado el: --/--/--</p>
-                        </div>
+                        <button onclick="descargarSLA()" class="w-full mt-6 flex items-center justify-center gap-3 px-4 py-3 bg-[#1a1f2e] hover:bg-blue-600 text-white rounded-xl transition text-xs font-bold uppercase tracking-widest shadow-md">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                            Acuerdo SLA (98.99%)
+                        </button>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-[2rem] p-8 shadow-lg border border-slate-200">
-                    <h3 class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Descargas Rápidas</h3>
-                    <div class="space-y-3">
-                        <button onclick="descargarSLA()" class="w-full flex items-center justify-between px-4 py-4 bg-[#1a1f2e] text-white rounded-xl transition text-xs font-bold uppercase tracking-widest hover:bg-blue-600 shadow-md">
-                            <span class="flex items-center gap-3">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                                Acuerdo SLA (98.99%) [cite: 28]
-                            </span>
-                            <svg class="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        </button>
-                    </div>
+                <div class="bg-[#1a1f2e] rounded-[2rem] p-8 shadow-lg text-white">
+                    <h3 class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Soporte Directo</h3>
+                    <p class="text-sm text-slate-300 mb-6">¿Necesitas asistencia técnica inmediata?</p>
+                    <a href="https://wa.me/+56934323575" target="_blank" class="flex items-center justify-center w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl transition shadow-lg">
+                        <svg class="w-5 h-5 mr-2 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.417-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.305 1.652zm6.599-3.835c1.52.909 3.299 1.388 5.112 1.389 5.405 0 9.811-4.406 9.814-9.814.001-2.62-1.019-5.086-2.87-6.938-1.852-1.854-4.32-2.873-6.94-2.873-5.41 0-9.815 4.406-9.817 9.817 0 1.834.51 3.626 1.474 5.196l-.973 3.553 3.636-.954zm10.985-7.119c-.299-.149-1.77-.873-2.044-.973-.274-.1-.473-.149-.672.149-.199.299-.771.972-.945 1.169-.174.199-.349.224-.648.074-.299-.149-1.264-.466-2.408-1.486-.889-.792-1.49-1.77-1.664-2.069-.174-.299-.018-.46.131-.609.135-.133.299-.348.448-.522.149-.174.199-.298.298-.497.1-.199.05-.373-.025-.522-.075-.149-.672-1.62-.922-2.213-.243-.58-.492-.501-.672-.51l-.573-.01c-.199 0-.523.074-.797.373-.273.299-1.045 1.02-1.045 2.487s1.07 2.885 1.22 3.084c.149.199 2.105 3.215 5.099 4.512.712.31 1.269.494 1.703.633.717.227 1.369.195 1.885.118.574-.085 1.77-.721 2.02-1.418.249-.696.249-1.293.174-1.418-.075-.125-.274-.199-.573-.349z"/></svg>
+                        WhatsApp Soporte
+                    </a>
                 </div>
             </div>
         </div>
@@ -142,14 +150,15 @@
             <div class="overflow-x-auto">
                 <table id="tablaTicketsContainer" class="w-full text-left text-sm border-collapse min-w-[600px] hidden">
                     <thead>
-                        <tr class="border-b border-slate-200 text-slate-500 text-[10px] uppercase font-black tracking-widest">
-                            <th class="pb-4">ID Ticket</th>
-                            <th class="pb-4">Asunto</th>
-                            <th class="pb-4">Fecha</th>
-                            <th class="pb-4">Estado</th>
+                        <tr class="border-b border-slate-200 text-slate-500">
+                            <th class="pb-4 font-bold uppercase tracking-wider text-[10px]">ID Ticket</th>
+                            <th class="pb-4 font-bold uppercase tracking-wider text-[10px]">Asunto</th>
+                            <th class="pb-4 font-bold uppercase tracking-wider text-[10px]">Fecha</th>
+                            <th class="pb-4 font-bold uppercase tracking-wider text-[10px]">Estado</th>
                         </tr>
                     </thead>
-                    <tbody id="tablaTickets" class="text-slate-700"></tbody>
+                    <tbody id="tablaTickets" class="text-slate-700">
+                        </tbody>
                 </table>
                 <div id="msgNoTickets" class="py-12 text-center">
                     <p class="text-slate-400 italic text-sm">No existen tickets activos registrados.</p>
@@ -161,7 +170,8 @@
             <h3 class="text-xl font-black text-[#1a1f2e] mb-2">Historial de Facturación</h3>
             <p class="text-sm text-slate-500 mb-8">Últimos 12 meses emitidos.</p>
             
-            <div id="gridFacturas" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+            <div id="gridFacturas" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                </div>
             <div id="msgNoFacturas" class="py-10 text-center hidden border-2 border-dashed border-slate-100 rounded-[2rem]">
                 <p class="text-slate-400 italic text-sm">Su estado de cuenta se encuentra al día.</p>
             </div>
@@ -175,16 +185,27 @@
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
             <h3 class="text-2xl font-black mb-2 text-[#1a1f2e]">Generar Ticket</h3>
-            <p class="text-sm text-slate-500 mb-6">Describa su requerimiento.</p>
-            <form class="space-y-5" onsubmit="event.preventDefault(); alert('Enviado.'); document.getElementById('modal-ticket').classList.add('hidden');">
-                <input type="text" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Asunto">
-                <select class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
-                    <option>Baja (Consultas/Administrativo)</option>
-                    <option>Media (Degradación de servicio)</option>
-                    <option>Alta (Caída total del enlace)</option>
-                </select>
-                <textarea rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Descripción..."></textarea>
-                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg">Enviar a Soporte</button>
+            <p class="text-sm text-slate-500 mb-6">Describe tu problema. Nuestro equipo técnico responderá en menos de 15 minutos.</p>
+            <form class="space-y-5" onsubmit="event.preventDefault(); alert('Ticket enviado con éxito a soporte@globalcomfibra.cl.'); document.getElementById('modal-ticket').classList.add('hidden');">
+                <div>
+                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Asunto</label>
+                    <input type="text" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Ej: Falla de conectividad">
+                </div>
+                <div>
+                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Prioridad (SLA)</label>
+                    <select class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
+                        <option>Baja (Consultas/Administrativo)</option>
+                        <option>Media (Degradación de servicio)</option>
+                        <option>Alta (Caída total del enlace)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Descripción</label>
+                    <textarea required rows="4" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Detalla el problema..."></textarea>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg mt-2">
+                    Enviar Ticket a Soporte
+                </button>
             </form>
         </div>
     </div>
@@ -196,17 +217,26 @@
     <script>
         const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
+                
         const clienteSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const ADMIN_EMAIL = 'contacto@globalcomfibra.cl';
 
         document.addEventListener('DOMContentLoaded', async () => {
-            const { data: { session } } = await clienteSupabase.auth.getSession();
-            if (!session) { window.location.href = 'login.html'; return; }
+            const { data: { session }, error: sessionError } = await clienteSupabase.auth.getSession();
+            
+            if (!session) {
+                window.location.href = 'login.html';
+                return;
+            } else if (session.user.email === ADMIN_EMAIL) {
+                window.location.href = 'admin.html';
+                return;
+            }
 
             document.getElementById('cuerpoPagina').classList.remove('hidden');
             const emailUsuario = session.user.email;
 
-            // 1. CARGAR DATOS DEL CLIENTE
-            const { data: cliente } = await clienteSupabase
+            // 1. Cargar Datos del Cliente
+            const { data: cliente, error } = await clienteSupabase
                 .from('clientes')
                 .select('*')
                 .eq('email', emailUsuario)
@@ -214,26 +244,40 @@
 
             if (cliente) {
                 document.getElementById('lblEmpresa').textContent = cliente.empresa || emailUsuario;
-                document.getElementById('lblId').textContent = cliente.id_cliente || "---";
-                document.getElementById('lblPlan').textContent = cliente.plan || "Dedicado";
-                document.getElementById('lblIp').textContent = cliente.ip || "0.0.0.0";
+                document.getElementById('lblId').textContent = cliente.id_cliente || "GCOM-NUEVO";
+                document.getElementById('lblPlan').textContent = cliente.plan || "Asignando Plan...";
+                document.getElementById('lblIp').textContent = cliente.ip || "Pendiente";
 
+                const palabras = (cliente.empresa || emailUsuario).split(' ');
+                let iniciales = palabras[0].charAt(0);
+                if(palabras.length > 1) iniciales += palabras[1].charAt(0);
+                document.getElementById('lblIniciales').textContent = iniciales.toUpperCase();
+
+                // Manejo de enlace Dashboard y Credenciales NOC
+                if (cliente.url_dashboard) {
+                    document.getElementById('btnLinkDashboard').href = cliente.url_dashboard;
+                }
+                
+                if (cliente.user_noc && cliente.pass_noc) {
+                    document.getElementById('boxCredencialesNoc').classList.remove('hidden');
+                    document.getElementById('lblUserNoc').textContent = cliente.user_noc;
+                    document.getElementById('lblPassNoc').textContent = cliente.pass_noc;
+                }
+
+                // Cálculo de meses de contrato
                 const fHabilitacion = new Date(cliente.created_at);
                 const mesesTotales = parseInt(cliente.contrato_meses) || 12;
                 const hoy = new Date();
                 const mesesPasados = (hoy.getFullYear() - fHabilitacion.getFullYear()) * 12 + (hoy.getMonth() - fHabilitacion.getMonth());
-                const restantes = Math.max(0, mesesTotales - mesesPasados);
-
+                
                 document.getElementById('lblMesesTotales').textContent = mesesTotales;
-                document.getElementById('lblMesesRestantes').textContent = restantes;
+                document.getElementById('lblMesesRestantes').textContent = Math.max(0, mesesTotales - mesesPasados);
                 document.getElementById('lblFechaHabilitacion').textContent = `Habilitado el: ${fHabilitacion.toLocaleDateString('es-CL')}`;
-
-                if (cliente.url_dashboard) {
-                    document.getElementById('btnLinkDashboard').href = cliente.url_dashboard;
-                }
+            } else {
+                document.getElementById('lblEmpresa').textContent = emailUsuario;
             }
 
-            // 2. TICKETS SEGUROS (SOLUCIÓN ERROR 400)
+            // 2. Cargar Tickets (con Try-Catch)
             try {
                 const { data: tickets, error: tError } = await clienteSupabase
                     .from('tickets')
@@ -245,7 +289,16 @@
                     document.getElementById('tablaTicketsContainer').classList.remove('hidden');
                     const tabla = document.getElementById('tablaTickets');
                     tickets.forEach(tk => {
-                        const row = `<tr><td class="py-4 font-mono text-xs text-blue-600">#${tk.id}</td><td class="py-4 font-medium">${tk.asunto}</td><td class="py-4 text-xs">${new Date(tk.created_at).toLocaleDateString()}</td><td class="py-4 font-bold uppercase text-[10px] text-green-600">${tk.estado}</td></tr>`;
+                        const row = `
+                            <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                                <td class="py-4 font-mono font-bold text-xs text-blue-600">#${tk.id}</td>
+                                <td class="py-4 font-medium">${tk.asunto}</td>
+                                <td class="py-4 text-slate-500 text-xs">${new Date(tk.created_at).toLocaleDateString()}</td>
+                                <td class="py-4">
+                                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-green-200">${tk.estado}</span>
+                                </td>
+                            </tr>
+                        `;
                         tabla.innerHTML += row;
                     });
                 }
@@ -253,7 +306,7 @@
                 console.log("Tabla tickets no disponible.");
             }
 
-            // 3. FACTURAS
+            // 3. Cargar Historial de 12 Facturas
             const { data: facturas } = await clienteSupabase
                 .from('facturas')
                 .select('*')
@@ -269,8 +322,12 @@
                             <div class="bg-white p-2 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition shadow-sm">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                             </div>
-                            <div><p class="text-[10px] font-black text-[#1a1f2e] uppercase">${f.mes_anio || 'Factura'}</p><p class="text-[9px] text-slate-400 font-bold">Descargar PDF</p></div>
-                        </a>`;
+                            <div>
+                                <p class="text-[10px] font-black text-[#1a1f2e] uppercase">${f.mes_anio || 'Factura'}</p>
+                                <p class="text-[9px] text-slate-400 font-bold">Descargar PDF</p>
+                            </div>
+                        </a>
+                    `;
                 });
             } else {
                 document.getElementById('msgNoFacturas').classList.remove('hidden');
