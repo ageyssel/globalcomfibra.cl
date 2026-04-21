@@ -177,19 +177,25 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
                 
         const clienteSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // TU CORREO DE ADMINISTRADOR
+        const ADMIN_EMAIL = 'contacto@globalcomfibra.cl';
 
         document.addEventListener('DOMContentLoaded', async () => {
             const { data: { session }, error: sessionError } = await clienteSupabase.auth.getSession();
             
+            // CANDADO: Si no hay sesión, al login. Si el Admin intenta entrar aquí, lo mandamos al panel admin.
             if (!session) {
                 window.location.href = 'login.html';
+                return;
+            } else if (session.user.email === ADMIN_EMAIL) {
+                window.location.href = 'admin.html';
                 return;
             }
 
             document.getElementById('cuerpoPagina').classList.remove('hidden');
             const emailUsuario = session.user.email;
 
-            // 1. Cargar Datos del Cliente
             const { data: cliente, error } = await clienteSupabase
                 .from('clientes')
                 .select('*')
@@ -213,7 +219,6 @@
                 document.getElementById('lblEmpresa').textContent = emailUsuario;
             }
 
-            // 2. Cargar Última Factura
             const { data: facturaData } = await clienteSupabase
                 .from('facturas')
                 .select('*')

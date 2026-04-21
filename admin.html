@@ -73,32 +73,37 @@
     </main>
 
     <script>
-        // CONFIGURACIÓN SUPABASE (PON TUS DATOS AQUÍ)
         const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
+        
         const adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        // CORREO ADMIN PERMITIDO (Cambia esto por tu correo real de administrador)
+        
+        // TU CORREO DE ADMINISTRADOR
         const ADMIN_EMAIL = 'contacto@globalcomfibra.cl'; 
 
         document.addEventListener('DOMContentLoaded', async () => {
             const { data: { session } } = await adminSupabase.auth.getSession();
             
-            // Bloqueo de seguridad: Solo tú puedes ver esta página
-            if (!session || session.user.email !== ADMIN_EMAIL) {
-                alert("Acceso denegado. Debes iniciar sesión como Administrador.");
+            // CANDADO: Si no hay sesión, al login. Si hay sesión pero no es el admin, al portal de clientes.
+            if (!session) {
                 window.location.href = 'login.html';
                 return;
+            } else if (session.user.email !== ADMIN_EMAIL) {
+                window.location.href = 'portal.html';
+                return;
             }
+            
+            // Si es el admin, mostramos la página
             document.getElementById('adminBody').classList.remove('hidden');
 
-            // Cargar lista de clientes
             const { data: clientes } = await adminSupabase.from('clientes').select('email, empresa');
             const select = document.getElementById('selectCliente');
             select.innerHTML = '<option value="">Seleccione un cliente...</option>';
-            clientes.forEach(c => {
-                select.innerHTML += `<option value="${c.email}">${c.empresa} (${c.email})</option>`;
-            });
+            if(clientes){
+                clientes.forEach(c => {
+                    select.innerHTML += `<option value="${c.email}">${c.empresa} (${c.email})</option>`;
+                });
+            }
         });
 
         // Actualizar métricas
@@ -128,7 +133,6 @@
             btn.textContent = "Subiendo archivo...";
             btn.disabled = true;
 
-            // 1. Subir a Supabase Storage
             const fileExt = archivo.name.split('.').pop();
             const fileName = `factura_${email}_${Date.now()}.${fileExt}`;
             const { data: uploadData, error: uploadError } = await adminSupabase.storage.from('facturas').upload(fileName, archivo);
@@ -140,10 +144,8 @@
                 return;
             }
 
-            // 2. Obtener URL Pública
             const { data: { publicUrl } } = adminSupabase.storage.from('facturas').getPublicUrl(fileName);
 
-            // 3. Guardar registro en la base de datos
             await adminSupabase.from('facturas').insert({
                 email_cliente: email,
                 mes_anio: mes,
@@ -152,7 +154,6 @@
 
             btn.textContent = "¡Subido con éxito!";
             
-            // 4. Redactar el correo y abrir el cliente de correo del Admin
             const asunto = encodeURIComponent(`Factura de Servicios Globalcom - ${mes}`);
             const cuerpoCorreo = encodeURIComponent(`Estimados,\n\nJunto con saludar, adjuntamos el enlace para descargar la Factura correspondiente a los servicios del mes de ${mes}.\n\n🔗 Descargar Factura: ${publicUrl}\n\nRecordarle que la renta mensual convenida debe ser pagada mediante depósito o transferencia bancaria conforme a lo estipulado en nuestro acuerdo.\nA continuación, detallamos los datos bancarios para realizar el pago:\n\nDATOS BANCARIOS\nNombre: Servicio de Telecomunicaciones Globalcom Ltda.\nBanco: Scotiabank / Cuenta Corriente\nRUT: 77.812.215-4\nN° de cuenta: 987836121\n\nAgradecemos desde ya su gestión para concretar el pago a la brevedad. Si ya realizó la transferencia, le solicitamos enviar el comprobante a este correo (contacto@globalcomfibra.cl) para registrar el pago correctamente.\n\nQuedamos atentos ante cualquier duda.\n\nSaludos cordiales,\nServicio de Telecomunicaciones Globalcom Ltda.`);
 
