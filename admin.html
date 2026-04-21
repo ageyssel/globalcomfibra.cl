@@ -439,7 +439,8 @@
         document.getElementById('formEditarCliente').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
-            btn.textContent = "Guardando..."; 
+            const originalText = btn.textContent;
+            btn.textContent = "Guardando en la nube..."; 
             btn.disabled = true;
 
             const emailOriginal = document.getElementById('editEmailOriginal').value;
@@ -458,16 +459,31 @@
                 pass_noc: document.getElementById('ePassNoc').value
             };
 
-            const { error } = await adminSupabase.from('clientes').update(updates).eq('email', emailOriginal);
-            
-            btn.textContent = "Guardar Cambios de Cliente"; 
-            btn.disabled = false;
-            
-            if(error) alert("Error: " + error.message);
-            else {
-                alert("Datos del cliente actualizados correctamente.");
-                document.getElementById('detEmpresa').textContent = updates.empresa; 
+            try {
+                // El .select() al final es CLAVE para obligar a Supabase a confirmar si modificó la fila
+                const { data, error } = await adminSupabase.from('clientes').update(updates).eq('email', emailOriginal).select();
+                
+                if (error) throw error;
+                
+                // Si la data está vacía, significa que el RLS bloqueó la acción silenciosamente
+                if (!data || data.length === 0) {
+                    throw new Error("Permiso denegado. La base de datos bloqueó la actualización (Falta configurar RLS).");
+                }
+
+                alert("¡Datos del cliente actualizados y guardados correctamente!");
+                
+                // Ocultar el modal para refrescar la pantalla
+                document.getElementById('modal-detalle').classList.add('hidden'); 
+                
+                // Recargar la lista de fondo
                 cargarListaClientes(); 
+
+            } catch (err) {
+                alert("Error al intentar guardar: " + err.message);
+            } finally {
+                // Restaurar el botón
+                btn.textContent = originalText; 
+                btn.disabled = false;
             }
         });
 
