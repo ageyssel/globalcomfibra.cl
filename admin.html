@@ -23,8 +23,7 @@
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto px-6 py-10">
-        
+    <main class="max-w-7xl mx-auto px-6 py-10">
         <div class="grid lg:grid-cols-2 gap-8">
             
             <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
@@ -59,14 +58,20 @@
                             <input type="email" id="cEmail" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
                         <div>
-                            <label class="text-[10px] font-bold text-orange-600 uppercase tracking-widest">Contraseña Portal</label>
+                            <label class="text-[10px] font-bold text-orange-600 uppercase tracking-widest">Crear Contraseña Portal</label>
                             <input type="password" id="cPassword" required placeholder="Mínimo 6 caracteres" class="w-full mt-1 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none">
                         </div>
                     </div>
 
-                    <div>
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Facturación</label>
-                        <input type="email" id="cEmailFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Facturación</label>
+                            <input type="email" id="cEmailFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fecha Inicio Contrato</label>
+                            <input type="date" id="cFecha" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
                     </div>
 
                     <div>
@@ -74,30 +79,24 @@
                         <input type="text" id="cDireccion" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Plan Contratado</label>
-                            <select id="cPlan" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                                <option>Internet Dedicado 100 Mbps</option>
-                                <option>Internet Dedicado 500 Mbps</option>
-                                <option>Internet Dedicado 1 Gbps</option>
-                                <option>Internet Dedicado 10 Gbps</option>
-                                <option>Fibra Oscura / Capa 2</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fecha Inicio</label>
-                            <input type="date" id="cFecha" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                        </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Plan Contratado</label>
+                        <select id="cPlan" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option>Internet Dedicado 100 Mbps</option>
+                            <option>Internet Dedicado 500 Mbps</option>
+                            <option>Internet Dedicado 1 Gbps</option>
+                            <option>Internet Dedicado 10 Gbps</option>
+                            <option>Fibra Oscura / Capa 2</option>
+                        </select>
                     </div>
 
                     <div class="p-4 bg-blue-50 rounded-xl border border-blue-100">
-                        <label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Enlace Monitoreo (Dashboard Externo)</label>
+                        <label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Enlace Monitoreo (Dashboard PurpleHackers)</label>
                         <input type="url" id="cDashboard" placeholder="https://app.purplehackers.com/..." class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                     </div>
 
                     <div>
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Subir Contrato Firmado (PDF)</label>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Subir Contrato PDF</label>
                         <input type="file" id="cArchivoContrato" accept=".pdf" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
                     </div>
 
@@ -130,6 +129,14 @@
                         </button>
                     </form>
                 </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-black text-[#1a1f2e] mb-4">Seguridad de Cuentas</h3>
+                    <p class="text-sm text-slate-500 mb-4">Envía un correo automático al cliente para que pueda cambiar su contraseña de acceso.</p>
+                    <button onclick="reestablecerClave()" class="w-full border border-slate-300 text-slate-600 font-bold py-3 rounded-lg hover:bg-slate-50 transition">
+                        Enviar Link de Recuperación al Cliente Seleccionado
+                    </button>
+                </div>
             </div>
 
         </div>
@@ -137,7 +144,8 @@
 
     <script>
         const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (aquí va tu llave completa)';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
+        
         const adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const ADMIN_EMAIL = 'contacto@globalcomfibra.cl'; 
 
@@ -162,7 +170,7 @@
             }
         }
 
-        // --- NUEVA LÓGICA: CREAR CLIENTE Y CUENTA VÍA EDGE FUNCTION ---
+        // CREAR CLIENTE Y CUENTA (EDGE FUNCTION)
         document.getElementById('formCrearCliente').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnCrearCliente');
@@ -174,7 +182,6 @@
             let urlContrato = "";
             const archivo = document.getElementById('cArchivoContrato').files[0];
 
-            // 1. Subida de contrato si existe
             if (archivo) {
                 const fileName = `contrato_${email}_${Date.now()}.pdf`;
                 const { error: uploadError } = await adminSupabase.storage.from('contratos').upload(fileName, archivo);
@@ -184,7 +191,6 @@
                 }
             }
 
-            // 2. Llamada a la Edge Function para crear Usuario Auth + Registro en DB
             const { data, error } = await adminSupabase.functions.invoke('create-client', {
                 body: {
                     email: email,
@@ -206,9 +212,9 @@
             });
 
             if (error) {
-                alert("Error en el alta: " + error.message);
+                alert("Error: " + error.message);
             } else {
-                alert("¡Cliente y cuenta creados con éxito!");
+                alert("¡Éxito! Cliente y cuenta creados.");
                 document.getElementById('formCrearCliente').reset();
                 cargarListaClientes();
             }
@@ -216,48 +222,50 @@
             btn.disabled = false;
         });
 
-        // --- FUNCIÓN DE FACTURACIÓN (SE MANTIENE INTACTA) ---
+        // SUBIR FACTURA Y NOTIFICAR
         document.getElementById('formFactura').addEventListener('submit', async (e) => {
             e.preventDefault();
             const select = document.getElementById('selectClienteFactura');
-            const emailClienteLogico = select.value;
-            const correoFacturacionReal = select.options[select.selectedIndex].getAttribute('data-fact');
-            
+            const emailCliente = select.value;
+            const correoFact = select.options[select.selectedIndex].getAttribute('data-fact');
             const mes = document.getElementById('inpMes').value;
             const archivo = document.getElementById('inpArchivoFactura').files[0];
             const btn = document.getElementById('btnSubirFactura');
 
-            if(!emailClienteLogico || !archivo) return alert("Selecciona cliente y archivo");
-
+            if(!emailCliente || !archivo) return alert("Faltan datos");
             btn.textContent = "Subiendo...";
             btn.disabled = true;
 
-            const fileName = `factura_${emailClienteLogico}_${Date.now()}.pdf`;
+            const fileName = `factura_${emailCliente}_${Date.now()}.pdf`;
             const { error: uploadError } = await adminSupabase.storage.from('facturas').upload(fileName, archivo);
 
             if (uploadError) {
-                alert("Error: " + uploadError.message);
+                alert(uploadError.message);
                 btn.disabled = false;
                 return;
             }
 
             const { data: { publicUrl } } = adminSupabase.storage.from('facturas').getPublicUrl(fileName);
-
-            await adminSupabase.from('facturas').insert({
-                email_cliente: emailClienteLogico,
-                mes_anio: mes,
-                url_archivo: publicUrl
-            });
+            await adminSupabase.from('facturas').insert({ email_cliente: emailCliente, mes_anio: mes, url_archivo: publicUrl });
 
             const asunto = encodeURIComponent(`Facturas de Servicio Globalcom - ${mes}`);
-            const cuerpoCorreo = encodeURIComponent(`Estimados,\n\nJunto con saludar, adjuntamos el enlace para descargar las Facturas correspondientes a los servicios del mes de ${mes}.\n\n🔗 Descargar Factura: ${publicUrl}\n\nRecordarle que la renta mensual convenida debe ser pagada mediante depósito o transferencia bancaria conforme a lo estipulado en nuestro acuerdo.\nA continuación, detallamos los datos bancarios para realizar el pago:\n\nDATOS BANCARIOS\nNombre: Servicio de Telecomunicaciones Globalcom Ltda.\nBanco: Scotiabank / Cuenta Corriente\nRUT: 77.812.215-4\nN° de cuenta: 987836121\n\nAgradecemos desde ya su gestión para concretar el pago a la brevedad. Si ya realizó la transferencia, le solicitamos enviar el comprobante al correo contacto@globalcomfibra.cl para registrar el pago correctamente.\n\nQuedamos atentos ante cualquier duda.\n\nSaludos cordiales,\nServicio de Telecomunicaciones Globalcom Ltda.`);
+            const cuerpo = encodeURIComponent(`Estimados,\n\nJunto con saludar, adjuntamos el enlace para descargar las Facturas correspondientes a los servicios del mes de ${mes}.\n\n🔗 Descargar Factura: ${publicUrl}\n\nRecordarle que la renta mensual convenida debe ser pagada mediante depósito o transferencia bancaria conforme a lo estipulado en nuestro acuerdo.\n\nDATOS BANCARIOS\nNombre: Servicio de Telecomunicaciones Globalcom Ltda.\nBanco: Scotiabank / Cuenta Corriente\nRUT: 77.812.215-4\nN° de cuenta: 987836121\n\nSaludos cordiales,\nServicio de Telecomunicaciones Globalcom Ltda.`);
 
-            window.open(`mailto:${correoFacturacionReal}?subject=${asunto}&body=${cuerpoCorreo}`);
-
+            window.open(`mailto:${correoFact}?subject=${asunto}&body=${cuerpo}`);
             btn.textContent = "Subir y Notificar por Correo";
             btn.disabled = false;
             document.getElementById('formFactura').reset();
         });
+
+        // REESTABLECER CLAVE
+        async function reestablecerClave() {
+            const email = document.getElementById('selectClienteFactura').value;
+            if(!email) return alert("Selecciona un cliente primero.");
+            
+            const { error } = await adminSupabase.auth.resetPasswordForEmail(email);
+            if(error) alert("Error: " + error.message);
+            else alert("Se ha enviado un correo de recuperación al cliente.");
+        }
 
         async function cerrarSesion() {
             await adminSupabase.auth.signOut();
