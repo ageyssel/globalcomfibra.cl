@@ -49,27 +49,31 @@
 
         <div class="grid lg:grid-cols-3 gap-8">
             
-            <div class="lg:col-span-2 bg-white rounded-[2rem] shadow-lg border border-slate-200 overflow-hidden min-h-[600px] flex flex-col">
-                <div class="px-6 py-4 flex justify-between items-center border-b border-slate-50 bg-slate-50/50">
-                    <div>
-                       <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">Monitoreo de Enlace en Tiempo Real</p>
-                       <h2 class="text-xl font-black text-blue-600">NOC Live Feed</h2>
-                    </div>
+            <div class="lg:col-span-2 bg-white rounded-[2rem] shadow-lg border border-slate-200 overflow-hidden min-h-[600px] flex flex-col relative group">
+                <div class="absolute inset-0 bg-[#0f172a] overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2072" 
+                         class="w-full h-full object-cover opacity-30 grayscale group-hover:scale-105 transition-transform duration-1000" 
+                         alt="Network Background">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent"></div>
                 </div>
-    
-                <div id="contenedorDashboard" class="flex-grow w-full relative">
-                    <div id="msgIframeBlocked" class="absolute inset-0 flex flex-col items-center justify-center p-12 text-center bg-slate-50 z-20 hidden">
-                        <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-6">
-                            <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                        </div>
-                        <h3 class="text-lg font-black text-[#1a1f2e] uppercase tracking-tight">Consola de Monitoreo Externa</h3>
-                        <p class="text-sm text-slate-500 max-w-xs mx-auto mt-2 mb-8">Por seguridad, el monitor de red debe abrirse en una consola independiente.</p>
-                        <a id="btnLinkDashboard" href="https://app.purplehackers.com/login/" target="_blank" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg text-sm">
-                            Abrir NOC en nueva pestaña
-                        </a>
-                    </div>
 
-                    <iframe id="frameDashboard" src="" class="w-full h-full border-none" allowfullscreen></iframe>
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-12 text-center z-10">
+                    <div class="w-24 h-24 bg-blue-600/20 backdrop-blur-xl rounded-full flex items-center justify-center mb-8 border border-blue-500/30 animate-pulse">
+                        <svg class="w-12 h-12 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    
+                    <h3 class="text-2xl font-black text-white uppercase tracking-tighter mb-4">NOC Live Management</h3>
+                    <p class="text-slate-400 max-w-sm mx-auto mt-2 mb-10 text-sm leading-relaxed">
+                        Acceda a la consola de monitoreo dedicada de Purple Hackers para gestionar su latencia y tráfico en tiempo real.
+                    </p>
+                    
+                    <a id="btnLinkDashboard" href="https://app.purplehackers.com/login/" target="_blank" 
+                       class="bg-blue-600 text-white px-10 py-4 rounded-2xl font-black hover:bg-blue-500 transition-all shadow-[0_0_40px_rgba(37,99,235,0.3)] hover:shadow-[0_0_60px_rgba(37,99,235,0.5)] text-xs uppercase tracking-widest flex items-center gap-3">
+                        Abrir Consola de Monitoreo
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+
+                    <p class="mt-8 text-[10px] text-slate-500 font-bold uppercase tracking-widest">Conexión Segura vía Globalcom Fiber</p>
                 </div>
             </div>
 
@@ -116,7 +120,7 @@
                         <button onclick="descargarSLA()" class="w-full flex items-center justify-between px-4 py-4 bg-[#1a1f2e] text-white rounded-xl transition text-xs font-bold uppercase tracking-widest hover:bg-blue-600 shadow-md">
                             <span class="flex items-center gap-3">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                                Acuerdo SLA (99.9%)
+                                Acuerdo SLA (98.99%) [cite: 28]
                             </span>
                             <svg class="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                         </button>
@@ -136,7 +140,7 @@
                 </button>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm border-collapse min-w-[600px]">
+                <table id="tablaTicketsContainer" class="w-full text-left text-sm border-collapse min-w-[600px] hidden">
                     <thead>
                         <tr class="border-b border-slate-200 text-slate-500 text-[10px] uppercase font-black tracking-widest">
                             <th class="pb-4">ID Ticket</th>
@@ -145,10 +149,9 @@
                             <th class="pb-4">Estado</th>
                         </tr>
                     </thead>
-                    <tbody id="tablaTickets" class="text-slate-700">
-                        </tbody>
+                    <tbody id="tablaTickets" class="text-slate-700"></tbody>
                 </table>
-                <div id="msgNoTickets" class="py-12 text-center hidden">
+                <div id="msgNoTickets" class="py-12 text-center">
                     <p class="text-slate-400 italic text-sm">No existen tickets activos registrados.</p>
                 </div>
             </div>
@@ -156,10 +159,9 @@
 
         <div class="mt-8 bg-white rounded-[2rem] p-8 md:p-10 shadow-lg border border-slate-200">
             <h3 class="text-xl font-black text-[#1a1f2e] mb-2">Historial de Facturación</h3>
-            <p class="text-sm text-slate-500 mb-8 text-sm">Últimos 12 meses emitidos.</p>
+            <p class="text-sm text-slate-500 mb-8">Últimos 12 meses emitidos.</p>
             
-            <div id="gridFacturas" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                </div>
+            <div id="gridFacturas" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
             <div id="msgNoFacturas" class="py-10 text-center hidden border-2 border-dashed border-slate-100 rounded-[2rem]">
                 <p class="text-slate-400 italic text-sm">Su estado de cuenta se encuentra al día.</p>
             </div>
@@ -177,8 +179,9 @@
             <form class="space-y-5" onsubmit="event.preventDefault(); alert('Enviado.'); document.getElementById('modal-ticket').classList.add('hidden');">
                 <input type="text" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Asunto">
                 <select class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
-                    <option>Baja (Consultas)</option>
-                    <option>Alta (Interrupción de servicio)</option>
+                    <option>Baja (Consultas/Administrativo)</option>
+                    <option>Media (Degradación de servicio)</option>
+                    <option>Alta (Caída total del enlace)</option>
                 </select>
                 <textarea rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Descripción..."></textarea>
                 <button type="submit" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg">Enviar a Soporte</button>
@@ -202,7 +205,7 @@
             document.getElementById('cuerpoPagina').classList.remove('hidden');
             const emailUsuario = session.user.email;
 
-            // 1. CARGAR DATOS DEL CLIENTE Y CALCULAR CONTRATO
+            // 1. CARGAR DATOS DEL CLIENTE
             const { data: cliente } = await clienteSupabase
                 .from('clientes')
                 .select('*')
@@ -215,12 +218,9 @@
                 document.getElementById('lblPlan').textContent = cliente.plan || "Dedicado";
                 document.getElementById('lblIp').textContent = cliente.ip || "0.0.0.0";
 
-                // Cálculo de meses restantes
-                const fHabilitacion = new Date(cliente.created_at); // O usa columna específica si la tienes
+                const fHabilitacion = new Date(cliente.created_at);
                 const mesesTotales = parseInt(cliente.contrato_meses) || 12;
                 const hoy = new Date();
-                
-                // Diferencia en meses
                 const mesesPasados = (hoy.getFullYear() - fHabilitacion.getFullYear()) * 12 + (hoy.getMonth() - fHabilitacion.getMonth());
                 const restantes = Math.max(0, mesesTotales - mesesPasados);
 
@@ -228,38 +228,32 @@
                 document.getElementById('lblMesesRestantes').textContent = restantes;
                 document.getElementById('lblFechaHabilitacion').textContent = `Habilitado el: ${fHabilitacion.toLocaleDateString('es-CL')}`;
 
-                // Manejo de Purple Hackers (Iframes rechazados)
-                const frame = document.getElementById('frameDashboard');
-                const loader = document.getElementById('loaderDashboard');
-                const blockedMsg = document.getElementById('msgIframeBlocked');
-                const btnLink = document.getElementById('btnLinkDashboard');
-
-                const dashUrl = cliente.url_dashboard || 'https://app.purplehackers.com/login/';
-                btnLink.href = dashUrl;
-                frame.src = dashUrl;
-
-                // Si no carga en 5 segundos, mostramos el botón externo por seguridad
-                const failSafe = setTimeout(() => {
-                    loader.classList.add('hidden');
-                    blockedMsg.classList.remove('hidden');
-                    frame.classList.add('hidden');
-                }, 5000);
-
-                frame.onload = () => {
-                    clearTimeout(failSafe);
-                    loader.classList.add('hidden');
-                    frame.classList.remove('hidden');
-                };
+                if (cliente.url_dashboard) {
+                    document.getElementById('btnLinkDashboard').href = cliente.url_dashboard;
+                }
             }
 
-            // 2. TICKETS VACÍOS (LIMPIOS)
-            const { data: tickets } = await clienteSupabase.from('tickets').select('*').eq('email_cliente', emailUsuario);
-            if (!tickets || tickets.length === 0) {
-                document.getElementById('msgNoTickets').classList.remove('hidden');
-                document.getElementById('tablaTickets').classList.add('hidden');
+            // 2. TICKETS SEGUROS (SOLUCIÓN ERROR 400)
+            try {
+                const { data: tickets, error: tError } = await clienteSupabase
+                    .from('tickets')
+                    .select('*')
+                    .eq('email_cliente', emailUsuario);
+
+                if (!tError && tickets && tickets.length > 0) {
+                    document.getElementById('msgNoTickets').classList.add('hidden');
+                    document.getElementById('tablaTicketsContainer').classList.remove('hidden');
+                    const tabla = document.getElementById('tablaTickets');
+                    tickets.forEach(tk => {
+                        const row = `<tr><td class="py-4 font-mono text-xs text-blue-600">#${tk.id}</td><td class="py-4 font-medium">${tk.asunto}</td><td class="py-4 text-xs">${new Date(tk.created_at).toLocaleDateString()}</td><td class="py-4 font-bold uppercase text-[10px] text-green-600">${tk.estado}</td></tr>`;
+                        tabla.innerHTML += row;
+                    });
+                }
+            } catch (err) {
+                console.log("Tabla tickets no disponible.");
             }
 
-            // 3. CARGAR ÚLTIMAS 12 FACTURAS
+            // 3. FACTURAS
             const { data: facturas } = await clienteSupabase
                 .from('facturas')
                 .select('*')
@@ -270,20 +264,13 @@
             const gridFacturas = document.getElementById('gridFacturas');
             if (facturas && facturas.length > 0) {
                 facturas.forEach(f => {
-                    const card = document.createElement('a');
-                    card.href = f.url_archivo;
-                    card.target = "_blank";
-                    card.className = "flex items-center gap-3 p-4 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-white hover:border-blue-200 transition group shadow-sm";
-                    card.innerHTML = `
-                        <div class="bg-white p-2 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition shadow-sm">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                        </div>
-                        <div>
-                            <p class="text-[10px] font-black text-[#1a1f2e] uppercase">${f.mes_anio || 'Factura'}</p>
-                            <p class="text-[9px] text-slate-400 font-bold">Descargar PDF</p>
-                        </div>
-                    `;
-                    gridFacturas.appendChild(card);
+                    gridFacturas.innerHTML += `
+                        <a href="${f.url_archivo}" target="_blank" class="flex items-center gap-3 p-4 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-white hover:border-blue-200 transition group shadow-sm">
+                            <div class="bg-white p-2 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition shadow-sm">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <div><p class="text-[10px] font-black text-[#1a1f2e] uppercase">${f.mes_anio || 'Factura'}</p><p class="text-[9px] text-slate-400 font-bold">Descargar PDF</p></div>
+                        </a>`;
                 });
             } else {
                 document.getElementById('msgNoFacturas').classList.remove('hidden');
@@ -291,7 +278,7 @@
         });
 
         function descargarSLA() {
-            window.open('https://eejsdoeuovcrjicrgxmo.supabase.co/storage/v1/object/public/contratos/SLA_Globalcom.pdf', '_blank');
+            window.open('https://eejsdoeuovcrjicrgxmo.supabase.co/storage/v1/object/public/contratos/SLA_GLOBALCOM.pdf', '_blank');
         }
 
         async function cerrarSesion() {
