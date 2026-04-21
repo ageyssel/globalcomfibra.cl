@@ -27,7 +27,7 @@ serve(async (req) => {
     const { error: dbError } = await supabaseAdmin.from('clientes').upsert({ email, ...clientData })
     if (dbError) throw dbError
 
-    // 3. ENVIAR CORREO DE BIENVENIDA (MODO REAL)
+    // 3. ENVIAR CORREO DE BIENVENIDA (MODO REAL CON CONTRASEÑA)
     const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
     
     const emailHtml = `
@@ -40,19 +40,19 @@ serve(async (req) => {
 
         <div style="padding: 40px 30px; color: #334155; line-height: 1.6;">
           <h2 style="color: #0f172a; margin-top: 0; font-size: 20px; font-weight: 600;">Bienvenido, equipo de ${clientData.empresa}</h2>
-          <p style="font-size: 15px;">Nos complace darle la bienvenida a nuestra red B2B. Su infraestructura tecnológica ahora está respaldada por nuestra red, y su cuenta en el <strong>Portal de Clientes Globalcom</strong> ya se encuentra activa.</p>
+          <p style="font-size: 15px;">Nos complace informarles que su infraestructura tecnológica ya se encuentra integrada a nuestra red troncal. Su cuenta de acceso al <strong>Portal de Clientes Globalcom</strong> ha sido activada.</p>
 
           <div style="background-color: #f8fafc; border-left: 4px solid #3b82f6; padding: 25px; margin: 35px 0; border-radius: 0 8px 8px 0;">
             <h3 style="margin: 0 0 15px 0; font-size: 12px; color: #475569; text-transform: uppercase; letter-spacing: 1px;">Credenciales de Acceso Exclusivo</h3>
             <p style="margin: 8px 0; font-size: 15px;"><strong>URL del Portal:</strong> <a href="https://globalcomfibra.cl/login" style="color: #3b82f6; text-decoration: none; font-weight: 600;">globalcomfibra.cl/login</a></p>
-            <p style="margin: 8px 0; font-size: 15px;"><strong>Usuario (Email):</strong> ${email}</p>
-            <p style="margin: 8px 0; font-size: 15px;"><strong>Contraseña:</strong> <em style="color: #64748b;">La contraseña temporal asignada por su ejecutivo</em></p>
+            <p style="margin: 8px 0; font-size: 15px;"><strong>Usuario:</strong> ${email}</p>
+            <p style="margin: 8px 0; font-size: 15px;"><strong>Contraseña:</strong> <span style="color: #0f172a; font-weight: 700; background-color: #e2e8f0; padding: 2px 6px; border-radius: 4px;">${password}</span></p>
           </div>
 
-          <p style="font-size: 15px;">Desde su portal privado podrá monitorear las métricas de su enlace en tiempo real, descargar sus contratos vigentes y acceder a su historial de facturación mensual.</p>
+          <p style="font-size: 14px; color: #64748b; font-style: italic;">Por seguridad, le recomendamos cambiar esta contraseña desde su perfil una vez que haya ingresado por primera vez.</p>
 
-          <div style="text-align: center; margin: 45px 0 20px 0;">
-            <a href="https://globalcomfibra.cl/login" style="background-color: #1a1f2e; color: #ffffff; padding: 16px 36px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; display: inline-block; transition: background-color 0.3s;">Acceder al Portal NOC</a>
+          <div style="text-align: center; margin: 40px 0 20px 0;">
+            <a href="https://globalcomfibra.cl/login" style="background-color: #1a1f2e; color: #ffffff; padding: 16px 36px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; display: inline-block;">Acceder al Portal NOC</a>
           </div>
         </div>
 
@@ -68,7 +68,6 @@ serve(async (req) => {
       </div>
     `;
 
-    // VERSIÓN PRODUCCIÓN: Envía desde dominio oficial a todos los correos registrados
     const resendResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -76,8 +75,8 @@ serve(async (req) => {
         'Authorization': `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: 'Globalcom <no-reply@globalcomfibra.cl>', // Dominio real
-        to: [email, clientData.correo_facturacion], // Arreglo con múltiples destinatarios reales
+        from: 'Globalcom <no-reply@globalcomfibra.cl>',
+        to: [email, clientData.correo_facturacion],
         subject: `Bienvenido a Globalcom - Activación de Cuenta: ${clientData.empresa}`,
         html: emailHtml,
       }),
@@ -90,7 +89,7 @@ serve(async (req) => {
       throw new Error(`Error enviando correo: ${resendData.message || 'Error desconocido de Resend'}`);
     }
 
-    return new Response(JSON.stringify({ message: "Cliente creado y correos enviados" }), { 
+    return new Response(JSON.stringify({ message: "Cliente creado y correos enviados con éxito" }), { 
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 
     })
 
