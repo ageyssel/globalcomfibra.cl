@@ -6,7 +6,6 @@
     <title>Admin Globalcom | Gestión de Clientes</title>
     <link rel="icon" href="img/favicon.png" type="image/png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="img/favicon.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style> body { font-family: 'Inter', sans-serif; } </style>
@@ -56,13 +55,18 @@
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Login (Informativo)</label>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email de Acceso (Login)</label>
                             <input type="email" id="cEmail" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
                         <div>
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Facturación</label>
-                            <input type="email" id="cEmailFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <label class="text-[10px] font-bold text-orange-600 uppercase tracking-widest">Contraseña Portal</label>
+                            <input type="password" id="cPassword" required placeholder="Mínimo 6 caracteres" class="w-full mt-1 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none">
                         </div>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Facturación</label>
+                        <input type="email" id="cEmailFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                     </div>
 
                     <div>
@@ -88,9 +92,8 @@
                     </div>
 
                     <div class="p-4 bg-blue-50 rounded-xl border border-blue-100">
-                        <label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Enlace Monitoreo en Vivo (Grafana/PRTG)</label>
-                        <input type="url" id="cDashboard" placeholder="https://grafana.globalcom.cl/d/cliente..." class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                        <p class="text-[9px] text-blue-500 mt-1">Este enlace se mostrará incrustado en el portal del cliente.</p>
+                        <label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Enlace Monitoreo (Dashboard Externo)</label>
+                        <input type="url" id="cDashboard" placeholder="https://app.purplehackers.com/..." class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                     </div>
 
                     <div>
@@ -99,9 +102,8 @@
                     </div>
 
                     <button type="submit" id="btnCrearCliente" class="w-full bg-[#1a1f2e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition shadow-lg mt-4">
-                        Crear Perfil de Cliente
+                        Crear Cliente y Cuenta de Acceso
                     </button>
-                    <p class="text-xs text-center text-slate-500 mt-2">⚠️ Recuerda dar de alta el correo y clave en la pestaña "Auth" de Supabase.</p>
                 </form>
             </div>
 
@@ -116,7 +118,7 @@
 
                     <form id="formFactura" class="space-y-4 bg-green-50 p-6 rounded-xl border border-green-100">
                         <div>
-                            <label class="text-[10px] font-bold text-green-800 uppercase tracking-widest">Mes de Facturación (Ej: Abril 2026)</label>
+                            <label class="text-[10px] font-bold text-green-800 uppercase tracking-widest">Mes de Facturación (Ej: Mayo 2026)</label>
                             <input type="text" id="inpMes" required class="w-full mt-1 bg-white border border-green-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
                         </div>
                         <div>
@@ -124,7 +126,7 @@
                             <input type="file" id="inpArchivoFactura" accept=".pdf" required class="w-full mt-1 bg-white border border-green-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
                         </div>
                         <button type="submit" id="btnSubirFactura" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition shadow-md">
-                            Subir, Actualizar Portal y Notificar
+                            Subir y Notificar por Correo
                         </button>
                     </form>
                 </div>
@@ -155,27 +157,26 @@
             select.innerHTML = '<option value="">Seleccione un cliente...</option>';
             if(clientes){
                 clientes.forEach(c => {
-                    // Guardamos el email de facturación como data-atributo para usarlo en el correo
                     select.innerHTML += `<option value="${c.email}" data-fact="${c.correo_facturacion || c.email}">${c.empresa} (${c.email})</option>`;
                 });
             }
         }
 
-        // LÓGICA PARA CREAR CLIENTE Y SUBIR CONTRATO
+        // --- NUEVA LÓGICA: CREAR CLIENTE Y CUENTA VÍA EDGE FUNCTION ---
         document.getElementById('formCrearCliente').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnCrearCliente');
-            btn.textContent = "Creando Perfil...";
+            btn.textContent = "Procesando Alta...";
             btn.disabled = true;
 
             const email = document.getElementById('cEmail').value.trim().toLowerCase();
+            const password = document.getElementById('cPassword').value;
             let urlContrato = "";
             const archivo = document.getElementById('cArchivoContrato').files[0];
 
-            // 1. Si hay contrato, lo subimos al bucket 'contratos'
+            // 1. Subida de contrato si existe
             if (archivo) {
-                const fileExt = archivo.name.split('.').pop();
-                const fileName = `contrato_${email}_${Date.now()}.${fileExt}`;
+                const fileName = `contrato_${email}_${Date.now()}.pdf`;
                 const { error: uploadError } = await adminSupabase.storage.from('contratos').upload(fileName, archivo);
                 if (!uploadError) {
                     const { data } = adminSupabase.storage.from('contratos').getPublicUrl(fileName);
@@ -183,34 +184,39 @@
                 }
             }
 
-            // 2. Guardar todos los datos en la tabla clientes
-            const { error } = await adminSupabase.from('clientes').upsert({
-                email: email,
-                empresa: document.getElementById('cEmpresa').value,
-                rut: document.getElementById('cRut').value,
-                contacto: document.getElementById('cContacto').value,
-                contacto_facturacion: document.getElementById('cContactoFact').value,
-                correo_facturacion: document.getElementById('cEmailFact').value.trim().toLowerCase(),
-                direccion: document.getElementById('cDireccion').value,
-                plan: document.getElementById('cPlan').value,
-                fecha_inicio: document.getElementById('cFecha').value,
-                url_dashboard: document.getElementById('cDashboard').value,
-                url_contrato: urlContrato,
-                id_cliente: 'GCOM-' + Math.floor(1000 + Math.random() * 9000) // Autogenera ID
+            // 2. Llamada a la Edge Function para crear Usuario Auth + Registro en DB
+            const { data, error } = await adminSupabase.functions.invoke('create-client', {
+                body: {
+                    email: email,
+                    password: password,
+                    clientData: {
+                        empresa: document.getElementById('cEmpresa').value,
+                        rut: document.getElementById('cRut').value,
+                        contacto: document.getElementById('cContacto').value,
+                        contacto_facturacion: document.getElementById('cContactoFact').value,
+                        correo_facturacion: document.getElementById('cEmailFact').value.trim().toLowerCase(),
+                        direccion: document.getElementById('cDireccion').value,
+                        plan: document.getElementById('cPlan').value,
+                        fecha_inicio: document.getElementById('cFecha').value,
+                        url_dashboard: document.getElementById('cDashboard').value,
+                        url_contrato: urlContrato,
+                        id_cliente: 'GCOM-' + Math.floor(1000 + Math.random() * 9000)
+                    }
+                }
             });
 
             if (error) {
-                alert("Error al crear: " + error.message);
+                alert("Error en el alta: " + error.message);
             } else {
-                alert("Cliente creado exitosamente en el CRM.");
+                alert("¡Cliente y cuenta creados con éxito!");
                 document.getElementById('formCrearCliente').reset();
                 cargarListaClientes();
             }
-            btn.textContent = "Crear Perfil de Cliente";
+            btn.textContent = "Crear Cliente y Cuenta de Acceso";
             btn.disabled = false;
         });
 
-        // LÓGICA PARA SUBIR FACTURA Y REDACTAR CORREO EXACTO
+        // --- FUNCIÓN DE FACTURACIÓN (SE MANTIENE INTACTA) ---
         document.getElementById('formFactura').addEventListener('submit', async (e) => {
             e.preventDefault();
             const select = document.getElementById('selectClienteFactura');
@@ -223,16 +229,14 @@
 
             if(!emailClienteLogico || !archivo) return alert("Selecciona cliente y archivo");
 
-            btn.textContent = "Subiendo archivo...";
+            btn.textContent = "Subiendo...";
             btn.disabled = true;
 
-            const fileExt = archivo.name.split('.').pop();
-            const fileName = `factura_${emailClienteLogico}_${Date.now()}.${fileExt}`;
+            const fileName = `factura_${emailClienteLogico}_${Date.now()}.pdf`;
             const { error: uploadError } = await adminSupabase.storage.from('facturas').upload(fileName, archivo);
 
             if (uploadError) {
                 alert("Error: " + uploadError.message);
-                btn.textContent = "Subir, Actualizar Portal y Notificar";
                 btn.disabled = false;
                 return;
             }
@@ -245,20 +249,14 @@
                 url_archivo: publicUrl
             });
 
-            btn.textContent = "¡Factura Lista!";
-            
-            // REDACCIÓN EXACTA DEL CORREO SOLICITADO
             const asunto = encodeURIComponent(`Facturas de Servicio Globalcom - ${mes}`);
             const cuerpoCorreo = encodeURIComponent(`Estimados,\n\nJunto con saludar, adjuntamos el enlace para descargar las Facturas correspondientes a los servicios del mes de ${mes}.\n\n🔗 Descargar Factura: ${publicUrl}\n\nRecordarle que la renta mensual convenida debe ser pagada mediante depósito o transferencia bancaria conforme a lo estipulado en nuestro acuerdo.\nA continuación, detallamos los datos bancarios para realizar el pago:\n\nDATOS BANCARIOS\nNombre: Servicio de Telecomunicaciones Globalcom Ltda.\nBanco: Scotiabank / Cuenta Corriente\nRUT: 77.812.215-4\nN° de cuenta: 987836121\n\nAgradecemos desde ya su gestión para concretar el pago a la brevedad. Si ya realizó la transferencia, le solicitamos enviar el comprobante al correo contacto@globalcomfibra.cl para registrar el pago correctamente.\n\nQuedamos atentos ante cualquier duda.\n\nSaludos cordiales,\nServicio de Telecomunicaciones Globalcom Ltda.`);
 
-            // Abre el correo dirigido al correo de facturación de ese cliente
             window.open(`mailto:${correoFacturacionReal}?subject=${asunto}&body=${cuerpoCorreo}`);
 
-            setTimeout(() => {
-                btn.textContent = "Subir, Actualizar Portal y Notificar";
-                btn.disabled = false;
-                document.getElementById('formFactura').reset();
-            }, 3000);
+            btn.textContent = "Subir y Notificar por Correo";
+            btn.disabled = false;
+            document.getElementById('formFactura').reset();
         });
 
         async function cerrarSesion() {
