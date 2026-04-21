@@ -21,7 +21,7 @@
             </div>
             <div class="flex items-center space-x-6">
                 <span id="adminUserEmail" class="text-[10px] font-bold text-slate-400 hidden md:inline">admin@globalcomfibra.cl</span>
-                <button onclick="cerrarSesion()" class="text-sm font-bold text-slate-300 hover:text-white transition">Salir del Admin</button>
+                <button onclick="cerrarSesion()" class="text-sm font-bold text-slate-300 hover:text-white transition">Salir</button>
             </div>
         </div>
     </nav>
@@ -156,43 +156,78 @@
     </main>
 
     <div id="modal-detalle" class="hidden fixed inset-0 bg-[#1a1f2e]/80 backdrop-blur-md z-[100] flex justify-center items-center p-4">
-        <div class="bg-white rounded-[2.5rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl relative border border-slate-200">
-            <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-5xl max-h-[95vh] overflow-y-auto shadow-2xl relative border border-slate-200">
+            <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition z-10">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
 
             <div class="p-10">
-                <div class="flex items-center gap-6 mb-10">
-                    <div id="detIniciales" class="h-16 w-16 rounded-3xl bg-blue-600 text-white flex items-center justify-center text-2xl font-black shadow-lg">?</div>
-                    <div>
-                        <h2 id="detEmpresa" class="text-3xl font-black text-[#1a1f2e]">Nombre Empresa</h2>
-                        <p id="detEmail" class="text-slate-500 font-medium text-sm">correo@cliente.cl</p>
+                <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center gap-6">
+                        <div id="detIniciales" class="h-16 w-16 rounded-3xl bg-blue-600 text-white flex items-center justify-center text-2xl font-black shadow-lg">?</div>
+                        <div>
+                            <h2 id="detEmpresa" class="text-3xl font-black text-[#1a1f2e]">Nombre Empresa</h2>
+                            <p id="detEmail" class="text-slate-500 font-medium text-sm">correo@cliente.cl</p>
+                        </div>
                     </div>
+                    <button id="btnEstadoCliente" onclick="toggleEstadoCliente()" data-estado="Activo" class="text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest transition shadow-sm border border-transparent">
+                        Activo
+                    </button>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-10">
                     <div class="space-y-6">
-                        <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Configuración de Servicio</h3>
-                        <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100 space-y-4">
-                            <p class="text-sm text-slate-500 font-bold uppercase tracking-widest text-[10px]">Plan</p>
-                            <p id="detPlan" class="font-black text-[#1a1f2e] -mt-3">---</p>
+                        <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Datos y Configuración (Editable)</h3>
+                        
+                        <form id="formEditarCliente" class="bg-slate-50 rounded-3xl p-6 border border-slate-100 space-y-4">
+                            <input type="hidden" id="editEmailOriginal">
                             
-                            <p class="text-sm text-slate-500 font-bold uppercase tracking-widest text-[10px]">IP Pública</p>
-                            <p id="detIp" class="text-blue-600 font-mono font-bold -mt-3">---</p>
-                            
-                            <p class="text-sm text-slate-500 font-bold uppercase tracking-widest text-[10px]">Contrato</p>
-                            <p id="detMeses" class="font-black text-[#1a1f2e] -mt-3">--- meses</p>
-                            
-                            <hr class="border-slate-200">
-                            <button id="btnVerContrato" class="w-full bg-[#1a1f2e] text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-600 transition shadow-md">
-                                Descargar Contrato PDF
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Empresa</label>
+                                <input type="text" id="eEmpresa" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:ring-1 outline-none"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">RUT</label>
+                                <input type="text" id="eRut" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:ring-1 outline-none"></div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Contacto Técnico</label>
+                                <input type="text" id="eContacto" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:ring-1 outline-none"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Cont. Facturación</label>
+                                <input type="text" id="eContactoFact" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:ring-1 outline-none"></div>
+                            </div>
+
+                            <div><label class="text-[9px] font-bold text-slate-500 uppercase">Email Facturación</label>
+                            <input type="email" id="eEmailFact" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:ring-1 outline-none"></div>
+
+                            <div><label class="text-[9px] font-bold text-slate-500 uppercase">Dirección Instalación</label>
+                            <input type="text" id="eDireccion" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:ring-1 outline-none"></div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">IP Pública</label>
+                                <input type="text" id="eIp" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:ring-1 outline-none"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Meses Contrato</label>
+                                <input type="number" id="eMeses" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:ring-1 outline-none"></div>
+                            </div>
+
+                            <div><label class="text-[9px] font-bold text-slate-500 uppercase">Plan</label>
+                            <input type="text" id="ePlan" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:ring-1 outline-none"></div>
+
+                            <div><label class="text-[9px] font-bold text-slate-500 uppercase">Link Dashboard</label>
+                            <input type="text" id="eDashboard" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:ring-1 outline-none"></div>
+
+                            <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-blue-700 transition shadow-md mt-2">
+                                Guardar Cambios de Cliente
                             </button>
-                        </div>
+                        </form>
+
+                        <button id="btnVerContrato" class="w-full bg-[#1a1f2e] text-white py-3 rounded-xl font-bold text-sm hover:bg-slate-800 transition shadow-md">
+                            Descargar Contrato PDF Original
+                        </button>
                     </div>
 
                     <div class="space-y-6">
                         <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Historial de Facturas</h3>
-                        <div id="listaFacturasDetalle" class="space-y-3 max-h-[350px] overflow-y-auto pr-2">
+                        <div id="listaFacturasDetalle" class="space-y-3 max-h-[500px] overflow-y-auto pr-2">
                             </div>
                     </div>
                 </div>
@@ -227,12 +262,14 @@
             
             if(clientes){
                 clientes.forEach(c => {
+                    const statusDot = (!c.estado || c.estado === 'Activo') ? '<span class="w-2 h-2 rounded-full bg-green-500 inline-block mr-2"></span>' : '<span class="w-2 h-2 rounded-full bg-red-500 inline-block mr-2"></span>';
+                    
                     select.innerHTML += `<option value="${c.email}" data-fact="${c.correo_facturacion || c.email}">${c.empresa}</option>`;
                     tabla.innerHTML += `
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="px-4 py-3 font-bold text-[#1a1f2e]">${c.empresa}</td>
-                            <td class="px-4 py-3 text-right">
-                                <button onclick="gestionarCliente('${c.email}')" class="text-[9px] font-black uppercase bg-slate-100 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded-lg transition tracking-widest border border-slate-200">Gestionar</button>
+                        <tr class="hover:bg-slate-50 transition border-b border-slate-100 last:border-0">
+                            <td class="px-4 py-4 font-bold text-[#1a1f2e] text-xs flex items-center">${statusDot} ${c.empresa}</td>
+                            <td class="px-4 py-4 text-right">
+                                <button onclick="gestionarCliente('${c.email}')" class="text-[9px] font-black uppercase bg-white border border-slate-200 text-slate-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 px-3 py-1.5 rounded-lg transition tracking-widest shadow-sm">Editar / Gestionar</button>
                             </td>
                         </tr>
                     `;
@@ -240,6 +277,7 @@
             }
         }
 
+        // --- ALTA DE CLIENTE (MANTIENE TODOS LOS CAMPOS) ---
         document.getElementById('formCrearCliente').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnCrearCliente');
@@ -276,6 +314,7 @@
                             plan: document.getElementById('cPlan').value,
                             url_dashboard: document.getElementById('cDashboard').value,
                             url_contrato: urlContrato,
+                            estado: 'Activo',
                             id_cliente: 'GCOM-' + Math.floor(1000 + Math.random() * 9000)
                         }
                     }
@@ -288,34 +327,114 @@
             finally { btn.textContent = originalText; btn.disabled = false; }
         });
 
+        // --- GESTIÓN INTEGRAL: LLENAR MODAL PARA EDICIÓN ---
         async function gestionarCliente(email) {
             const modal = document.getElementById('modal-detalle');
             modal.classList.remove('hidden');
 
             const { data: cliente } = await adminSupabase.from('clientes').select('*').eq('email', email).single();
             
+            // Llenar Cabecera
             document.getElementById('detEmpresa').textContent = cliente.empresa;
             document.getElementById('detEmail').textContent = cliente.email;
-            document.getElementById('detPlan').textContent = cliente.plan;
-            document.getElementById('detIp').textContent = cliente.ip || '0.0.0.0';
-            document.getElementById('detMeses').textContent = cliente.contrato_meses || '12';
             document.getElementById('detIniciales').textContent = cliente.empresa.substring(0,1).toUpperCase();
 
-            // Buscar contrato en Storage
+            // Llenar Formulario de Edición
+            document.getElementById('editEmailOriginal').value = cliente.email;
+            document.getElementById('eEmpresa').value = cliente.empresa || '';
+            document.getElementById('eRut').value = cliente.rut || '';
+            document.getElementById('eContacto').value = cliente.contacto || '';
+            document.getElementById('eContactoFact').value = cliente.contacto_facturacion || '';
+            document.getElementById('eEmailFact').value = cliente.correo_facturacion || '';
+            document.getElementById('eDireccion').value = cliente.direccion || '';
+            document.getElementById('eIp').value = cliente.ip || '';
+            document.getElementById('eMeses').value = cliente.contrato_meses || '12';
+            document.getElementById('ePlan').value = cliente.plan || '';
+            document.getElementById('eDashboard').value = cliente.url_dashboard || '';
+
+            // Configurar Botón Estado
+            const estadoActual = cliente.estado || 'Activo';
+            actualizarBotonEstado(estadoActual);
+
+            // Buscar contrato
             const { data: archivos } = await adminSupabase.storage.from('contratos').list('', { search: email });
             const btnContrato = document.getElementById('btnVerContrato');
             if (archivos && archivos.length > 0) {
                 const { data: url } = adminSupabase.storage.from('contratos').getPublicUrl(archivos[0].name);
                 btnContrato.onclick = () => window.open(url.publicUrl, '_blank');
                 btnContrato.classList.remove('opacity-50', 'pointer-events-none');
+                btnContrato.textContent = "Descargar Contrato PDF Original";
             } else {
                 btnContrato.classList.add('opacity-50', 'pointer-events-none');
-                btnContrato.textContent = "Sin Contrato";
+                btnContrato.textContent = "Sin Contrato PDF";
             }
 
             cargarFacturasDetalle(email);
         }
 
+        // --- GESTIÓN INTEGRAL: GUARDAR EDICIÓN ---
+        document.getElementById('formEditarCliente').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.textContent = "Guardando..."; btn.disabled = true;
+
+            const emailOriginal = document.getElementById('editEmailOriginal').value;
+            const updates = {
+                empresa: document.getElementById('eEmpresa').value,
+                rut: document.getElementById('eRut').value,
+                contacto: document.getElementById('eContacto').value,
+                contacto_facturacion: document.getElementById('eContactoFact').value,
+                correo_facturacion: document.getElementById('eEmailFact').value,
+                direccion: document.getElementById('eDireccion').value,
+                ip: document.getElementById('eIp').value,
+                contrato_meses: document.getElementById('eMeses').value,
+                plan: document.getElementById('ePlan').value,
+                url_dashboard: document.getElementById('eDashboard').value
+            };
+
+            const { error } = await adminSupabase.from('clientes').update(updates).eq('email', emailOriginal);
+            
+            btn.textContent = "Guardar Cambios de Cliente"; btn.disabled = false;
+            
+            if(error) alert("Error: " + error.message);
+            else {
+                alert("Datos del cliente actualizados correctamente.");
+                document.getElementById('detEmpresa').textContent = updates.empresa; 
+                cargarListaClientes(); 
+            }
+        });
+
+        // --- GESTIÓN INTEGRAL: TOGGLE ESTADO ---
+        async function toggleEstadoCliente() {
+            const btn = document.getElementById('btnEstadoCliente');
+            const email = document.getElementById('editEmailOriginal').value;
+            const estadoActual = btn.dataset.estado;
+            const nuevoEstado = estadoActual === 'Activo' ? 'Suspendido' : 'Activo';
+
+            if(!confirm(`¿Desea cambiar el estado del cliente a ${nuevoEstado}?`)) return;
+
+            const { error } = await adminSupabase.from('clientes').update({ estado: nuevoEstado }).eq('email', email);
+            
+            if(error) alert("Error: " + error.message);
+            else {
+                actualizarBotonEstado(nuevoEstado);
+                cargarListaClientes();
+            }
+        }
+
+        function actualizarBotonEstado(estado) {
+            const btn = document.getElementById('btnEstadoCliente');
+            btn.dataset.estado = estado;
+            if(estado === 'Activo') {
+                btn.className = "text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-700 transition shadow-sm border border-green-200";
+                btn.innerHTML = `<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> ACTIVO (Click para Suspender)</span>`;
+            } else {
+                btn.className = "text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest bg-red-100 text-red-700 hover:bg-green-100 hover:text-green-700 transition shadow-sm border border-red-200";
+                btn.innerHTML = `<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500"></span> SUSPENDIDO (Click para Activar)</span>`;
+            }
+        }
+
+        // --- FACTURACIÓN ---
         async function cargarFacturasDetalle(email) {
             const contenedor = document.getElementById('listaFacturasDetalle');
             contenedor.innerHTML = '<p class="text-xs italic">Cargando...</p>';
@@ -347,14 +466,18 @@
 
         document.getElementById('formFactura').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const emailCliente = document.getElementById('selectClienteFactura').value;
-            const correoFact = document.getElementById('selectClienteFactura').options[document.getElementById('selectClienteFactura').selectedIndex].getAttribute('data-fact');
+            const select = document.getElementById('selectClienteFactura');
+            const emailCliente = select.value;
+            const correoFact = select.options[select.selectedIndex].getAttribute('data-fact');
             const mes = document.getElementById('inpMes').value;
             const archivo = document.getElementById('inpArchivoFactura').files[0];
             const btn = document.getElementById('btnSubirFactura');
 
             if(!emailCliente) return alert("Seleccione un cliente");
-            btn.disabled = true; btn.textContent = "Procesando...";
+            
+            const originalBtn = btn.textContent;
+            btn.textContent = "Procesando...";
+            btn.disabled = true;
 
             try {
                 const fileName = `factura_${emailCliente}_${Date.now()}.pdf`;
@@ -362,12 +485,24 @@
                 if (uploadError) throw uploadError;
 
                 const { data: { publicUrl } } = adminSupabase.storage.from('facturas').getPublicUrl(fileName);
-                await adminSupabase.from('facturas').insert({ email_cliente: emailCliente, mes_anio: mes, url_archivo: publicUrl });
+                const { error: dbError } = await adminSupabase.from('facturas').insert({ email_cliente: emailCliente, mes_anio: mes, url_archivo: publicUrl });
+                if (dbError) throw dbError;
 
-                window.open(`mailto:${correoFact}?subject=Factura Globalcom - ${mes}&body=Hola, adjuntamos su factura: ${publicUrl}`);
-                alert("Listo!"); document.getElementById('formFactura').reset();
+                const { data: res, error: err } = await adminSupabase.functions.invoke('send-invoice-notification', {
+                    body: {
+                        emailCliente: emailCliente,
+                        correoFacturacion: correoFact,
+                        mesAnio: mes,
+                        urlArchivo: publicUrl,
+                        empresa: select.options[select.selectedIndex].text
+                    }
+                });
+                if (err) throw err;
+
+                alert("Factura procesada y notificada con éxito.");
+                document.getElementById('formFactura').reset();
             } catch (err) { alert(err.message); }
-            finally { btn.disabled = false; btn.textContent = "Subir y Notificar Factura"; }
+            finally { btn.textContent = originalBtn; btn.disabled = false; }
         });
 
         async function cerrarSesion() {
