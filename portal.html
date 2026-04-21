@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col hidden" id="cuerpoPagina">
+    
     <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-4">
@@ -38,7 +39,7 @@
         <div class="mb-8 flex justify-between items-end">
             <div>
                 <h1 class="text-3xl font-black text-[#1a1f2e] tracking-tight">Panel de Control</h1>
-                <p class="text-slate-500 text-sm mt-1">Monitorea tu enlace dedicado y gestiona requerimientos técnicos.</p>
+                <p class="text-slate-500 text-sm mt-1">Gestión integral de servicio y conectividad.</p>
             </div>
             <div id="statusBadge" class="hidden md:flex bg-green-50 border border-green-200 px-4 py-2 rounded-full items-center space-x-2">
                 <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -47,6 +48,7 @@
         </div>
 
         <div class="grid lg:grid-cols-3 gap-8">
+            
             <div class="lg:col-span-2 bg-white rounded-[2rem] shadow-lg border border-slate-200 overflow-hidden min-h-[550px] flex flex-col relative group">
                 <div class="px-6 py-4 flex justify-between items-center border-b border-slate-50 bg-slate-50/50 absolute top-0 w-full z-20">
                     <div>
@@ -69,7 +71,7 @@
                     <p class="text-slate-400 max-w-sm mx-auto mb-6 text-sm leading-relaxed">Acceda a la consola de monitoreo dedicada de Purple Hackers para gestionar su latencia en tiempo real.</p>
                     
                     <div id="boxCredencialesNoc" class="hidden bg-slate-900/60 backdrop-blur-md border border-slate-700 rounded-xl p-4 mb-6 text-left w-full max-w-sm shadow-xl">
-                        <p class="text-[10px] text-blue-400 font-bold uppercase tracking-widest mb-3 border-b border-slate-700 pb-2">Tus Credenciales de Acceso</p>
+                        <p class="text-[10px] text-blue-400 font-bold uppercase tracking-widest mb-3 border-b border-slate-700 pb-2">Credenciales de Acceso NOC</p>
                         <div class="space-y-2">
                             <div class="flex justify-between items-center">
                                 <span class="text-xs text-slate-400">Usuario:</span>
@@ -121,7 +123,7 @@
                         
                         <button onclick="descargarSLA()" class="w-full mt-6 flex items-center justify-center gap-3 px-4 py-3 bg-[#1a1f2e] hover:bg-blue-600 text-white rounded-xl transition text-xs font-bold uppercase tracking-widest shadow-md">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                            Acuerdo SLA (98.99%)
+                            Descargar SLA (98.99%)
                         </button>
                     </div>
                 </div>
@@ -157,8 +159,7 @@
                             <th class="pb-4 font-bold uppercase tracking-wider text-[10px]">Estado</th>
                         </tr>
                     </thead>
-                    <tbody id="tablaTickets" class="text-slate-700">
-                        </tbody>
+                    <tbody id="tablaTickets" class="text-slate-700"></tbody>
                 </table>
                 <div id="msgNoTickets" class="py-12 text-center">
                     <p class="text-slate-400 italic text-sm">No existen tickets activos registrados.</p>
@@ -169,14 +170,11 @@
         <div class="mt-8 bg-white rounded-[2rem] p-8 md:p-10 shadow-lg border border-slate-200">
             <h3 class="text-xl font-black text-[#1a1f2e] mb-2">Historial de Facturación</h3>
             <p class="text-sm text-slate-500 mb-8">Últimos 12 meses emitidos.</p>
-            
-            <div id="gridFacturas" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                </div>
+            <div id="gridFacturas" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
             <div id="msgNoFacturas" class="py-10 text-center hidden border-2 border-dashed border-slate-100 rounded-[2rem]">
                 <p class="text-slate-400 italic text-sm">Su estado de cuenta se encuentra al día.</p>
             </div>
         </div>
-
     </main>
 
     <div id="modal-ticket" class="hidden fixed inset-0 bg-[#1a1f2e]/60 backdrop-blur-sm z-50 flex justify-center items-center p-4">
@@ -185,25 +183,25 @@
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
             <h3 class="text-2xl font-black mb-2 text-[#1a1f2e]">Generar Ticket</h3>
-            <p class="text-sm text-slate-500 mb-6">Describe tu problema. Nuestro equipo técnico responderá en menos de 15 minutos.</p>
-            <form class="space-y-5" onsubmit="event.preventDefault(); alert('Ticket enviado con éxito a soporte@globalcomfibra.cl.'); document.getElementById('modal-ticket').classList.add('hidden');">
+            <p class="text-sm text-slate-500 mb-6">Describa su problema técnico. Nuestro equipo responderá a la brevedad.</p>
+            <form id="formNuevoTicket" class="space-y-5">
                 <div>
                     <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Asunto</label>
-                    <input type="text" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Ej: Falla de conectividad">
+                    <input type="text" id="tkAsunto" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Ej: Falla de conectividad">
                 </div>
                 <div>
                     <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Prioridad (SLA)</label>
-                    <select class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
-                        <option>Baja (Consultas/Administrativo)</option>
-                        <option>Media (Degradación de servicio)</option>
-                        <option>Alta (Caída total del enlace)</option>
+                    <select id="tkPrioridad" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
+                        <option value="Baja">Baja (Consultas/Administrativo)</option>
+                        <option value="Media">Media (Degradación de servicio)</option>
+                        <option value="Alta">Alta (Caída total del enlace)</option>
                     </select>
                 </div>
                 <div>
                     <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Descripción</label>
-                    <textarea required rows="4" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Detalla el problema..."></textarea>
+                    <textarea id="tkDescripcion" required rows="4" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Detalla el problema..."></textarea>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg mt-2">
+                <button type="submit" id="btnEnviarTicket" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg mt-2">
                     Enviar Ticket a Soporte
                 </button>
             </form>
@@ -217,131 +215,94 @@
     <script>
         const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
-                
         const clienteSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const ADMIN_EMAIL = 'contacto@globalcomfibra.cl';
 
         document.addEventListener('DOMContentLoaded', async () => {
-            const { data: { session }, error: sessionError } = await clienteSupabase.auth.getSession();
-            
-            if (!session) {
-                window.location.href = 'login.html';
-                return;
-            } else if (session.user.email === ADMIN_EMAIL) {
-                window.location.href = 'admin.html';
-                return;
-            }
+            const { data: { session } } = await clienteSupabase.auth.getSession();
+            if (!session) { window.location.href = 'login.html'; return; }
+            else if (session.user.email === ADMIN_EMAIL) { window.location.href = 'admin.html'; return; }
 
             document.getElementById('cuerpoPagina').classList.remove('hidden');
             const emailUsuario = session.user.email;
 
-            // 1. Cargar Datos del Cliente
-            const { data: cliente, error } = await clienteSupabase
-                .from('clientes')
-                .select('*')
-                .eq('email', emailUsuario)
-                .maybeSingle();
+            // 1. CARGAR DATOS DEL CLIENTE
+            const { data: cliente } = await clienteSupabase.from('clientes').select('*').eq('email', emailUsuario).maybeSingle();
 
             if (cliente) {
                 document.getElementById('lblEmpresa').textContent = cliente.empresa || emailUsuario;
                 document.getElementById('lblId').textContent = cliente.id_cliente || "GCOM-NUEVO";
-                document.getElementById('lblPlan').textContent = cliente.plan || "Asignando Plan...";
-                document.getElementById('lblIp').textContent = cliente.ip || "Pendiente";
-
-                const palabras = (cliente.empresa || emailUsuario).split(' ');
-                let iniciales = palabras[0].charAt(0);
-                if(palabras.length > 1) iniciales += palabras[1].charAt(0);
-                document.getElementById('lblIniciales').textContent = iniciales.toUpperCase();
-
-                // Manejo de enlace Dashboard y Credenciales NOC
-                if (cliente.url_dashboard) {
-                    document.getElementById('btnLinkDashboard').href = cliente.url_dashboard;
-                }
+                document.getElementById('lblPlan').textContent = cliente.plan || "Dedicado";
+                document.getElementById('lblIp').textContent = cliente.ip || "0.0.0.0";
                 
+                const palabras = (cliente.empresa || emailUsuario).split(' ');
+                document.getElementById('lblIniciales').textContent = (palabras[0].charAt(0) + (palabras[1] ? palabras[1].charAt(0) : '')).toUpperCase();
+
+                // Dashboard NOC y Credenciales
+                if (cliente.url_dashboard) document.getElementById('btnLinkDashboard').href = cliente.url_dashboard;
                 if (cliente.user_noc && cliente.pass_noc) {
                     document.getElementById('boxCredencialesNoc').classList.remove('hidden');
                     document.getElementById('lblUserNoc').textContent = cliente.user_noc;
                     document.getElementById('lblPassNoc').textContent = cliente.pass_noc;
                 }
 
-                // Cálculo de meses de contrato
+                // Cálculo de meses
                 const fHabilitacion = new Date(cliente.created_at);
                 const mesesTotales = parseInt(cliente.contrato_meses) || 12;
-                const hoy = new Date();
-                const mesesPasados = (hoy.getFullYear() - fHabilitacion.getFullYear()) * 12 + (hoy.getMonth() - fHabilitacion.getMonth());
-                
+                const mesesPasados = (new Date().getFullYear() - fHabilitacion.getFullYear()) * 12 + (new Date().getMonth() - fHabilitacion.getMonth());
                 document.getElementById('lblMesesTotales').textContent = mesesTotales;
                 document.getElementById('lblMesesRestantes').textContent = Math.max(0, mesesTotales - mesesPasados);
                 document.getElementById('lblFechaHabilitacion').textContent = `Habilitado el: ${fHabilitacion.toLocaleDateString('es-CL')}`;
-            } else {
-                document.getElementById('lblEmpresa').textContent = emailUsuario;
             }
 
-            // 2. Cargar Tickets (con Try-Catch)
+            // 2. CARGAR TICKETS SEGUROS
             try {
-                const { data: tickets, error: tError } = await clienteSupabase
-                    .from('tickets')
-                    .select('*')
-                    .eq('email_cliente', emailUsuario);
-
-                if (!tError && tickets && tickets.length > 0) {
+                const { data: tickets } = await clienteSupabase.from('tickets').select('*').eq('email_cliente', emailUsuario).order('created_at', {ascending: false});
+                if (tickets && tickets.length > 0) {
                     document.getElementById('msgNoTickets').classList.add('hidden');
                     document.getElementById('tablaTicketsContainer').classList.remove('hidden');
                     const tabla = document.getElementById('tablaTickets');
                     tickets.forEach(tk => {
-                        const row = `
-                            <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
-                                <td class="py-4 font-mono font-bold text-xs text-blue-600">#${tk.id}</td>
-                                <td class="py-4 font-medium">${tk.asunto}</td>
-                                <td class="py-4 text-slate-500 text-xs">${new Date(tk.created_at).toLocaleDateString()}</td>
-                                <td class="py-4">
-                                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-green-200">${tk.estado}</span>
-                                </td>
-                            </tr>
-                        `;
-                        tabla.innerHTML += row;
+                        tabla.innerHTML += `<tr class="border-b border-slate-100 hover:bg-slate-50 transition"><td class="py-4 font-mono font-bold text-xs text-blue-600">#${tk.id}</td><td class="py-4 font-medium">${tk.asunto}</td><td class="py-4 text-slate-500 text-xs">${new Date(tk.created_at).toLocaleDateString()}</td><td class="py-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase border border-green-200">${tk.estado}</span></td></tr>`;
                     });
                 }
-            } catch (err) {
-                console.log("Tabla tickets no disponible.");
-            }
+            } catch (e) { console.log("Tickets no disponibles"); }
 
-            // 3. Cargar Historial de 12 Facturas
-            const { data: facturas } = await clienteSupabase
-                .from('facturas')
-                .select('*')
-                .eq('email_cliente', emailUsuario)
-                .order('created_at', { ascending: false })
-                .limit(12);
-
+            // 3. CARGAR 12 FACTURAS
+            const { data: facturas } = await clienteSupabase.from('facturas').select('*').eq('email_cliente', emailUsuario).order('created_at', { ascending: false }).limit(12);
             const gridFacturas = document.getElementById('gridFacturas');
             if (facturas && facturas.length > 0) {
                 facturas.forEach(f => {
-                    gridFacturas.innerHTML += `
-                        <a href="${f.url_archivo}" target="_blank" class="flex items-center gap-3 p-4 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-white hover:border-blue-200 transition group shadow-sm">
-                            <div class="bg-white p-2 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition shadow-sm">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-black text-[#1a1f2e] uppercase">${f.mes_anio || 'Factura'}</p>
-                                <p class="text-[9px] text-slate-400 font-bold">Descargar PDF</p>
-                            </div>
-                        </a>
-                    `;
+                    gridFacturas.innerHTML += `<a href="${f.url_archivo}" target="_blank" class="flex items-center gap-3 p-4 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-white hover:border-blue-200 transition group shadow-sm"><div class="bg-white p-2 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition shadow-sm"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></div><div><p class="text-[10px] font-black text-[#1a1f2e] uppercase">${f.mes_anio}</p><p class="text-[9px] text-slate-400 font-bold">Descargar PDF</p></div></a>`;
                 });
-            } else {
-                document.getElementById('msgNoFacturas').classList.remove('hidden');
-            }
+            } else { document.getElementById('msgNoFacturas').classList.remove('hidden'); }
         });
 
-        function descargarSLA() {
-            window.open('https://eejsdoeuovcrjicrgxmo.supabase.co/storage/v1/object/public/contratos/SLA%20GLOBALCOM.pdf', '_blank');
-        }
+        // ENVÍO DE TICKET REAL
+        document.getElementById('formNuevoTicket').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnEnviarTicket');
+            const originalText = btn.textContent;
+            btn.textContent = "Sincronizando..."; btn.disabled = true;
+            try {
+                const { error } = await clienteSupabase.from('tickets').insert({
+                    email_cliente: (await clienteSupabase.auth.getSession()).data.session.user.email,
+                    asunto: document.getElementById('tkAsunto').value,
+                    prioridad: document.getElementById('tkPrioridad').value,
+                    descripcion: document.getElementById('tkDescripcion').value,
+                    estado: 'Abierto'
+                });
+                if (error) throw error;
+                // Disparo de Edge Function opcional si la configuraste
+                await clienteSupabase.functions.invoke('notify-ticket', { body: { empresa: document.getElementById('lblEmpresa').textContent, emailCliente: (await clienteSupabase.auth.getSession()).data.session.user.email, asunto: document.getElementById('tkAsunto').value, prioridad: document.getElementById('tkPrioridad').value, descripcion: document.getElementById('tkDescripcion').value } });
+                alert('Ticket generado correctamente. Soporte técnico ha sido notificado.');
+                window.location.reload();
+            } catch (err) { alert("Error: " + err.message); }
+            finally { btn.textContent = originalText; btn.disabled = false; }
+        });
 
-        async function cerrarSesion() {
-            await clienteSupabase.auth.signOut();
-            window.location.href = 'index.html';
-        }
+        function descargarSLA() { window.open('https://eejsdoeuovcrjicrgxmo.supabase.co/storage/v1/object/public/contratos/SLA%20GLOBALCOM.pdf', '_blank'); }
+        async function cerrarSesion() { await clienteSupabase.auth.signOut(); window.location.href = 'index.html'; }
     </script>
 </body>
 </html>
