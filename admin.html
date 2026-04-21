@@ -217,6 +217,7 @@
                         clientData: {
                             empresa: document.getElementById('cEmpresa').value,
                             rut: document.getElementById('cRut').value,
+                            contrato_meses: mesesContrato,
                             contacto: document.getElementById('cContacto').value,
                             contacto_facturacion: document.getElementById('cContactoFact').value,
                             correo_facturacion: document.getElementById('cEmailFact').value.trim().toLowerCase(),
@@ -310,6 +311,119 @@
             await adminSupabase.auth.signOut();
             window.location.href = 'index.html';
         }
+
+        async function gestionarCliente(email) {
+            const modal = document.getElementById('modal-detalle');
+            modal.classList.remove('hidden');
+
+            // 1. Obtener datos del cliente
+            const { data: cliente } = await supabase.from('clientes').select('*').eq('email', email).single();
+    
+            document.getElementById('detEmpresa').textContent = cliente.empresa;
+            document.getElementById('detEmail').textContent = cliente.email;
+            document.getElementById('detPlan').textContent = cliente.plan;
+            document.getElementById('detIp').textContent = cliente.ip;
+            document.getElementById('detMeses').textContent = cliente.contrato_meses || '12';
+            document.getElementById('detIniciales').textContent = cliente.empresa.substring(0,1).toUpperCase();
+
+            // 2. Configurar botón de contrato
+            const { data: archivos } = await supabase.storage.from('contratos').list('', { search: email });
+            const btnContrato = document.getElementById('btnVerContrato');
+            if (archivos && archivos.length > 0) {
+                const { data: url } = supabase.storage.from('contratos').getPublicUrl(archivos[0].name);
+                btnContrato.onclick = () => window.open(url.publicUrl, '_blank');
+                btnContrato.classList.remove('opacity-50', 'pointer-events-none');
+            } else {
+                btnContrato.onclick = null;
+                btnContrato.classList.add('opacity-50', 'pointer-events-none');
+                btnContrato.textContent = "Contrato no cargado";
+            }
+
+            // 3. Cargar Facturas
+            cargarFacturasDetalle(email);
+        }
+
+        async function cargarFacturasDetalle(email) {
+            const contenedor = document.getElementById('listaFacturasDetalle');
+            contenedor.innerHTML = '<p class="text-xs text-slate-400 italic">Cargando facturas...</p>';
+
+            const { data: facturas } = await supabase.from('facturas')
+                .select('*')
+                .eq('email_cliente', email)
+                .order('created_at', { ascending: false });
+
+            contenedor.innerHTML = '';
+            if (facturas.length === 0) {
+                    contenedor.innerHTML = '<p class="text-xs text-slate-400 italic">No hay facturas para este cliente.</p>';
+                    return;
+            }
+
+            facturas.forEach(f => {
+                const item = document.createElement('div');
+                item.className = "flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100";
+                item.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs font-bold text-[#1a1f2e]">${f.mes_anio}</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="${f.url_archivo}" target="_blank" class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        </a>
+                        <button onclick="eliminarFactura(${f.id}, '${email}')" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </div>
+                `;
+                contenedor.appendChild(item);
+            });
+        }
+
+        async function eliminarFactura(id, email) {
+            if (!confirm('¿Seguro que deseas eliminar esta factura?')) return;
+            await supabase.from('facturas').delete().eq('id', id);
+            cargarFacturasDetalle(email); // Recargar lista
+        }
+
     </script>
+
+<div id="modal-detalle" class="hidden fixed inset-0 bg-[#1a1f2e]/80 backdrop-blur-md z-[100] flex justify-center items-center p-4">
+    <div class="bg-white rounded-[2.5rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl relative border border-slate-200">
+        <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+
+        <div class="p-10">
+            <div class="flex items-center gap-6 mb-10">
+                <div id="detIniciales" class="h-16 w-16 rounded-3xl bg-blue-600 text-white flex items-center justify-center text-2xl font-black shadow-lg">?</div>
+                <div>
+                    <h2 id="detEmpresa" class="text-3xl font-black text-[#1a1f2e]">Nombre Empresa</h2>
+                    <p id="detEmail" class="text-slate-500 font-medium">correo@cliente.cl</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-10">
+                <div class="space-y-6">
+                    <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Configuración de Servicio</h3>
+                    <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100 space-y-4">
+                        <p class="text-sm"><strong>Plan:</strong> <span id="detPlan" class="text-slate-600">---</span></p>
+                        <p class="text-sm"><strong>IP Pública:</strong> <span id="detIp" class="text-blue-600 font-mono font-bold">---</span></p>
+                        <p class="text-sm"><strong>Duración Contrato:</strong> <span id="detMeses" class="text-slate-600">---</span> meses</p>
+                        <hr class="border-slate-200">
+                        <button id="btnVerContrato" class="w-full bg-[#1a1f2e] text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-600 transition">
+                            Ver Contrato Original (PDF)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Facturación Emitida</h3>
+                    <div id="listaFacturasDetalle" class="space-y-3 max-h-[300px] overflow-y-auto pr-2">
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
