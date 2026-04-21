@@ -3,104 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Globalcom | Telecomunicaciones Corporativas</title>
+    <title>Globalcom | Telecomunicaciones y Fibra Óptica</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100">
+<body class="bg-slate-50 text-slate-800">
 
-    <nav class="w-full bg-slate-950/80 backdrop-blur-md border-b border-slate-800 fixed top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-2 flex flex-col md:flex-row justify-between items-center">
+    <nav class="w-full bg-white/95 backdrop-blur-md border-b border-slate-200 fixed top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center">
             <a href="index.html" class="w-full md:w-auto flex justify-center md:justify-start">
-                <img src="img/logo.png" alt="Globalcom" class="w-[20%] md:w-auto md:h-10 object-contain">
+                <img src="img/logo.png" alt="Globalcom" class="h-10 md:h-12 object-contain">
             </a>
             
-            <div class="hidden md:flex space-x-8 text-xs font-semibold text-slate-300 uppercase tracking-widest mt-2 md:mt-0">
-                <a href="#servicios" class="hover:text-cyan-400 transition">Servicios</a>
-                <a href="#infraestructura" class="hover:text-cyan-400 transition">SLA 98.99%</a>
+            <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
+                <a href="#servicios" class="hover:text-blue-600 transition">Servicios</a>
+                <a href="#cobertura" class="hover:text-blue-600 transition">Red y Cobertura</a>
+                <a href="#soporte" class="hover:text-blue-600 transition">Soporte SLA</a>
+                <a href="#faq" class="hover:text-blue-600 transition">Preguntas Frecuentes</a>
             </div>
-            <a href="portal.html" class="hidden md:block bg-orange-500 text-white px-6 py-2 rounded-full text-xs font-bold hover:bg-orange-600 transition shadow-lg shadow-orange-500/20">
-                PORTAL CLIENTES
+            <a href="portal.html" class="hidden md:block bg-[#1a1f2e] text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-blue-600 transition shadow-lg">
+                Portal Clientes
             </a>
         </div>
     </nav>
 
-    <header class="relative pt-32 pb-20 md:pt-40 md:pb-32 px-6 overflow-hidden">
-        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-slate-950 -z-10"></div>
+    <header class="relative pt-32 pb-20 md:pt-40 md:pb-24 px-6 bg-white overflow-hidden border-b border-slate-100">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-50 via-white to-white -z-10"></div>
         <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-            <div class="space-y-8 text-center md:text-left">
-                <span class="inline-block border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase">
+            <div class="space-y-6 text-center md:text-left">
+                <span class="inline-block border border-orange-200 bg-orange-50 text-orange-600 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase">
                     Red 100% Fibra Óptica Propia
                 </span>
-                <h1 class="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight">
-                    Conectividad <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Sin Límites.</span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-[#1a1f2e] leading-tight">
+                    Soluciones de Internet y <span class="text-blue-600">Transporte de Datos.</span>
                 </h1>
-                <p class="text-lg text-slate-400 max-w-lg mx-auto md:mx-0">
-                    Soluciones de internet dedicado e interconexión de sedes. Garantizamos velocidad simétrica pura para empresas que no pueden permitirse parar.
+                <p class="text-lg text-slate-600 max-w-xl mx-auto md:mx-0 leading-relaxed">
+                    Garantizamos velocidad, soporte personalizado y calidad. Telecomunicaciones adaptadas a las necesidades de empresas de todos los tamaños, con total confianza.
                 </p>
                 <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start space-y-4 sm:space-y-0 sm:space-x-4 pt-4">
-                    <a href="#contacto" class="w-full sm:w-auto bg-orange-500 text-white px-8 py-4 rounded-full font-bold hover:bg-orange-600 transition shadow-lg shadow-orange-500/25 text-center">
-                        Consultar Factibilidad
-                    </a>
-                    <a href="portal.html" class="w-full sm:w-auto border border-slate-600 text-slate-300 px-8 py-4 rounded-full font-bold hover:bg-slate-800 transition text-center">
-                        Ver Demo Portal
+                    <a href="#contacto" class="w-full sm:w-auto bg-orange-500 text-white px-8 py-4 rounded-full font-bold hover:bg-orange-600 transition shadow-lg text-center">
+                        Solicitar Factibilidad
                     </a>
                 </div>
             </div>
             
             <div class="relative hidden md:block">
-                <div class="absolute inset-0 bg-cyan-500/20 blur-[100px] rounded-full"></div>
-                <div class="bg-slate-800/50 border border-slate-700 p-8 rounded-3xl backdrop-blur-sm relative z-10">
-                    <div class="space-y-6">
-                        <div class="flex justify-between items-center border-b border-slate-700 pb-4">
-                            <span class="text-sm font-semibold text-slate-300">Uptime Garantizado</span>
-                            <span class="text-xl font-black text-cyan-400">98.99%</span>
-                        </div>
-                        <div class="flex justify-between items-center border-b border-slate-700 pb-4">
-                            <span class="text-sm font-semibold text-slate-300">Latencia</span>
-                            <span class="text-xl font-black text-cyan-400">&lt; 4ms</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-semibold text-slate-300">Soporte Nivel 2</span>
-                            <span class="text-xl font-black text-orange-500">&lt; 6 Horas</span>
-                        </div>
-                    </div>
+                <div class="absolute inset-0 bg-blue-100 blur-[80px] rounded-full opacity-50"></div>
+                <div class="bg-white border border-slate-100 p-8 rounded-[2rem] shadow-2xl relative z-10">
+                    <h3 class="text-xl font-bold text-[#1a1f2e] mb-6 border-b border-slate-100 pb-4">Nuestros Objetivos</h3>
+                    <ul class="space-y-4 text-sm text-slate-600">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            Entregar internet de alta disponibilidad para tu empresa.
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            Interconectar todas tus sedes y sucursales para optimizar operaciones.
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            Garantizar la disponibilidad de todos nuestros servicios (SLA 98.99%).
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </header>
 
-    <section id="servicios" class="bg-slate-950 py-24 px-6 border-t border-slate-800">
+    <section id="cobertura" class="py-20 px-6 bg-slate-50">
+        <div class="max-w-7xl mx-auto text-center max-w-3xl">
+            <h2 class="text-3xl font-black text-[#1a1f2e] mb-6">Backbone con Alta Disponibilidad</h2>
+            <p class="text-slate-600 leading-relaxed mb-8">
+                Contamos con una red propia de fibra óptica con cobertura nacional desde la Región de Valparaíso hasta la Región del BíoBío. Nuestra red posee un backbone de transporte en alta disponibilidad con un anillo troncal principal a través de la Ruta 5 Sur.
+            </p>
+            <div class="bg-white inline-block px-6 py-3 rounded-full border border-slate-200 shadow-sm text-sm font-semibold text-blue-700">
+                🚀 Incluye acceso a CDNs Nacionales: Google, Facebook, Youtube, Netflix, Microsoft, Amazon.
+            </div>
+        </div>
+    </section>
+
+    <section id="servicios" class="py-20 px-6 bg-white border-t border-slate-100">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl md:text-4xl font-black mb-12 text-center">Nuestras Soluciones</h2>
+            <h2 class="text-3xl md:text-4xl font-black text-center text-[#1a1f2e] mb-16">Nuestros Servicios</h2>
+            
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-slate-900 border border-slate-800 p-10 rounded-3xl hover:border-cyan-500/50 transition group">
-                    <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 text-cyan-400 font-bold group-hover:bg-cyan-500/10">01</div>
-                    <h3 class="text-xl font-bold mb-3">Internet Dedicado</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Enlace exclusivo 1:1, simétrico y sin sobreventa para grandes demandas de tráfico.</p>
+                <div class="bg-slate-50 border border-slate-200 p-8 rounded-[2rem] hover:shadow-xl transition">
+                    <h3 class="text-xl font-black text-blue-700 mb-6">Internet Dedicado Empresarial</h3>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li>• Velocidades desde 100Mbps hasta 40Gbps.</li>
+                        <li>• Ancho de banda garantizado.</li>
+                        <li>• Red propia 100% Fibra Óptica.</li>
+                        <li>• Asignación de IPs Públicas o Configuración BGP.</li>
+                        <li>• Dashboard para monitoreo de tráfico.</li>
+                        <li>• Sistema de Alertas de Enlace.</li>
+                        <li>• Soporte 24/7 Especializado.</li>
+                    </ul>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 p-10 rounded-3xl hover:border-orange-500/50 transition group">
-                    <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 text-orange-500 font-bold group-hover:bg-orange-500/10">02</div>
-                    <h3 class="text-xl font-bold mb-3">Interconexión</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Redes privadas VPN, Fibra Oscura y MPLS para conectar tus sucursales con seguridad total.</p>
+
+                <div class="bg-slate-50 border border-slate-200 p-8 rounded-[2rem] hover:shadow-xl transition">
+                    <h3 class="text-xl font-black text-orange-600 mb-6">Internet Dedicado PYME</h3>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li>• Velocidades desde 100Mbps hasta 1Gbps.</li>
+                        <li>• Ancho de banda garantizado y simétrico.</li>
+                        <li>• Red propia 100% Fibra Óptica.</li>
+                        <li>• Wifi next Generation 2G y 5G MU-MIMO.</li>
+                        <li>• Sistema de Alertas de Enlace.</li>
+                        <li>• Acceso a CDNs Nacionales.</li>
+                        <li>• Soporte 24/7 Especializado.</li>
+                    </ul>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 p-10 rounded-3xl hover:border-cyan-500/50 transition group">
-                    <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 text-cyan-400 font-bold group-hover:bg-cyan-500/10">03</div>
-                    <h3 class="text-xl font-bold mb-3">Atención Directa</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Cero bots. Atención humana directa y derivación inmediata a ingenieros técnicos.</p>
+
+                <div class="bg-slate-50 border border-slate-200 p-8 rounded-[2rem] hover:shadow-xl transition">
+                    <h3 class="text-xl font-black text-[#1a1f2e] mb-6">Interconexión de Sedes</h3>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li>• Enlaces de Fibra Oscura.</li>
+                        <li>• Enlaces punto a punto capa 2.</li>
+                        <li>• Tuneles MPLS y VPN Ipsec.</li>
+                        <li>• Velocidades desde 100Mbps hasta 40Gbps.</li>
+                        <li>• Ancho de banda garantizado.</li>
+                        <li>• Alta disponibilidad y Alertas de Enlace.</li>
+                        <li>• Soporte 24/7 Especializado.</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-slate-950 py-12 px-6 border-t border-slate-800 text-center">
-        <img src="img/logo.png" alt="Globalcom" class="h-8 mx-auto mb-6 opacity-50 grayscale hover:grayscale-0 transition">
-        <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest">
-            © 2026 Globalcom. Desarrollado por FocusFrame Media SpA.
-        </p>
+    <section id="soporte" class="py-20 px-6 bg-[#1a1f2e] text-white">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16">
+            <div>
+                <h2 class="text-3xl font-black mb-6">Soporte y Atención al Cliente</h2>
+                <p class="text-slate-300 mb-8 leading-relaxed">
+                    Brindamos soporte técnico on-site a la red y equipos. Contamos con personal capacitado para asistir a terreno ante cualquier desperfecto.
+                </p>
+                
+                <div class="bg-white/10 border border-white/20 rounded-2xl p-6 mb-8">
+                    <h4 class="font-bold text-orange-400 mb-4 uppercase text-xs tracking-wider">Tiempos de Respuesta Garantizados</h4>
+                    <div class="flex justify-between items-center border-b border-white/10 pb-3 mb-3">
+                        <span>WhatsApp Soporte</span>
+                        <span class="font-black text-white">5 minutos</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-white/10 pb-3 mb-3">
+                        <span>Correo Electrónico</span>
+                        <span class="font-black text-white">10 minutos</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Generación de Ticket</span>
+                        <span class="font-black text-white">< 15 minutos</span>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="font-bold text-cyan-400 uppercase text-xs tracking-wider">Flujo de Atención:</h4>
+                    <p class="text-sm text-slate-300">1. Recepción (< 10 min) → 2. Validación → 3. Diagnóstico remoto → 4. Solución o Derivación técnica.</p>
+                    <p class="text-sm font-bold text-white bg-blue-600 inline-block px-3 py-1 rounded-lg mt-2">Tiempo de resolución promedio: < 6 hrs hábiles.</p>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-black mb-6 text-orange-400">Por qué Globalcom</h2>
+                <ul class="space-y-6 text-slate-300 text-sm">
+                    <li class="flex items-start">
+                        <span class="text-2xl mr-3">✓</span>
+                        <div>
+                            <strong class="text-white block text-base">Atención real, no bots.</strong>
+                            A diferencia de la competencia (10-30 min con bots), nosotros respondemos en < 10 min de forma directa y humana.
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-2xl mr-3">✓</span>
+                        <div>
+                            <strong class="text-white block text-base">Diagnóstico técnico desde el primer contacto.</strong>
+                            Sin guiones innecesarios, resolución remota alta desde el inicio.
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-2xl mr-3">✓</span>
+                        <div>
+                            <strong class="text-white block text-base">Derivación inmediata.</strong>
+                            Agendamiento técnico ágil en el mismo flujo, sin pasar a otras áreas.
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-2xl mr-3">✓</span>
+                        <div>
+                            <strong class="text-white block text-base">Escalamiento 24/7.</strong>
+                            Chat WhatsApp de emergencias, Soporte 2do nivel, y línea directa con Gerencia de Operaciones.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 bg-slate-50 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Tecnología y Certificaciones</h4>
+            <div class="flex flex-wrap justify-center gap-8 md:gap-16 opacity-60 grayscale font-bold text-slate-600">
+                <span>Google Cloud</span>
+                <span>AWS</span>
+                <span>Microsoft Azure</span>
+                <span>Cisco</span>
+                <span>Fortinet</span>
+                <span>MikroTik</span>
+                <span>Furukawa</span>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#161b28] text-slate-300 pt-16 pb-8 px-6">
+        <div class="max-w-5xl mx-auto text-center">
+            
+            <div class="flex justify-center items-center mb-6">
+                <img src="img/logo.png" alt="Globalcom" class="h-8 brightness-0 invert opacity-90">
+            </div>
+
+            <p class="text-slate-400 mb-8 max-w-2xl mx-auto text-[15px]">
+                Construido con altos estándares de seguridad y tecnología de fibra óptica. <br class="hidden md:block">
+                Protegemos la información y la conectividad de tu empresa.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8 mb-8 text-sm">
+                <a href="mailto:contacto@globalcomfibra.cl" class="flex items-center hover:text-white transition">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    contacto@globalcomfibra.cl
+                </a>
+                <a href="#" class="flex items-center hover:text-white transition">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    Soporte Técnico
+                </a>
+            </div>
+
+            <div class="flex justify-center space-x-4 mb-12">
+                <a href="#" class="text-slate-400 hover:text-white transition">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.20 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+                <a href="#" class="text-slate-400 hover:text-white transition">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+            </div>
+
+            <hr class="border-slate-700/60 mb-8">
+
+            <div class="text-sm font-semibold text-slate-300 mb-6">
+                Globalcom Telecomunicaciones | RUT 78.387.713-9 | Santiago, Chile
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
+                <a href="#" class="inline-flex justify-center items-center px-6 py-2.5 rounded-full border border-slate-600 hover:border-slate-400 hover:bg-slate-800 transition text-sm text-slate-300">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    Ver Términos y Condiciones
+                </a>
+                <a href="#" class="inline-flex justify-center items-center px-6 py-2.5 rounded-full border border-slate-600 hover:border-slate-400 hover:bg-slate-800 transition text-sm text-slate-300">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    Ver Política de Privacidad
+                </a>
+            </div>
+
+            <p class="text-xs text-slate-500">
+                © 2026 Globalcom Telecomunicaciones. Todos los derechos reservados. Desarrollado por FocusFrame Media SpA.
+            </p>
+        </div>
     </footer>
 
 </body>
