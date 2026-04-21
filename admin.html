@@ -158,11 +158,22 @@
                     </select>
 
                     <form id="formFactura" class="space-y-4 bg-green-50 p-6 rounded-xl border border-green-100">
-                        <div>
-                            <input type="text" id="inpMes" required placeholder="Mes (Ej: Mayo 2026)" class="w-full bg-white border border-green-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[10px] font-bold text-green-800 uppercase tracking-widest">Concepto / Mes</label>
+                                <input type="text" id="inpMes" required placeholder="Ej: Mayo 2026 o Instalación" class="w-full mt-1 bg-white border border-green-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-green-500">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-green-800 uppercase tracking-widest">Tipo de Cobro</label>
+                                <select id="selTipoFactura" class="w-full mt-1 bg-white border border-green-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-green-500">
+                                    <option value="mensual">Mensualidad Regular</option>
+                                    <option value="habilitacion">Costo de Habilitación</option>
+                                </select>
+                            </div>
                         </div>
                         <div>
-                            <input type="file" id="inpArchivoFactura" accept=".pdf" required class="w-full bg-white border border-green-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2">
+                            <label class="text-[10px] font-bold text-green-800 uppercase tracking-widest">Archivo PDF Factura</label>
+                            <input type="file" id="inpArchivoFactura" accept=".pdf" required class="w-full mt-1 bg-white border border-green-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-green-500">
                         </div>
                         <button type="submit" id="btnSubirFactura" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition shadow-md">
                             Subir y Notificar Factura
@@ -813,6 +824,7 @@
             const emailCliente = select.value;
             const correoFact = select.options[select.selectedIndex].getAttribute('data-fact');
             const mes = document.getElementById('inpMes').value;
+            const tipoFactura = document.getElementById('selTipoFactura').value; // NUEVO CAMPO
             const archivo = document.getElementById('inpArchivoFactura').files[0];
             const btn = document.getElementById('btnSubirFactura');
 
@@ -830,8 +842,16 @@
                 const { error: dbError } = await adminSupabase.from('facturas').insert({ email_cliente: emailCliente, mes_anio: mes, url_archivo: publicUrl });
                 if (dbError) throw dbError;
 
+                // PASAMOS EL TIPO DE FACTURA A LA FUNCIÓN
                 const { data: res, error: err } = await adminSupabase.functions.invoke('send-invoice-notification', {
-                    body: { emailCliente, correoFacturacion: correoFact, mesAnio: mes, urlArchivo: publicUrl, empresa: select.options[select.selectedIndex].text }
+                    body: { 
+                        emailCliente, 
+                        correoFacturacion: correoFact, 
+                        mesAnio: mes, 
+                        urlArchivo: publicUrl, 
+                        empresa: select.options[select.selectedIndex].text,
+                        tipo: tipoFactura 
+                    }
                 });
                 if (err) throw err;
 
