@@ -92,6 +92,13 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="mt-8 pt-6 border-t border-slate-100">
+                    <p id="txtMesFactura" class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 text-center">Buscando facturas...</p>
+                    <a href="#" id="btnDescargarFactura" target="_blank" class="block text-center w-full bg-slate-100 text-slate-400 font-bold py-3 rounded-xl transition text-sm pointer-events-none">
+                        No hay facturas disponibles
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -182,7 +189,7 @@
             document.getElementById('cuerpoPagina').classList.remove('hidden');
             const emailUsuario = session.user.email;
 
-            // maybeSingle es más seguro: Si la tabla aún no tiene datos de este cliente, no crashea
+            // 1. Cargar Datos del Cliente
             const { data: cliente, error } = await clienteSupabase
                 .from('clientes')
                 .select('*')
@@ -203,8 +210,29 @@
                 if(palabras.length > 1) iniciales += palabras[1].charAt(0);
                 document.getElementById('lblIniciales').textContent = iniciales.toUpperCase();
             } else {
-                // Si el usuario existe en Auth pero no en la tabla "clientes", mostramos su email temporalmente
                 document.getElementById('lblEmpresa').textContent = emailUsuario;
+            }
+
+            // 2. Cargar Última Factura
+            const { data: facturaData } = await clienteSupabase
+                .from('facturas')
+                .select('*')
+                .eq('email_cliente', emailUsuario)
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .maybeSingle();
+
+            const btnFactura = document.getElementById('btnDescargarFactura');
+            const txtMes = document.getElementById('txtMesFactura');
+
+            if (facturaData) {
+                txtMes.textContent = `Correspondiente a: ${facturaData.mes_anio}`;
+                btnFactura.textContent = "Descargar Última Factura";
+                btnFactura.href = facturaData.url_archivo;
+                btnFactura.classList.remove('bg-slate-100', 'text-slate-400', 'pointer-events-none');
+                btnFactura.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700', 'shadow-md');
+            } else {
+                txtMes.textContent = "Estado de cuenta al día";
             }
         });
 

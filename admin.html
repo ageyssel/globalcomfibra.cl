@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Globalcom | Gestión de Clientes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Inter', sans-serif; } </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen hidden" id="adminBody">
+
+    <nav class="bg-[#1a1f2e] text-white py-4 px-6 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <span class="font-black text-xl tracking-tight">GLOBALCOM ADMIN</span>
+                <span class="bg-red-500 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-widest">Acceso Restringido</span>
+            </div>
+            <button onclick="cerrarSesion()" class="text-sm font-bold text-slate-300 hover:text-white transition">Salir del Admin</button>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-10">
+        <h1 class="text-3xl font-black mb-8 text-[#1a1f2e]">Gestión de Clientes y Facturación</h1>
+
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mb-8">
+            <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Seleccionar Cliente</label>
+            <select id="selectCliente" class="w-full mt-2 bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500 transition">
+                <option value="">Cargando clientes...</option>
+            </select>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="text-lg font-black text-[#1a1f2e] mb-4">Actualizar Métricas de Red</h3>
+                <form id="formMetricas" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Bajada (Mbps)</label>
+                            <input type="number" id="inpBajada" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Subida (Mbps)</label>
+                            <input type="number" id="inpSubida" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Latencia (ms)</label>
+                        <input type="number" id="inpLatencia" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-[#1a1f2e] text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">Guardar Métricas</button>
+                </form>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="text-lg font-black text-[#1a1f2e] mb-4">Cargar Factura Mensual</h3>
+                <form id="formFactura" class="space-y-4">
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Mes y Año (Ej: Abril 2026)</label>
+                        <input type="text" id="inpMes" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Archivo PDF</label>
+                        <input type="file" id="inpArchivo" accept=".pdf" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
+                    </div>
+                    <button type="submit" id="btnSubirFactura" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition shadow-md">
+                        Subir y Notificar Cliente
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // CONFIGURACIÓN SUPABASE (PON TUS DATOS AQUÍ)
+        const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
+        const adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // CORREO ADMIN PERMITIDO (Cambia esto por tu correo real de administrador)
+        const ADMIN_EMAIL = 'contacto@globalcomfibra.cl'; 
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const { data: { session } } = await adminSupabase.auth.getSession();
+            
+            // Bloqueo de seguridad: Solo tú puedes ver esta página
+            if (!session || session.user.email !== ADMIN_EMAIL) {
+                alert("Acceso denegado. Debes iniciar sesión como Administrador.");
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('adminBody').classList.remove('hidden');
+
+            // Cargar lista de clientes
+            const { data: clientes } = await adminSupabase.from('clientes').select('email, empresa');
+            const select = document.getElementById('selectCliente');
+            select.innerHTML = '<option value="">Seleccione un cliente...</option>';
+            clientes.forEach(c => {
+                select.innerHTML += `<option value="${c.email}">${c.empresa} (${c.email})</option>`;
+            });
+        });
+
+        // Actualizar métricas
+        document.getElementById('formMetricas').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('selectCliente').value;
+            if(!email) return alert("Selecciona un cliente");
+
+            const bajada = document.getElementById('inpBajada').value;
+            const subida = document.getElementById('inpSubida').value;
+            const latencia = document.getElementById('inpLatencia').value;
+
+            const { error } = await adminSupabase.from('clientes').update({ bajada, subida, latencia }).eq('email', email);
+            if(error) alert("Error al guardar"); else alert("Métricas actualizadas en vivo.");
+        });
+
+        // Subir Factura y Enviar Correo
+        document.getElementById('formFactura').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('selectCliente').value;
+            const mes = document.getElementById('inpMes').value;
+            const archivo = document.getElementById('inpArchivo').files[0];
+            const btn = document.getElementById('btnSubirFactura');
+
+            if(!email || !archivo) return alert("Faltan datos");
+
+            btn.textContent = "Subiendo archivo...";
+            btn.disabled = true;
+
+            // 1. Subir a Supabase Storage
+            const fileExt = archivo.name.split('.').pop();
+            const fileName = `factura_${email}_${Date.now()}.${fileExt}`;
+            const { data: uploadData, error: uploadError } = await adminSupabase.storage.from('facturas').upload(fileName, archivo);
+
+            if (uploadError) {
+                alert("Error al subir archivo: " + uploadError.message);
+                btn.textContent = "Subir y Notificar Cliente";
+                btn.disabled = false;
+                return;
+            }
+
+            // 2. Obtener URL Pública
+            const { data: { publicUrl } } = adminSupabase.storage.from('facturas').getPublicUrl(fileName);
+
+            // 3. Guardar registro en la base de datos
+            await adminSupabase.from('facturas').insert({
+                email_cliente: email,
+                mes_anio: mes,
+                url_archivo: publicUrl
+            });
+
+            btn.textContent = "¡Subido con éxito!";
+            
+            // 4. Redactar el correo y abrir el cliente de correo del Admin
+            const asunto = encodeURIComponent(`Factura de Servicios Globalcom - ${mes}`);
+            const cuerpoCorreo = encodeURIComponent(`Estimados,\n\nJunto con saludar, adjuntamos el enlace para descargar la Factura correspondiente a los servicios del mes de ${mes}.\n\n🔗 Descargar Factura: ${publicUrl}\n\nRecordarle que la renta mensual convenida debe ser pagada mediante depósito o transferencia bancaria conforme a lo estipulado en nuestro acuerdo.\nA continuación, detallamos los datos bancarios para realizar el pago:\n\nDATOS BANCARIOS\nNombre: Servicio de Telecomunicaciones Globalcom Ltda.\nBanco: Scotiabank / Cuenta Corriente\nRUT: 77.812.215-4\nN° de cuenta: 987836121\n\nAgradecemos desde ya su gestión para concretar el pago a la brevedad. Si ya realizó la transferencia, le solicitamos enviar el comprobante a este correo (contacto@globalcomfibra.cl) para registrar el pago correctamente.\n\nQuedamos atentos ante cualquier duda.\n\nSaludos cordiales,\nServicio de Telecomunicaciones Globalcom Ltda.`);
+
+            window.open(`mailto:${email}?subject=${asunto}&body=${cuerpoCorreo}`);
+
+            setTimeout(() => {
+                btn.textContent = "Subir y Notificar Cliente";
+                btn.disabled = false;
+                document.getElementById('formFactura').reset();
+            }, 3000);
+        });
+
+        async function cerrarSesion() {
+            await adminSupabase.auth.signOut();
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
