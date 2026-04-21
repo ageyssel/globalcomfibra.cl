@@ -8,9 +8,8 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    <style> body { font-family: 'Inter', sans-serif; } </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col justify-center items-center p-6 relative overflow-hidden">
     
@@ -18,34 +17,82 @@
     <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange-50 rounded-full blur-[120px] opacity-50 -z-10"></div>
 
     <div class="w-full max-w-md relative z-10">
-        
         <div class="text-center mb-10">
             <a href="index.html" class="inline-block">
                 <img src="img/logo.png" alt="Globalcom" class="h-24 md:h-32 mx-auto hover:opacity-80 transition object-contain">
             </a>
             <h2 class="mt-8 text-3xl font-black text-[#1a1f2e] tracking-tight">Portal Clientes</h2>
-            <p class="text-sm text-slate-500 mt-2 font-medium">Panel de administración de red</p>
+            <p class="text-sm text-slate-500 mt-2 font-medium">Ingresa tus credenciales corporativas</p>
         </div>
 
-        <div class="bg-white rounded-[2rem] p-10 shadow-xl border border-slate-100 text-center">
-            
-            <form action="portal.html" class="space-y-6">
-                <p class="text-sm text-slate-600 mb-6 font-medium">Acceso corporativo validado. No se requiere información de inicio de sesión para ingresar.</p>
+        <div class="bg-white rounded-[2rem] p-10 shadow-xl border border-slate-100">
+            <form id="loginForm" class="space-y-6">
+                <div id="errorAlert" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-bold text-center">
+                    Credenciales incorrectas. Intente nuevamente.
+                </div>
+
+                <div>
+                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Email Corporativo</label>
+                    <input type="email" id="email" required placeholder="tu@empresa.cl" 
+                           class="w-full mt-2 bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-sm focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition">
+                </div>
                 
-                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition-all shadow-lg mt-4">
-                    Ingresar al Portal
+                <div>
+                    <div class="flex justify-between items-center ml-1 mb-2">
+                        <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Contraseña</label>
+                        <a href="mailto:soporte@globalcomfibra.cl" class="text-[11px] font-bold text-blue-600 hover:text-blue-800 transition">¿Olvidaste tu clave?</a>
+                    </div>
+                    <input type="password" id="password" required placeholder="••••••••" 
+                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-sm focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition">
+                </div>
+
+                <button type="submit" id="btnSubmit" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition-all shadow-lg mt-4">
+                    Iniciar Sesión
                 </button>
             </form>
 
-        </div>
+            <script>
+                // 2. Configura aquí tus credenciales de Supabase
+                const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co/rest/v1/';
+                const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
+                const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+                document.getElementById('loginForm').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    const errorAlert = document.getElementById('errorAlert');
+                    const btnSubmit = document.getElementById('btnSubmit');
+
+                    btnSubmit.textContent = "Validando...";
+                    btnSubmit.classList.add('opacity-50');
+
+                    // 3. Autenticación real contra Supabase
+                    const { data, error } = await supabase.auth.signInWithPassword({
+                        email: email,
+                        password: password,
+                    });
+
+                    if (error) {
+                        errorAlert.textContent = "Error: " + error.message;
+                        errorAlert.classList.remove('hidden');
+                        btnSubmit.textContent = "Iniciar Sesión";
+                        btnSubmit.classList.remove('opacity-50');
+                    } else {
+                        // Si es exitoso, redirigimos al portal
+                        window.location.href = 'portal.html';
+                    }
+                });
+            </script>
+        </div>
+        
         <div class="text-center mt-12">
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center">
                 <svg class="w-4 h-4 mr-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                Conexión Segura End-to-End
+                Seguridad End-to-End por Supabase
             </p>
         </div>
-
     </div>
 </body>
 </html>
