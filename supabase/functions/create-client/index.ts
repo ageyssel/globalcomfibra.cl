@@ -27,7 +27,7 @@ serve(async (req) => {
     const { error: dbError } = await supabaseAdmin.from('clientes').upsert({ email, ...clientData })
     if (dbError) throw dbError
 
-    // 3. ENVIAR CORREO DE BIENVENIDA (Vía Resend)
+    // 3. ENVIAR CORREO DE BIENVENIDA (MODO REAL)
     const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
     
     const emailHtml = `
@@ -68,28 +68,34 @@ serve(async (req) => {
       </div>
     `;
 
-    await fetch('https://api.resend.com/emails', {
+    // VERSIÓN PRODUCCIÓN: Envía desde dominio oficial a todos los correos registrados
+    const resendResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: 'Globalcom <onboarding@resend.dev>', // Luego puedes usar tu propio dominio
-        to: [email, clientData.correo_facturacion],
+        from: 'Globalcom <no-reply@globalcomfibra.cl>', // Dominio real
+        to: [email, clientData.correo_facturacion], // Arreglo con múltiples destinatarios reales
         subject: `Bienvenido a Globalcom - Activación de Cuenta: ${clientData.empresa}`,
         html: emailHtml,
       }),
     });
+
+    const resendData = await resendResponse.json();
+    
+    if (!resendResponse.ok) {
+      console.error("🔥 ERROR DE RESEND:", resendData);
+      throw new Error(`Error enviando correo: ${resendData.message || 'Error desconocido de Resend'}`);
+    }
 
     return new Response(JSON.stringify({ message: "Cliente creado y correos enviados" }), { 
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 
     })
 
   } catch (error) {
-    
     console.error("🔥 ERROR DETECTADO:", error.message);
-
     return new Response(JSON.stringify({ error: error.message }), { 
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 
     })
