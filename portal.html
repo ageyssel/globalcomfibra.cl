@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col hidden" id="cuerpoPagina">
+    
     <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-4">
@@ -47,7 +48,8 @@
         </div>
 
         <div class="grid lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 bg-white rounded-[2rem] shadow-lg border border-slate-200 overflow-hidden min-h-[550px] flex flex-col">
+            
+            <div class="lg:col-span-2 bg-white rounded-[2rem] shadow-lg border border-slate-200 overflow-hidden min-h-[600px] flex flex-col">
                 <div class="px-6 py-4 flex justify-between items-center border-b border-slate-50 bg-slate-50/50">
                     <div>
                        <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">Monitoreo de Enlace en Tiempo Real</p>
@@ -66,18 +68,11 @@
                             class="w-full h-full border-none hidden" 
                             allowfullscreen>
                     </iframe>
-
-                    <div id="msgNoDashboard" class="hidden absolute inset-0 flex flex-col items-center justify-center p-12 text-center bg-slate-50">
-                        <div class="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-4">
-                            <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                        </div>
-                        <h3 class="text-lg font-black text-slate-600 uppercase tracking-tight">Métricas en Proceso</h3>
-                        <p class="text-sm text-slate-400 max-w-xs mx-auto mt-2 italic">Estamos vinculando su enlace con el centro de operaciones. Sus métricas estarán disponibles en breve.</p>
-                    </div>
                 </div>
             </div>
 
             <div class="flex flex-col space-y-8">
+                
                 <div class="bg-white rounded-[2rem] p-8 shadow-lg border border-slate-200">
                     <h3 class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-6">Servicio Contratado</h3>
                     <div class="space-y-5">
@@ -91,17 +86,32 @@
                                 <code id="lblIp" class="text-sm font-bold text-blue-600">0.0.0.0</code>
                             </div>
                         </div>
-                        <div>
-                            <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">SLA Garantizado</p>
-                            <p class="text-sm font-semibold text-slate-800">98.99%</p>
-                        </div>
                     </div>
-                    
-                    <div class="mt-8 pt-6 border-t border-slate-100">
-                        <p id="txtMesFactura" class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 text-center">Buscando facturas...</p>
-                        <a href="#" id="btnDescargarFactura" target="_blank" class="block text-center w-full bg-slate-100 text-slate-400 font-bold py-3 rounded-xl transition text-sm pointer-events-none">
-                            No hay facturas disponibles
-                        </a>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-8 shadow-lg border border-slate-200">
+                    <h3 class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Documentación Legal</h3>
+                    <div class="space-y-3">
+                        <button onclick="descargarDocumento('contrato')" class="w-full flex items-center justify-between px-4 py-3.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition text-sm font-bold text-slate-700 group">
+                            <span class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                Mi Contrato
+                            </span>
+                        </button>
+
+                        <button onclick="descargarDocumento('facturas')" class="w-full flex items-center justify-between px-4 py-3.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition text-sm font-bold text-slate-700 group">
+                            <span class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                Última Factura
+                            </span>
+                        </button>
+
+                        <button onclick="descargarSLA()" class="w-full flex items-center justify-between px-4 py-3.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition text-sm font-bold text-slate-700 group">
+                            <span class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                Acuerdo SLA (99.9%)
+                            </span>
+                        </button>
                     </div>
                 </div>
 
@@ -149,6 +159,7 @@
                 </table>
             </div>
         </div>
+
     </main>
 
     <div id="modal-ticket" class="hidden fixed inset-0 bg-[#1a1f2e]/60 backdrop-blur-sm z-50 flex justify-center items-center p-4">
@@ -194,7 +205,7 @@
         const ADMIN_EMAIL = 'contacto@globalcomfibra.cl';
 
         document.addEventListener('DOMContentLoaded', async () => {
-            const { data: { session }, error: sessionError } = await clienteSupabase.auth.getSession();
+            const { data: { session } } = await clienteSupabase.auth.getSession();
             
             if (!session) {
                 window.location.href = 'login.html';
@@ -207,8 +218,8 @@
             document.getElementById('cuerpoPagina').classList.remove('hidden');
             const emailUsuario = session.user.email;
 
-            // 1. Cargar Datos del Cliente
-            const { data: cliente, error } = await clienteSupabase
+            // Cargar Datos del Cliente
+            const { data: cliente } = await clienteSupabase
                 .from('clientes')
                 .select('*')
                 .eq('email', emailUsuario)
@@ -225,47 +236,59 @@
                 if(palabras.length > 1) iniciales += palabras[1].charAt(0);
                 document.getElementById('lblIniciales').textContent = iniciales.toUpperCase();
 
-                // MANEJO DEL DASHBOARD (Purple Hackers u otro)
+                // CARGAR PURPLE HACKERS AUTOMÁTICAMENTE
                 const frame = document.getElementById('frameDashboard');
                 const loader = document.getElementById('loaderDashboard');
-                const noDash = document.getElementById('msgNoDashboard');
 
-                if (cliente.url_dashboard) {
-                    frame.src = cliente.url_dashboard;
-                    frame.onload = () => {
-                        loader.classList.add('hidden');
-                        frame.classList.remove('hidden');
-                    };
-                } else {
+                frame.src = cliente.url_dashboard || 'https://app.purplehackers.com/login/';
+                
+                frame.onload = () => {
                     loader.classList.add('hidden');
-                    noDash.classList.remove('hidden');
-                }
-            } else {
-                document.getElementById('lblEmpresa').textContent = emailUsuario;
-            }
-
-            // 2. Cargar Última Factura
-            const { data: facturaData } = await clienteSupabase
-                .from('facturas')
-                .select('*')
-                .eq('email_cliente', emailUsuario)
-                .order('created_at', { ascending: false })
-                .limit(1)
-                .maybeSingle();
-
-            const btnFactura = document.getElementById('btnDescargarFactura');
-            const txtMes = document.getElementById('txtMesFactura');
-
-            if (facturaData) {
-                txtMes.textContent = `Correspondiente a: ${facturaData.mes_anio}`;
-                btnFactura.textContent = "Descargar Última Factura";
-                btnFactura.href = facturaData.url_archivo;
-                btnFactura.classList.remove('bg-slate-100', 'text-slate-400', 'pointer-events-none');
-                btnFactura.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700', 'shadow-md');
-            } else {
-                txtMes.textContent = "Estado de cuenta al día";
+                    frame.classList.remove('hidden');
+                };
             }
         });
+
+        // FUNCIONES DE DESCARGA DE DOCUMENTOS
+        async function descargarDocumento(tipo) {
+            const { data: { session } } = await clienteSupabase.auth.getSession();
+            const emailUsuario = session.user.email;
+
+            if (tipo === 'contrato') {
+                const { data: archivos, error } = await clienteSupabase.storage.from('contratos').list('', {
+                    search: emailUsuario
+                });
+
+                if (archivos && archivos.length > 0) {
+                    const { data: urlData } = clienteSupabase.storage.from('contratos').getPublicUrl(archivos[0].name);
+                    window.open(urlData.publicUrl, '_blank');
+                } else {
+                    alert('Su contrato aún no ha sido cargado en el portal. Por favor, contacte a su ejecutivo.');
+                }
+            } 
+            
+            else if (tipo === 'facturas') {
+                const { data: facturaData } = await clienteSupabase
+                    .from('facturas')
+                    .select('url_archivo')
+                    .eq('email_cliente', emailUsuario)
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .maybeSingle();
+
+                if (facturaData && facturaData.url_archivo) {
+                    window.open(facturaData.url_archivo, '_blank');
+                } else {
+                    alert('Su cuenta está al día. Aún no hay facturas emitidas en el portal.');
+                }
+            }
+        }
+
+        function descargarSLA() {
+            // Reemplaza esta URL con la ruta pública de tu PDF de SLA en Supabase
+            const urlSLA = 'https://eejsdoeuovcrjicrgxmo.supabase.co/storage/v1/object/public/contratos/SLA_Globalcom.pdf'; 
+            window.open(urlSLA, '_blank');
+        }
 
         async function cerrarSesion() {
             await clienteSupabase.auth.signOut();
