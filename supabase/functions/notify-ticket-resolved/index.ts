@@ -43,10 +43,13 @@ serve(async (req) => {
 
     const resendResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${RESEND_API_KEY}` },
+      headers: { 
+        'Content-Type': 'application/json', 
+        'Authorization': `Bearer ${RESEND_API_KEY}` 
+      },
       body: JSON.stringify({
         from: 'Soporte Globalcom <no-reply@globalcomfibra.cl>',
-        to: [emailCliente],
+        to: [emailCliente, 'contacto@globalcomfibra.cl'], // <--- AGREGAMOS TU CORREO AQUÍ
         subject: `[Resuelto] Ticket #${idTicket}: ${asunto}`,
         html: emailHtml,
       }),

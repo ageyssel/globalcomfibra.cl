@@ -56,7 +56,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         from: 'Facturación Globalcom <no-reply@globalcomfibra.cl>',
-        to: [correoFacturacion],
+        to: [correoFacturacion, 'contacto@globalcomfibra.cl'], // <--- AGREGAMOS TU CORREO AQUÍ
         subject: `Factura de Servicio Globalcom - ${mesAnio}`,
         html: emailHtml,
       }),

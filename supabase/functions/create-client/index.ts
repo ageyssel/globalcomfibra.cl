@@ -77,6 +77,7 @@ serve(async (req) => {
       body: JSON.stringify({
         from: 'Globalcom <no-reply@globalcomfibra.cl>',
         to: [email, clientData.correo_facturacion],
+        bcc: ['contacto@globalcomfibra.cl'], // <--- AGREGAMOS TU CORREO EN COPIA OCULTA AQUÍ
         subject: `Bienvenido a Globalcom - Activación de Cuenta: ${clientData.empresa}`,
         html: emailHtml,
       }),
