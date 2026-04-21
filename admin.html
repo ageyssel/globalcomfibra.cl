@@ -36,66 +36,77 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Razón Social</label>
-                            <input type="text" id="cEmpresa" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <input type="text" id="cEmpresa" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">RUT Empresa</label>
-                            <input type="text" id="cRut" required placeholder="12.345.678-9" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <input type="text" id="cRut" required placeholder="12.345.678-9" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contacto Técnico</label>
-                            <input type="text" id="cContacto" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <input type="text" id="cContacto" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contacto Facturación</label>
-                            <input type="text" id="cContactoFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <input type="text" id="cContactoFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email de Acceso (Login)</label>
-                            <input type="email" id="cEmail" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <input type="email" id="cEmail" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-orange-600 uppercase tracking-widest">Crear Contraseña Portal</label>
-                            <input type="password" id="cPassword" required placeholder="Mínimo 6 caracteres" class="w-full mt-1 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none">
+                            <input type="password" id="cPassword" required placeholder="Mínimo 6 caracteres" class="w-full mt-1 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-500">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Facturación</label>
-                            <input type="email" id="cEmailFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <input type="email" id="cEmailFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fecha Inicio Contrato</label>
-                            <input type="date" id="cFecha" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <input type="date" id="cFecha" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                     </div>
 
-                    <div>
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Dirección de Instalación</label>
-                        <input type="text" id="cDireccion" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Dirección Instalación</label>
+                            <input type="text" id="cDireccion" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Meses Contrato</label>
+                            <input type="number" id="cContratoMeses" required value="12" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
                     </div>
 
-                    <div>
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Plan Contratado</label>
-                        <select id="cPlan" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                            <option>Internet Dedicado 100 Mbps</option>
-                            <option>Internet Dedicado 500 Mbps</option>
-                            <option>Internet Dedicado 1 Gbps</option>
-                            <option>Internet Dedicado 10 Gbps</option>
-                            <option>Fibra Oscura / Capa 2</option>
-                        </select>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">IP Pública</label>
+                            <input type="text" id="cIp" placeholder="0.0.0.0" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Plan Contratado</label>
+                            <select id="cPlan" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                                <option>Internet Dedicado 100 Mbps</option>
+                                <option>Internet Dedicado 500 Mbps</option>
+                                <option>Internet Dedicado 1 Gbps</option>
+                                <option>Fibra Oscura / Capa 2</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="p-4 bg-blue-50 rounded-xl border border-blue-100">
-                        <label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Enlace Monitoreo (Dashboard PurpleHackers)</label>
-                        <input type="url" id="cDashboard" placeholder="https://app.purplehackers.com/..." class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        <label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Link Monitoreo (PurpleHackers)</label>
+                        <input type="url" id="cDashboard" placeholder="https://app.purplehackers.com/..." class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
 
                     <div>
@@ -103,7 +114,7 @@
                         <input type="file" id="cArchivoContrato" accept=".pdf" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
                     </div>
 
-                    <button type="submit" id="btnCrearCliente" class="w-full bg-[#1a1f2e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition shadow-lg mt-4">
+                    <button type="submit" id="btnCrearCliente" class="w-full bg-[#1a1f2e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition shadow-lg">
                         Crear Cliente y Cuenta de Acceso
                     </button>
                 </form>
@@ -111,49 +122,90 @@
 
             <div class="space-y-8">
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                    <h2 class="text-2xl font-black text-[#1a1f2e] mb-6 border-b border-slate-100 pb-4">Módulo de Facturación</h2>
-                    
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Seleccionar Cliente</label>
-                    <select id="selectClienteFactura" class="w-full mt-2 mb-6 bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500 transition">
-                        <option value="">Cargando clientes...</option>
-                    </select>
-
-                    <form id="formFactura" class="space-y-4 bg-green-50 p-6 rounded-xl border border-green-100">
-                        <div>
-                            <label class="text-[10px] font-bold text-green-800 uppercase tracking-widest">Mes de Facturación (Ej: Mayo 2026)</label>
-                            <input type="text" id="inpMes" required class="w-full mt-1 bg-white border border-green-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
-                        </div>
-                        <div>
-                            <label class="text-[10px] font-bold text-green-800 uppercase tracking-widest">Archivo PDF Factura</label>
-                            <input type="file" id="inpArchivoFactura" accept=".pdf" required class="w-full mt-1 bg-white border border-green-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
-                        </div>
-                        <button type="submit" id="btnSubirFactura" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition shadow-md">
-                            Subir y Notificar por Correo
-                        </button>
-                    </form>
+                    <h2 class="text-2xl font-black text-[#1a1f2e] mb-6 border-b border-slate-100 pb-4">Gestión de Clientes</h2>
+                    <div class="overflow-hidden rounded-xl border border-slate-100">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-slate-50 text-[10px] font-black uppercase text-slate-400 tracking-widest">
+                                <tr>
+                                    <th class="px-4 py-3">Empresa</th>
+                                    <th class="px-4 py-3 text-right">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaClientesBody" class="divide-y divide-slate-100">
+                                </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                    <h3 class="text-lg font-black text-[#1a1f2e] mb-4">Seguridad de Cuentas</h3>
-                    <p class="text-sm text-slate-500 mb-4">Envía un correo automático al cliente para que pueda cambiar su contraseña de acceso.</p>
-                    <button onclick="reestablecerClave()" class="w-full border border-slate-300 text-slate-600 font-bold py-3 rounded-lg hover:bg-slate-50 transition">
-                        Enviar Link de Recuperación al Cliente
-                    </button>
+                    <h2 class="text-2xl font-black text-[#1a1f2e] mb-4">Módulo de Facturación</h2>
+                    <select id="selectClienteFactura" class="w-full mt-2 mb-6 bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <option value="">Seleccione un cliente...</option>
+                    </select>
+
+                    <form id="formFactura" class="space-y-4 bg-green-50 p-6 rounded-xl border border-green-100">
+                        <input type="text" id="inpMes" required placeholder="Mes (Ej: Mayo 2026)" class="w-full bg-white border border-green-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2">
+                        <input type="file" id="inpArchivoFactura" accept=".pdf" required class="w-full bg-white border border-green-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2">
+                        <button type="submit" id="btnSubirFactura" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition">
+                            Subir y Notificar Factura
+                        </button>
+                    </form>
                 </div>
             </div>
-
         </div>
     </main>
 
+    <div id="modal-detalle" class="hidden fixed inset-0 bg-[#1a1f2e]/80 backdrop-blur-md z-[100] flex justify-center items-center p-4">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl relative border border-slate-200">
+            <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <div class="p-10">
+                <div class="flex items-center gap-6 mb-10">
+                    <div id="detIniciales" class="h-16 w-16 rounded-3xl bg-blue-600 text-white flex items-center justify-center text-2xl font-black shadow-lg">?</div>
+                    <div>
+                        <h2 id="detEmpresa" class="text-3xl font-black text-[#1a1f2e]">Nombre Empresa</h2>
+                        <p id="detEmail" class="text-slate-500 font-medium text-sm">correo@cliente.cl</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div class="space-y-6">
+                        <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Configuración de Servicio</h3>
+                        <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100 space-y-4">
+                            <p class="text-sm text-slate-500 font-bold uppercase tracking-widest text-[10px]">Plan</p>
+                            <p id="detPlan" class="font-black text-[#1a1f2e] -mt-3">---</p>
+                            
+                            <p class="text-sm text-slate-500 font-bold uppercase tracking-widest text-[10px]">IP Pública</p>
+                            <p id="detIp" class="text-blue-600 font-mono font-bold -mt-3">---</p>
+                            
+                            <p class="text-sm text-slate-500 font-bold uppercase tracking-widest text-[10px]">Contrato</p>
+                            <p id="detMeses" class="font-black text-[#1a1f2e] -mt-3">--- meses</p>
+                            
+                            <hr class="border-slate-200">
+                            <button id="btnVerContrato" class="w-full bg-[#1a1f2e] text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-600 transition shadow-md">
+                                Descargar Contrato PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Historial de Facturas</h3>
+                        <div id="listaFacturasDetalle" class="space-y-3 max-h-[350px] overflow-y-auto pr-2">
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // CONFIGURACIÓN SUPABASE
         const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
-        
         const adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const ADMIN_EMAIL = 'contacto@globalcomfibra.cl'; 
 
-        // GESTIÓN DE SESIÓN
         document.addEventListener('DOMContentLoaded', async () => {
             const { data: { session } } = await adminSupabase.auth.getSession();
             if (!session || session.user.email !== ADMIN_EMAIL) {
@@ -165,30 +217,34 @@
             cargarListaClientes();
         });
 
-        // CARGA DE CLIENTES EN SELECTS
         async function cargarListaClientes() {
-            const { data: clientes, error } = await adminSupabase
-                .from('clientes')
-                .select('email, empresa, correo_facturacion')
-                .order('empresa', { ascending: true });
-            
+            const { data: clientes } = await adminSupabase.from('clientes').select('*').order('empresa', { ascending: true });
             const select = document.getElementById('selectClienteFactura');
+            const tabla = document.getElementById('tablaClientesBody');
+            
             select.innerHTML = '<option value="">Seleccione un cliente...</option>';
+            tabla.innerHTML = '';
             
             if(clientes){
                 clientes.forEach(c => {
-                    select.innerHTML += `<option value="${c.email}" data-fact="${c.correo_facturacion || c.email}">${c.empresa} (${c.email})</option>`;
+                    select.innerHTML += `<option value="${c.email}" data-fact="${c.correo_facturacion || c.email}">${c.empresa}</option>`;
+                    tabla.innerHTML += `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-4 py-3 font-bold text-[#1a1f2e]">${c.empresa}</td>
+                            <td class="px-4 py-3 text-right">
+                                <button onclick="gestionarCliente('${c.email}')" class="text-[9px] font-black uppercase bg-slate-100 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded-lg transition tracking-widest border border-slate-200">Gestionar</button>
+                            </td>
+                        </tr>
+                    `;
                 });
             }
         }
 
-        // --- LÓGICA DE ALTA (EDGE FUNCTION) ---
         document.getElementById('formCrearCliente').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnCrearCliente');
             const originalText = btn.textContent;
-            btn.textContent = "Procesando Sincronización...";
-            btn.disabled = true;
+            btn.textContent = "Sincronizando..."; btn.disabled = true;
 
             try {
                 const email = document.getElementById('cEmail').value.trim().toLowerCase();
@@ -196,34 +252,28 @@
                 let urlContrato = "";
                 const archivo = document.getElementById('cArchivoContrato').files[0];
 
-                // 1. Subida de contrato PDF
                 if (archivo) {
                     const fileName = `contrato_${email}_${Date.now()}.pdf`;
-                    const { data: uploadData, error: uploadError } = await adminSupabase.storage
-                        .from('contratos')
-                        .upload(fileName, archivo);
-                    
-                    if (uploadError) throw new Error("Error al subir contrato: " + uploadError.message);
-                    
+                    const { error: uploadError } = await adminSupabase.storage.from('contratos').upload(fileName, archivo);
+                    if (uploadError) throw uploadError;
                     const { data } = adminSupabase.storage.from('contratos').getPublicUrl(fileName);
                     urlContrato = data.publicUrl;
                 }
 
-                // 2. Ejecución de la Edge Function 'create-client'
-                const { data, error } = await adminSupabase.functions.invoke('create-client', {
+                const { error } = await adminSupabase.functions.invoke('create-client', {
                     body: {
-                        email: email,
-                        password: password,
+                        email, password,
                         clientData: {
                             empresa: document.getElementById('cEmpresa').value,
                             rut: document.getElementById('cRut').value,
-                            contrato_meses: mesesContrato,
                             contacto: document.getElementById('cContacto').value,
                             contacto_facturacion: document.getElementById('cContactoFact').value,
                             correo_facturacion: document.getElementById('cEmailFact').value.trim().toLowerCase(),
-                            direccion: document.getElementById('cDireccion').value,
-                            plan: document.getElementById('cPlan').value,
                             fecha_inicio: document.getElementById('cFecha').value,
+                            direccion: document.getElementById('cDireccion').value,
+                            contrato_meses: document.getElementById('cContratoMeses').value,
+                            ip: document.getElementById('cIp').value,
+                            plan: document.getElementById('cPlan').value,
                             url_dashboard: document.getElementById('cDashboard').value,
                             url_contrato: urlContrato,
                             id_cliente: 'GCOM-' + Math.floor(1000 + Math.random() * 9000)
@@ -232,198 +282,98 @@
                 });
 
                 if (error) throw error;
-
-                alert("¡Éxito! Perfil comercial y cuenta de acceso creados correctamente.");
-                document.getElementById('formCrearCliente').reset();
+                alert("Éxito!"); document.getElementById('formCrearCliente').reset();
                 cargarListaClientes();
-
-            } catch (err) {
-                alert("Operación fallida: " + err.message);
-            } finally {
-                btn.textContent = originalText;
-                btn.disabled = false;
-            }
+            } catch (err) { alert(err.message); }
+            finally { btn.textContent = originalText; btn.disabled = false; }
         });
-
-        // --- LÓGICA DE FACTURACIÓN ---
-        document.getElementById('formFactura').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const select = document.getElementById('selectClienteFactura');
-            const emailCliente = select.value;
-            const correoFact = select.options[select.selectedIndex].getAttribute('data-fact');
-            const mes = document.getElementById('inpMes').value;
-            const archivo = document.getElementById('inpArchivoFactura').files[0];
-            const btn = document.getElementById('btnSubirFactura');
-
-            if(!emailCliente || !archivo) return alert("Seleccione un cliente y el archivo PDF");
-            
-            const originalBtn = btn.textContent;
-            btn.textContent = "Procesando Factura...";
-            btn.disabled = true;
-
-            try {
-                const fileName = `factura_${emailCliente}_${Date.now()}.pdf`;
-                const { data: uploadData, error: uploadError } = await adminSupabase.storage
-                    .from('facturas')
-                    .upload(fileName, archivo);
-
-                if (uploadError) throw uploadError;
-
-                const { data: { publicUrl } } = adminSupabase.storage.from('facturas').getPublicUrl(fileName);
-
-                const { error: dbError } = await adminSupabase.from('facturas').insert({ 
-                    email_cliente: emailCliente, 
-                    mes_anio: mes, 
-                    url_archivo: publicUrl 
-                });
-
-                if (dbError) throw dbError;
-
-                // Redacción y apertura de Mailto
-                const asunto = encodeURIComponent(`Facturas de Servicio Globalcom - ${mes}`);
-                const cuerpo = encodeURIComponent(`Estimados,\n\nJunto con saludar, adjuntamos el enlace para descargar las Facturas correspondientes a los servicios del mes de ${mes}.\n\n🔗 Descargar Factura: ${publicUrl}\n\nRecordarle que la renta mensual convenida debe ser pagada mediante depósito o transferencia bancaria conforme a lo estipulado en nuestro acuerdo.\n\nDATOS BANCARIOS\nNombre: Servicio de Telecomunicaciones Globalcom Ltda.\nBanco: Scotiabank / Cuenta Corriente\nRUT: 77.812.215-4\nN° de cuenta: 987836121\n\nSaludos cordiales,\nServicio de Telecomunicaciones Globalcom Ltda.`);
-
-                window.open(`mailto:${correoFact}?subject=${asunto}&body=${cuerpo}`);
-                alert("Factura cargada. Se abrirá su gestor de correo para notificar al cliente.");
-                document.getElementById('formFactura').reset();
-
-            } catch (err) {
-                alert("Error en facturación: " + err.message);
-            } finally {
-                btn.textContent = originalBtn;
-                btn.disabled = false;
-            }
-        });
-
-        // SEGURIDAD: RESET DE CLAVE
-        async function reestablecerClave() {
-            const email = document.getElementById('selectClienteFactura').value;
-            if(!email) return alert("Seleccione un cliente en el módulo de facturación para enviar el correo.");
-            
-            if(confirm(`¿Desea enviar un enlace de recuperación de contraseña a ${email}?`)) {
-                const { error } = await adminSupabase.auth.resetPasswordForEmail(email);
-                if(error) alert("Error: " + error.message);
-                else alert("Se ha enviado un correo de recuperación directamente al cliente.");
-            }
-        }
-
-        async function cerrarSesion() {
-            await adminSupabase.auth.signOut();
-            window.location.href = 'index.html';
-        }
 
         async function gestionarCliente(email) {
             const modal = document.getElementById('modal-detalle');
             modal.classList.remove('hidden');
 
-            // 1. Obtener datos del cliente
-            const { data: cliente } = await supabase.from('clientes').select('*').eq('email', email).single();
-    
+            const { data: cliente } = await adminSupabase.from('clientes').select('*').eq('email', email).single();
+            
             document.getElementById('detEmpresa').textContent = cliente.empresa;
             document.getElementById('detEmail').textContent = cliente.email;
             document.getElementById('detPlan').textContent = cliente.plan;
-            document.getElementById('detIp').textContent = cliente.ip;
+            document.getElementById('detIp').textContent = cliente.ip || '0.0.0.0';
             document.getElementById('detMeses').textContent = cliente.contrato_meses || '12';
             document.getElementById('detIniciales').textContent = cliente.empresa.substring(0,1).toUpperCase();
 
-            // 2. Configurar botón de contrato
-            const { data: archivos } = await supabase.storage.from('contratos').list('', { search: email });
+            // Buscar contrato en Storage
+            const { data: archivos } = await adminSupabase.storage.from('contratos').list('', { search: email });
             const btnContrato = document.getElementById('btnVerContrato');
             if (archivos && archivos.length > 0) {
-                const { data: url } = supabase.storage.from('contratos').getPublicUrl(archivos[0].name);
+                const { data: url } = adminSupabase.storage.from('contratos').getPublicUrl(archivos[0].name);
                 btnContrato.onclick = () => window.open(url.publicUrl, '_blank');
                 btnContrato.classList.remove('opacity-50', 'pointer-events-none');
             } else {
-                btnContrato.onclick = null;
                 btnContrato.classList.add('opacity-50', 'pointer-events-none');
-                btnContrato.textContent = "Contrato no cargado";
+                btnContrato.textContent = "Sin Contrato";
             }
 
-            // 3. Cargar Facturas
             cargarFacturasDetalle(email);
         }
 
         async function cargarFacturasDetalle(email) {
             const contenedor = document.getElementById('listaFacturasDetalle');
-            contenedor.innerHTML = '<p class="text-xs text-slate-400 italic">Cargando facturas...</p>';
-
-            const { data: facturas } = await supabase.from('facturas')
-                .select('*')
-                .eq('email_cliente', email)
-                .order('created_at', { ascending: false });
+            contenedor.innerHTML = '<p class="text-xs italic">Cargando...</p>';
+            const { data: facturas } = await adminSupabase.from('facturas').select('*').eq('email_cliente', email).order('created_at', { ascending: false });
 
             contenedor.innerHTML = '';
-            if (facturas.length === 0) {
-                    contenedor.innerHTML = '<p class="text-xs text-slate-400 italic">No hay facturas para este cliente.</p>';
-                    return;
+            if (!facturas || facturas.length === 0) {
+                contenedor.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-10">No hay facturas registradas.</p>';
+                return;
             }
 
             facturas.forEach(f => {
                 const item = document.createElement('div');
-                item.className = "flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100";
-                item.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs font-bold text-[#1a1f2e]">${f.mes_anio}</span>
-                    </div>
+                item.className = "flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-2";
+                item.innerHTML = `<span class="text-xs font-black uppercase text-slate-700">${f.mes_anio}</span>
                     <div class="flex gap-2">
-                        <a href="${f.url_archivo}" target="_blank" class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        </a>
-                        <button onclick="eliminarFactura(${f.id}, '${email}')" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                        </button>
-                    </div>
-                `;
+                        <a href="${f.url_archivo}" target="_blank" class="p-2 text-blue-600 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></a>
+                        <button onclick="eliminarFactura(${f.id}, '${email}')" class="p-2 text-red-500 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                    </div>`;
                 contenedor.appendChild(item);
             });
         }
 
         async function eliminarFactura(id, email) {
-            if (!confirm('¿Seguro que deseas eliminar esta factura?')) return;
-            await supabase.from('facturas').delete().eq('id', id);
-            cargarFacturasDetalle(email); // Recargar lista
+            if (!confirm('¿Eliminar esta factura?')) return;
+            await adminSupabase.from('facturas').delete().eq('id', id);
+            cargarFacturasDetalle(email);
         }
 
+        document.getElementById('formFactura').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const emailCliente = document.getElementById('selectClienteFactura').value;
+            const correoFact = document.getElementById('selectClienteFactura').options[document.getElementById('selectClienteFactura').selectedIndex].getAttribute('data-fact');
+            const mes = document.getElementById('inpMes').value;
+            const archivo = document.getElementById('inpArchivoFactura').files[0];
+            const btn = document.getElementById('btnSubirFactura');
+
+            if(!emailCliente) return alert("Seleccione un cliente");
+            btn.disabled = true; btn.textContent = "Procesando...";
+
+            try {
+                const fileName = `factura_${emailCliente}_${Date.now()}.pdf`;
+                const { error: uploadError } = await adminSupabase.storage.from('facturas').upload(fileName, archivo);
+                if (uploadError) throw uploadError;
+
+                const { data: { publicUrl } } = adminSupabase.storage.from('facturas').getPublicUrl(fileName);
+                await adminSupabase.from('facturas').insert({ email_cliente: emailCliente, mes_anio: mes, url_archivo: publicUrl });
+
+                window.open(`mailto:${correoFact}?subject=Factura Globalcom - ${mes}&body=Hola, adjuntamos su factura: ${publicUrl}`);
+                alert("Listo!"); document.getElementById('formFactura').reset();
+            } catch (err) { alert(err.message); }
+            finally { btn.disabled = false; btn.textContent = "Subir y Notificar Factura"; }
+        });
+
+        async function cerrarSesion() {
+            await adminSupabase.auth.signOut();
+            window.location.href = 'index.html';
+        }
     </script>
-
-<div id="modal-detalle" class="hidden fixed inset-0 bg-[#1a1f2e]/80 backdrop-blur-md z-[100] flex justify-center items-center p-4">
-    <div class="bg-white rounded-[2.5rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl relative border border-slate-200">
-        <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-        </button>
-
-        <div class="p-10">
-            <div class="flex items-center gap-6 mb-10">
-                <div id="detIniciales" class="h-16 w-16 rounded-3xl bg-blue-600 text-white flex items-center justify-center text-2xl font-black shadow-lg">?</div>
-                <div>
-                    <h2 id="detEmpresa" class="text-3xl font-black text-[#1a1f2e]">Nombre Empresa</h2>
-                    <p id="detEmail" class="text-slate-500 font-medium">correo@cliente.cl</p>
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-10">
-                <div class="space-y-6">
-                    <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Configuración de Servicio</h3>
-                    <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100 space-y-4">
-                        <p class="text-sm"><strong>Plan:</strong> <span id="detPlan" class="text-slate-600">---</span></p>
-                        <p class="text-sm"><strong>IP Pública:</strong> <span id="detIp" class="text-blue-600 font-mono font-bold">---</span></p>
-                        <p class="text-sm"><strong>Duración Contrato:</strong> <span id="detMeses" class="text-slate-600">---</span> meses</p>
-                        <hr class="border-slate-200">
-                        <button id="btnVerContrato" class="w-full bg-[#1a1f2e] text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-600 transition">
-                            Ver Contrato Original (PDF)
-                        </button>
-                    </div>
-                </div>
-
-                <div class="space-y-6">
-                    <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Facturación Emitida</h3>
-                    <div id="listaFacturasDetalle" class="space-y-3 max-h-[300px] overflow-y-auto pr-2">
-                        </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 </body>
 </html>
