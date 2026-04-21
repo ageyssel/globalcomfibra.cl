@@ -19,7 +19,10 @@
                 <span class="font-black text-xl tracking-tight">GLOBALCOM ADMIN</span>
                 <span class="bg-red-500 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-widest">NOC & CRM</span>
             </div>
-            <button onclick="cerrarSesion()" class="text-sm font-bold text-slate-300 hover:text-white transition">Salir del Admin</button>
+            <div class="flex items-center space-x-6">
+                <span id="adminUserEmail" class="text-[10px] font-bold text-slate-400 hidden md:inline">admin@globalcomfibra.cl</span>
+                <button onclick="cerrarSesion()" class="text-sm font-bold text-slate-300 hover:text-white transition">Salir del Admin</button>
+            </div>
         </div>
     </nav>
 
@@ -134,7 +137,7 @@
                     <h3 class="text-lg font-black text-[#1a1f2e] mb-4">Seguridad de Cuentas</h3>
                     <p class="text-sm text-slate-500 mb-4">Envía un correo automático al cliente para que pueda cambiar su contraseña de acceso.</p>
                     <button onclick="reestablecerClave()" class="w-full border border-slate-300 text-slate-600 font-bold py-3 rounded-lg hover:bg-slate-50 transition">
-                        Enviar Link de Recuperación al Cliente Seleccionado
+                        Enviar Link de Recuperación al Cliente
                     </button>
                 </div>
             </div>
@@ -143,12 +146,14 @@
     </main>
 
     <script>
+        // CONFIGURACIÓN SUPABASE
         const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
         
         const adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const ADMIN_EMAIL = 'contacto@globalcomfibra.cl'; 
 
+        // GESTIÓN DE SESIÓN
         document.addEventListener('DOMContentLoaded', async () => {
             const { data: { session } } = await adminSupabase.auth.getSession();
             if (!session || session.user.email !== ADMIN_EMAIL) {
@@ -156,13 +161,20 @@
                 return;
             }
             document.getElementById('adminBody').classList.remove('hidden');
+            document.getElementById('adminUserEmail').textContent = session.user.email;
             cargarListaClientes();
         });
 
+        // CARGA DE CLIENTES EN SELECTS
         async function cargarListaClientes() {
-            const { data: clientes } = await adminSupabase.from('clientes').select('email, empresa, correo_facturacion');
+            const { data: clientes, error } = await adminSupabase
+                .from('clientes')
+                .select('email, empresa, correo_facturacion')
+                .order('empresa', { ascending: true });
+            
             const select = document.getElementById('selectClienteFactura');
             select.innerHTML = '<option value="">Seleccione un cliente...</option>';
+            
             if(clientes){
                 clientes.forEach(c => {
                     select.innerHTML += `<option value="${c.email}" data-fact="${c.correo_facturacion || c.email}">${c.empresa} (${c.email})</option>`;
@@ -170,59 +182,69 @@
             }
         }
 
-        // CREAR CLIENTE Y CUENTA (EDGE FUNCTION)
+        // --- LÓGICA DE ALTA (EDGE FUNCTION) ---
         document.getElementById('formCrearCliente').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnCrearCliente');
-            btn.textContent = "Procesando Alta...";
+            const originalText = btn.textContent;
+            btn.textContent = "Procesando Sincronización...";
             btn.disabled = true;
 
-            const email = document.getElementById('cEmail').value.trim().toLowerCase();
-            const password = document.getElementById('cPassword').value;
-            let urlContrato = "";
-            const archivo = document.getElementById('cArchivoContrato').files[0];
+            try {
+                const email = document.getElementById('cEmail').value.trim().toLowerCase();
+                const password = document.getElementById('cPassword').value;
+                let urlContrato = "";
+                const archivo = document.getElementById('cArchivoContrato').files[0];
 
-            if (archivo) {
-                const fileName = `contrato_${email}_${Date.now()}.pdf`;
-                const { error: uploadError } = await adminSupabase.storage.from('contratos').upload(fileName, archivo);
-                if (!uploadError) {
+                // 1. Subida de contrato PDF
+                if (archivo) {
+                    const fileName = `contrato_${email}_${Date.now()}.pdf`;
+                    const { data: uploadData, error: uploadError } = await adminSupabase.storage
+                        .from('contratos')
+                        .upload(fileName, archivo);
+                    
+                    if (uploadError) throw new Error("Error al subir contrato: " + uploadError.message);
+                    
                     const { data } = adminSupabase.storage.from('contratos').getPublicUrl(fileName);
                     urlContrato = data.publicUrl;
                 }
-            }
 
-            const { data, error } = await adminSupabase.functions.invoke('create-client', {
-                body: {
-                    email: email,
-                    password: password,
-                    clientData: {
-                        empresa: document.getElementById('cEmpresa').value,
-                        rut: document.getElementById('cRut').value,
-                        contacto: document.getElementById('cContacto').value,
-                        contacto_facturacion: document.getElementById('cContactoFact').value,
-                        correo_facturacion: document.getElementById('cEmailFact').value.trim().toLowerCase(),
-                        direccion: document.getElementById('cDireccion').value,
-                        plan: document.getElementById('cPlan').value,
-                        fecha_inicio: document.getElementById('cFecha').value,
-                        url_dashboard: document.getElementById('cDashboard').value,
-                        url_contrato: urlContrato,
-                        id_cliente: 'GCOM-' + Math.floor(1000 + Math.random() * 9000)
+                // 2. Ejecución de la Edge Function 'create-client'
+                const { data, error } = await adminSupabase.functions.invoke('create-client', {
+                    body: {
+                        email: email,
+                        password: password,
+                        clientData: {
+                            empresa: document.getElementById('cEmpresa').value,
+                            rut: document.getElementById('cRut').value,
+                            contacto: document.getElementById('cContacto').value,
+                            contacto_facturacion: document.getElementById('cContactoFact').value,
+                            correo_facturacion: document.getElementById('cEmailFact').value.trim().toLowerCase(),
+                            direccion: document.getElementById('cDireccion').value,
+                            plan: document.getElementById('cPlan').value,
+                            fecha_inicio: document.getElementById('cFecha').value,
+                            url_dashboard: document.getElementById('cDashboard').value,
+                            url_contrato: urlContrato,
+                            id_cliente: 'GCOM-' + Math.floor(1000 + Math.random() * 9000)
+                        }
                     }
-                }
-            });
+                });
 
-            if (error) {
-                alert("Error: " + error.message);
-            } else {
-                alert("¡Éxito! Cliente y cuenta creados.");
+                if (error) throw error;
+
+                alert("¡Éxito! Perfil comercial y cuenta de acceso creados correctamente.");
                 document.getElementById('formCrearCliente').reset();
                 cargarListaClientes();
+
+            } catch (err) {
+                alert("Operación fallida: " + err.message);
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
             }
-            btn.textContent = "Crear Cliente y Cuenta de Acceso";
-            btn.disabled = false;
         });
 
-        // SUBIR FACTURA Y NOTIFICAR
+        // --- LÓGICA DE FACTURACIÓN ---
         document.getElementById('formFactura').addEventListener('submit', async (e) => {
             e.preventDefault();
             const select = document.getElementById('selectClienteFactura');
@@ -232,39 +254,56 @@
             const archivo = document.getElementById('inpArchivoFactura').files[0];
             const btn = document.getElementById('btnSubirFactura');
 
-            if(!emailCliente || !archivo) return alert("Faltan datos");
-            btn.textContent = "Subiendo...";
+            if(!emailCliente || !archivo) return alert("Seleccione un cliente y el archivo PDF");
+            
+            const originalBtn = btn.textContent;
+            btn.textContent = "Procesando Factura...";
             btn.disabled = true;
 
-            const fileName = `factura_${emailCliente}_${Date.now()}.pdf`;
-            const { error: uploadError } = await adminSupabase.storage.from('facturas').upload(fileName, archivo);
+            try {
+                const fileName = `factura_${emailCliente}_${Date.now()}.pdf`;
+                const { data: uploadData, error: uploadError } = await adminSupabase.storage
+                    .from('facturas')
+                    .upload(fileName, archivo);
 
-            if (uploadError) {
-                alert(uploadError.message);
+                if (uploadError) throw uploadError;
+
+                const { data: { publicUrl } } = adminSupabase.storage.from('facturas').getPublicUrl(fileName);
+
+                const { error: dbError } = await adminSupabase.from('facturas').insert({ 
+                    email_cliente: emailCliente, 
+                    mes_anio: mes, 
+                    url_archivo: publicUrl 
+                });
+
+                if (dbError) throw dbError;
+
+                // Redacción y apertura de Mailto
+                const asunto = encodeURIComponent(`Facturas de Servicio Globalcom - ${mes}`);
+                const cuerpo = encodeURIComponent(`Estimados,\n\nJunto con saludar, adjuntamos el enlace para descargar las Facturas correspondientes a los servicios del mes de ${mes}.\n\n🔗 Descargar Factura: ${publicUrl}\n\nRecordarle que la renta mensual convenida debe ser pagada mediante depósito o transferencia bancaria conforme a lo estipulado en nuestro acuerdo.\n\nDATOS BANCARIOS\nNombre: Servicio de Telecomunicaciones Globalcom Ltda.\nBanco: Scotiabank / Cuenta Corriente\nRUT: 77.812.215-4\nN° de cuenta: 987836121\n\nSaludos cordiales,\nServicio de Telecomunicaciones Globalcom Ltda.`);
+
+                window.open(`mailto:${correoFact}?subject=${asunto}&body=${cuerpo}`);
+                alert("Factura cargada. Se abrirá su gestor de correo para notificar al cliente.");
+                document.getElementById('formFactura').reset();
+
+            } catch (err) {
+                alert("Error en facturación: " + err.message);
+            } finally {
+                btn.textContent = originalBtn;
                 btn.disabled = false;
-                return;
             }
-
-            const { data: { publicUrl } } = adminSupabase.storage.from('facturas').getPublicUrl(fileName);
-            await adminSupabase.from('facturas').insert({ email_cliente: emailCliente, mes_anio: mes, url_archivo: publicUrl });
-
-            const asunto = encodeURIComponent(`Facturas de Servicio Globalcom - ${mes}`);
-            const cuerpo = encodeURIComponent(`Estimados,\n\nJunto con saludar, adjuntamos el enlace para descargar las Facturas correspondientes a los servicios del mes de ${mes}.\n\n🔗 Descargar Factura: ${publicUrl}\n\nRecordarle que la renta mensual convenida debe ser pagada mediante depósito o transferencia bancaria conforme a lo estipulado en nuestro acuerdo.\n\nDATOS BANCARIOS\nNombre: Servicio de Telecomunicaciones Globalcom Ltda.\nBanco: Scotiabank / Cuenta Corriente\nRUT: 77.812.215-4\nN° de cuenta: 987836121\n\nSaludos cordiales,\nServicio de Telecomunicaciones Globalcom Ltda.`);
-
-            window.open(`mailto:${correoFact}?subject=${asunto}&body=${cuerpo}`);
-            btn.textContent = "Subir y Notificar por Correo";
-            btn.disabled = false;
-            document.getElementById('formFactura').reset();
         });
 
-        // REESTABLECER CLAVE
+        // SEGURIDAD: RESET DE CLAVE
         async function reestablecerClave() {
             const email = document.getElementById('selectClienteFactura').value;
-            if(!email) return alert("Selecciona un cliente primero.");
+            if(!email) return alert("Seleccione un cliente en el módulo de facturación para enviar el correo.");
             
-            const { error } = await adminSupabase.auth.resetPasswordForEmail(email);
-            if(error) alert("Error: " + error.message);
-            else alert("Se ha enviado un correo de recuperación al cliente.");
+            if(confirm(`¿Desea enviar un enlace de recuperación de contraseña a ${email}?`)) {
+                const { error } = await adminSupabase.auth.resetPasswordForEmail(email);
+                if(error) alert("Error: " + error.message);
+                else alert("Se ha enviado un correo de recuperación directamente al cliente.");
+            }
         }
 
         async function cerrarSesion() {
