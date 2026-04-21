@@ -138,31 +138,30 @@
         // Configura aquí tus credenciales de Supabase
         const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co/rest/v1/';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                
+        // CORRECCIÓN: Le cambiamos el nombre a clienteSupabase
+        const clienteSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // 1. Verificamos si existe una sesión activa real en Supabase
-            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            // Verificamos si existe una sesión usando clienteSupabase
+            const { data: { session }, error: sessionError } = await clienteSupabase.auth.getSession();
             
             if (!session) {
-                // Si no hay sesión válida, lo echamos al login
                 window.location.href = 'login.html';
                 return;
             }
 
-            // Si hay sesión, mostramos la página
             document.getElementById('cuerpoPagina').classList.remove('hidden');
             const emailUsuario = session.user.email;
 
-            // 2. Buscamos la info del cliente en tu tabla 'clientes' usando su email
-            const { data: cliente, error } = await supabase
+            // Buscamos la info del cliente usando clienteSupabase
+            const { data: cliente, error } = await clienteSupabase
                 .from('clientes')
                 .select('*')
                 .eq('email', emailUsuario)
                 .single();
 
             if (cliente) {
-                // Inyectamos la información real de la base de datos en la pantalla
                 document.getElementById('lblEmpresa').textContent = cliente.empresa || "Empresa Demo";
                 document.getElementById('lblId').textContent = cliente.id_cliente || "GCOM-0000";
                 document.getElementById('lblPlan').textContent = cliente.plan || "Internet Dedicado";
@@ -171,19 +170,18 @@
                 document.getElementById('lblLatencia').textContent = cliente.latencia || "0";
                 document.getElementById('lblIp').textContent = cliente.ip || "0.0.0.0";
 
-                // Crear iniciales
                 const palabras = (cliente.empresa || "Empresa Demo").split(' ');
                 let iniciales = palabras[0].charAt(0);
                 if(palabras.length > 1) iniciales += palabras[1].charAt(0);
                 document.getElementById('lblIniciales').textContent = iniciales.toUpperCase();
             } else {
-                console.error("No se encontraron los datos del cliente en la base de datos", error);
+                console.error("No se encontraron datos", error);
             }
         });
 
-        // 3. Función real para cerrar sesión en Supabase
+        // Función para cerrar sesión usando clienteSupabase
         async function cerrarSesion() {
-            await supabase.auth.signOut();
+            await clienteSupabase.auth.signOut();
             window.location.href = 'index.html';
         }
     </script>
