@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Globalcom | Gestión de Clientes</title>
+    <link rel="icon" href="img/favicon.png" type="image/png">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="img/favicon.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style> body { font-family: 'Inter', sans-serif; } </style>
@@ -15,131 +18,221 @@
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-4">
                 <span class="font-black text-xl tracking-tight">GLOBALCOM ADMIN</span>
-                <span class="bg-red-500 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-widest">Acceso Restringido</span>
+                <span class="bg-red-500 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-widest">NOC & CRM</span>
             </div>
             <button onclick="cerrarSesion()" class="text-sm font-bold text-slate-300 hover:text-white transition">Salir del Admin</button>
         </div>
     </nav>
 
-    <main class="max-w-4xl mx-auto px-6 py-10">
-        <h1 class="text-3xl font-black mb-8 text-[#1a1f2e]">Gestión de Clientes y Facturación</h1>
-
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mb-8">
-            <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Seleccionar Cliente</label>
-            <select id="selectCliente" class="w-full mt-2 bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500 transition">
-                <option value="">Cargando clientes...</option>
-            </select>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-8">
+    <main class="max-w-6xl mx-auto px-6 py-10">
+        
+        <div class="grid lg:grid-cols-2 gap-8">
+            
             <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                <h3 class="text-lg font-black text-[#1a1f2e] mb-4">Actualizar Métricas de Red</h3>
-                <form id="formMetricas" class="space-y-4">
+                <h2 class="text-2xl font-black text-[#1a1f2e] mb-6 border-b border-slate-100 pb-4">Alta de Nuevo Cliente</h2>
+                
+                <form id="formCrearCliente" class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Bajada (Mbps)</label>
-                            <input type="number" id="inpBajada" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Razón Social</label>
+                            <input type="text" id="cEmpresa" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
                         <div>
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Subida (Mbps)</label>
-                            <input type="number" id="inpSubida" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">RUT Empresa</label>
+                            <input type="text" id="cRut" required placeholder="12.345.678-9" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
                     </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Latencia (ms)</label>
-                        <input type="number" id="inpLatencia" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contacto Técnico</label>
+                            <input type="text" id="cContacto" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contacto Facturación</label>
+                            <input type="text" id="cContactoFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
                     </div>
-                    <button type="submit" class="w-full bg-[#1a1f2e] text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">Guardar Métricas</button>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Login (Informativo)</label>
+                            <input type="email" id="cEmail" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Facturación</label>
+                            <input type="email" id="cEmailFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Dirección de Instalación</label>
+                        <input type="text" id="cDireccion" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Plan Contratado</label>
+                            <select id="cPlan" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                                <option>Internet Dedicado 100 Mbps</option>
+                                <option>Internet Dedicado 500 Mbps</option>
+                                <option>Internet Dedicado 1 Gbps</option>
+                                <option>Internet Dedicado 10 Gbps</option>
+                                <option>Fibra Oscura / Capa 2</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fecha Inicio</label>
+                            <input type="date" id="cFecha" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-blue-50 rounded-xl border border-blue-100">
+                        <label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Enlace Monitoreo en Vivo (Grafana/PRTG)</label>
+                        <input type="url" id="cDashboard" placeholder="https://grafana.globalcom.cl/d/cliente..." class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        <p class="text-[9px] text-blue-500 mt-1">Este enlace se mostrará incrustado en el portal del cliente.</p>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Subir Contrato Firmado (PDF)</label>
+                        <input type="file" id="cArchivoContrato" accept=".pdf" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                    </div>
+
+                    <button type="submit" id="btnCrearCliente" class="w-full bg-[#1a1f2e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition shadow-lg mt-4">
+                        Crear Perfil de Cliente
+                    </button>
+                    <p class="text-xs text-center text-slate-500 mt-2">⚠️ Recuerda dar de alta el correo y clave en la pestaña "Auth" de Supabase.</p>
                 </form>
             </div>
 
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                <h3 class="text-lg font-black text-[#1a1f2e] mb-4">Cargar Factura Mensual</h3>
-                <form id="formFactura" class="space-y-4">
-                    <div>
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Mes y Año (Ej: Abril 2026)</label>
-                        <input type="text" id="inpMes" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Archivo PDF</label>
-                        <input type="file" id="inpArchivo" accept=".pdf" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
-                    </div>
-                    <button type="submit" id="btnSubirFactura" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition shadow-md">
-                        Subir y Notificar Cliente
-                    </button>
-                </form>
+            <div class="space-y-8">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <h2 class="text-2xl font-black text-[#1a1f2e] mb-6 border-b border-slate-100 pb-4">Módulo de Facturación</h2>
+                    
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Seleccionar Cliente</label>
+                    <select id="selectClienteFactura" class="w-full mt-2 mb-6 bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <option value="">Cargando clientes...</option>
+                    </select>
+
+                    <form id="formFactura" class="space-y-4 bg-green-50 p-6 rounded-xl border border-green-100">
+                        <div>
+                            <label class="text-[10px] font-bold text-green-800 uppercase tracking-widest">Mes de Facturación (Ej: Abril 2026)</label>
+                            <input type="text" id="inpMes" required class="w-full mt-1 bg-white border border-green-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-green-800 uppercase tracking-widest">Archivo PDF Factura</label>
+                            <input type="file" id="inpArchivoFactura" accept=".pdf" required class="w-full mt-1 bg-white border border-green-200 rounded-lg px-3 py-2 text-sm focus:ring-2 outline-none">
+                        </div>
+                        <button type="submit" id="btnSubirFactura" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition shadow-md">
+                            Subir, Actualizar Portal y Notificar
+                        </button>
+                    </form>
+                </div>
             </div>
+
         </div>
     </main>
 
     <script>
-        const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
-        
+        const SUPABASE_URL = 'PON_TU_URL_AQUI';
+        const SUPABASE_KEY = 'PON_TU_ANON_KEY_AQUI';
         const adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        
-        // TU CORREO DE ADMINISTRADOR
         const ADMIN_EMAIL = 'contacto@globalcomfibra.cl'; 
 
         document.addEventListener('DOMContentLoaded', async () => {
             const { data: { session } } = await adminSupabase.auth.getSession();
-            
-            // CANDADO: Si no hay sesión, al login. Si hay sesión pero no es el admin, al portal de clientes.
-            if (!session) {
+            if (!session || session.user.email !== ADMIN_EMAIL) {
                 window.location.href = 'login.html';
                 return;
-            } else if (session.user.email !== ADMIN_EMAIL) {
-                window.location.href = 'portal.html';
-                return;
             }
-            
-            // Si es el admin, mostramos la página
             document.getElementById('adminBody').classList.remove('hidden');
+            cargarListaClientes();
+        });
 
-            const { data: clientes } = await adminSupabase.from('clientes').select('email, empresa');
-            const select = document.getElementById('selectCliente');
+        async function cargarListaClientes() {
+            const { data: clientes } = await adminSupabase.from('clientes').select('email, empresa, correo_facturacion');
+            const select = document.getElementById('selectClienteFactura');
             select.innerHTML = '<option value="">Seleccione un cliente...</option>';
             if(clientes){
                 clientes.forEach(c => {
-                    select.innerHTML += `<option value="${c.email}">${c.empresa} (${c.email})</option>`;
+                    // Guardamos el email de facturación como data-atributo para usarlo en el correo
+                    select.innerHTML += `<option value="${c.email}" data-fact="${c.correo_facturacion || c.email}">${c.empresa} (${c.email})</option>`;
                 });
             }
-        });
+        }
 
-        // Actualizar métricas
-        document.getElementById('formMetricas').addEventListener('submit', async (e) => {
+        // LÓGICA PARA CREAR CLIENTE Y SUBIR CONTRATO
+        document.getElementById('formCrearCliente').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('selectCliente').value;
-            if(!email) return alert("Selecciona un cliente");
+            const btn = document.getElementById('btnCrearCliente');
+            btn.textContent = "Creando Perfil...";
+            btn.disabled = true;
 
-            const bajada = document.getElementById('inpBajada').value;
-            const subida = document.getElementById('inpSubida').value;
-            const latencia = document.getElementById('inpLatencia').value;
+            const email = document.getElementById('cEmail').value.trim().toLowerCase();
+            let urlContrato = "";
+            const archivo = document.getElementById('cArchivoContrato').files[0];
 
-            const { error } = await adminSupabase.from('clientes').update({ bajada, subida, latencia }).eq('email', email);
-            if(error) alert("Error al guardar"); else alert("Métricas actualizadas en vivo.");
+            // 1. Si hay contrato, lo subimos al bucket 'contratos'
+            if (archivo) {
+                const fileExt = archivo.name.split('.').pop();
+                const fileName = `contrato_${email}_${Date.now()}.${fileExt}`;
+                const { error: uploadError } = await adminSupabase.storage.from('contratos').upload(fileName, archivo);
+                if (!uploadError) {
+                    const { data } = adminSupabase.storage.from('contratos').getPublicUrl(fileName);
+                    urlContrato = data.publicUrl;
+                }
+            }
+
+            // 2. Guardar todos los datos en la tabla clientes
+            const { error } = await adminSupabase.from('clientes').upsert({
+                email: email,
+                empresa: document.getElementById('cEmpresa').value,
+                rut: document.getElementById('cRut').value,
+                contacto: document.getElementById('cContacto').value,
+                contacto_facturacion: document.getElementById('cContactoFact').value,
+                correo_facturacion: document.getElementById('cEmailFact').value.trim().toLowerCase(),
+                direccion: document.getElementById('cDireccion').value,
+                plan: document.getElementById('cPlan').value,
+                fecha_inicio: document.getElementById('cFecha').value,
+                url_dashboard: document.getElementById('cDashboard').value,
+                url_contrato: urlContrato,
+                id_cliente: 'GCOM-' + Math.floor(1000 + Math.random() * 9000) // Autogenera ID
+            });
+
+            if (error) {
+                alert("Error al crear: " + error.message);
+            } else {
+                alert("Cliente creado exitosamente en el CRM.");
+                document.getElementById('formCrearCliente').reset();
+                cargarListaClientes();
+            }
+            btn.textContent = "Crear Perfil de Cliente";
+            btn.disabled = false;
         });
 
-        // Subir Factura y Enviar Correo
+        // LÓGICA PARA SUBIR FACTURA Y REDACTAR CORREO EXACTO
         document.getElementById('formFactura').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('selectCliente').value;
+            const select = document.getElementById('selectClienteFactura');
+            const emailClienteLogico = select.value;
+            const correoFacturacionReal = select.options[select.selectedIndex].getAttribute('data-fact');
+            
             const mes = document.getElementById('inpMes').value;
-            const archivo = document.getElementById('inpArchivo').files[0];
+            const archivo = document.getElementById('inpArchivoFactura').files[0];
             const btn = document.getElementById('btnSubirFactura');
 
-            if(!email || !archivo) return alert("Faltan datos");
+            if(!emailClienteLogico || !archivo) return alert("Selecciona cliente y archivo");
 
             btn.textContent = "Subiendo archivo...";
             btn.disabled = true;
 
             const fileExt = archivo.name.split('.').pop();
-            const fileName = `factura_${email}_${Date.now()}.${fileExt}`;
-            const { data: uploadData, error: uploadError } = await adminSupabase.storage.from('facturas').upload(fileName, archivo);
+            const fileName = `factura_${emailClienteLogico}_${Date.now()}.${fileExt}`;
+            const { error: uploadError } = await adminSupabase.storage.from('facturas').upload(fileName, archivo);
 
             if (uploadError) {
-                alert("Error al subir archivo: " + uploadError.message);
-                btn.textContent = "Subir y Notificar Cliente";
+                alert("Error: " + uploadError.message);
+                btn.textContent = "Subir, Actualizar Portal y Notificar";
                 btn.disabled = false;
                 return;
             }
@@ -147,20 +240,22 @@
             const { data: { publicUrl } } = adminSupabase.storage.from('facturas').getPublicUrl(fileName);
 
             await adminSupabase.from('facturas').insert({
-                email_cliente: email,
+                email_cliente: emailClienteLogico,
                 mes_anio: mes,
                 url_archivo: publicUrl
             });
 
-            btn.textContent = "¡Subido con éxito!";
+            btn.textContent = "¡Factura Lista!";
             
-            const asunto = encodeURIComponent(`Factura de Servicios Globalcom - ${mes}`);
-            const cuerpoCorreo = encodeURIComponent(`Estimados,\n\nJunto con saludar, adjuntamos el enlace para descargar la Factura correspondiente a los servicios del mes de ${mes}.\n\n🔗 Descargar Factura: ${publicUrl}\n\nRecordarle que la renta mensual convenida debe ser pagada mediante depósito o transferencia bancaria conforme a lo estipulado en nuestro acuerdo.\nA continuación, detallamos los datos bancarios para realizar el pago:\n\nDATOS BANCARIOS\nNombre: Servicio de Telecomunicaciones Globalcom Ltda.\nBanco: Scotiabank / Cuenta Corriente\nRUT: 77.812.215-4\nN° de cuenta: 987836121\n\nAgradecemos desde ya su gestión para concretar el pago a la brevedad. Si ya realizó la transferencia, le solicitamos enviar el comprobante a este correo (contacto@globalcomfibra.cl) para registrar el pago correctamente.\n\nQuedamos atentos ante cualquier duda.\n\nSaludos cordiales,\nServicio de Telecomunicaciones Globalcom Ltda.`);
+            // REDACCIÓN EXACTA DEL CORREO SOLICITADO
+            const asunto = encodeURIComponent(`Facturas de Servicio Globalcom - ${mes}`);
+            const cuerpoCorreo = encodeURIComponent(`Estimados,\n\nJunto con saludar, adjuntamos el enlace para descargar las Facturas correspondientes a los servicios del mes de ${mes}.\n\n🔗 Descargar Factura: ${publicUrl}\n\nRecordarle que la renta mensual convenida debe ser pagada mediante depósito o transferencia bancaria conforme a lo estipulado en nuestro acuerdo.\nA continuación, detallamos los datos bancarios para realizar el pago:\n\nDATOS BANCARIOS\nNombre: Servicio de Telecomunicaciones Globalcom Ltda.\nBanco: Scotiabank / Cuenta Corriente\nRUT: 77.812.215-4\nN° de cuenta: 987836121\n\nAgradecemos desde ya su gestión para concretar el pago a la brevedad. Si ya realizó la transferencia, le solicitamos enviar el comprobante al correo contacto@globalcomfibra.cl para registrar el pago correctamente.\n\nQuedamos atentos ante cualquier duda.\n\nSaludos cordiales,\nServicio de Telecomunicaciones Globalcom Ltda.`);
 
-            window.open(`mailto:${email}?subject=${asunto}&body=${cuerpoCorreo}`);
+            // Abre el correo dirigido al correo de facturación de ese cliente
+            window.open(`mailto:${correoFacturacionReal}?subject=${asunto}&body=${cuerpoCorreo}`);
 
             setTimeout(() => {
-                btn.textContent = "Subir y Notificar Cliente";
+                btn.textContent = "Subir, Actualizar Portal y Notificar";
                 btn.disabled = false;
                 document.getElementById('formFactura').reset();
             }, 3000);
