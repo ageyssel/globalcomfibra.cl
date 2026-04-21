@@ -16,20 +16,15 @@
     <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-4">
-                <a href="index.html">
-                    <img src="img/logo.png" alt="Globalcom" class="h-10 md:h-12 object-contain">
-                </a>
+                <a href="index.html"><img src="img/logo.png" alt="Globalcom" class="h-10 md:h-12 object-contain"></a>
                 <span class="text-[10px] font-black uppercase tracking-widest text-blue-700 bg-blue-50 px-3 py-1 rounded-md hidden md:inline-block border border-blue-100">Portal Privado</span>
             </div>
-            
             <div class="flex items-center space-x-6">
                 <div class="text-right hidden md:block">
                     <p id="lblEmpresa" class="text-xs font-bold text-[#1a1f2e]">Cargando...</p>
                     <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">ID: <span id="lblId">----</span></p>
                 </div>
-                <div id="lblIniciales" class="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm border border-slate-200 uppercase">
-                    -
-                </div>
+                <div id="lblIniciales" class="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm border border-slate-200 uppercase">-</div>
                 <a href="#" onclick="cerrarSesion()" class="text-[10px] font-black text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg transition uppercase tracking-wider">Cerrar Sesión</a>
             </div>
         </div>
@@ -48,46 +43,26 @@
         </div>
 
         <div class="grid lg:grid-cols-3 gap-8">
-            
             <div class="lg:col-span-2 bg-white rounded-[2rem] shadow-lg border border-slate-200 overflow-hidden min-h-[550px] flex flex-col relative group">
                 <div class="px-6 py-4 flex justify-between items-center border-b border-slate-50 bg-slate-50/50 absolute top-0 w-full z-20">
-                    <div>
-                       <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">Monitoreo de Enlace en Tiempo Real</p>
-                       <h2 class="text-xl font-black text-blue-600">NOC Live Feed</h2>
-                    </div>
+                    <div><p class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">Monitoreo de Enlace en Tiempo Real</p><h2 class="text-xl font-black text-blue-600">NOC Live Feed</h2></div>
                 </div>
-                
                 <div class="absolute inset-0 bg-[#0f172a] overflow-hidden mt-16">
-                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2072" class="w-full h-full object-cover opacity-30 grayscale group-hover:scale-105 transition-transform duration-1000" alt="Network Background">
+                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2072" class="w-full h-full object-cover opacity-30 grayscale group-hover:scale-105 transition-transform duration-1000">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent"></div>
                 </div>
-
                 <div class="absolute inset-0 flex flex-col items-center justify-center p-12 text-center z-10 mt-16">
-                    <div class="w-20 h-20 bg-blue-600/20 backdrop-blur-xl rounded-full flex items-center justify-center mb-6 border border-blue-500/30 animate-pulse">
-                        <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    </div>
-                    
+                    <div class="w-20 h-20 bg-blue-600/20 backdrop-blur-xl rounded-full flex items-center justify-center mb-6 border border-blue-500/30 animate-pulse"><svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
                     <h3 class="text-2xl font-black text-white uppercase tracking-tighter mb-2">NOC Live Management</h3>
                     <p class="text-slate-400 max-w-sm mx-auto mb-6 text-sm leading-relaxed">Acceda a la consola de monitoreo dedicada de Purple Hackers para gestionar su latencia en tiempo real.</p>
-                    
                     <div id="boxCredencialesNoc" class="hidden bg-slate-900/60 backdrop-blur-md border border-slate-700 rounded-xl p-4 mb-6 text-left w-full max-w-sm shadow-xl">
                         <p class="text-[10px] text-blue-400 font-bold uppercase tracking-widest mb-3 border-b border-slate-700 pb-2">Credenciales de Acceso NOC</p>
                         <div class="space-y-2">
-                            <div class="flex justify-between items-center">
-                                <span class="text-xs text-slate-400">Usuario:</span>
-                                <code id="lblUserNoc" class="text-xs font-bold text-white bg-slate-800 px-3 py-1 rounded-md select-all">---</code>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-xs text-slate-400">Contraseña:</span>
-                                <code id="lblPassNoc" class="text-xs font-bold text-white bg-slate-800 px-3 py-1 rounded-md select-all">---</code>
-                            </div>
+                            <div class="flex justify-between items-center"><span class="text-xs text-slate-400">Usuario:</span><code id="lblUserNoc" class="text-xs font-bold text-white bg-slate-800 px-3 py-1 rounded-md select-all">---</code></div>
+                            <div class="flex justify-between items-center"><span class="text-xs text-slate-400">Contraseña:</span><code id="lblPassNoc" class="text-xs font-bold text-white bg-slate-800 px-3 py-1 rounded-md select-all">---</code></div>
                         </div>
                     </div>
-                    
-                    <a id="btnLinkDashboard" href="https://app.purplehackers.com/login/" target="_blank" class="bg-blue-600 text-white px-10 py-4 rounded-2xl font-black hover:bg-blue-500 transition-all shadow-[0_0_40px_rgba(37,99,235,0.3)] text-xs uppercase tracking-widest flex items-center gap-3">
-                        Abrir Consola de Monitoreo
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                    </a>
+                    <a id="btnLinkDashboard" href="https://app.purplehackers.com/login/" target="_blank" class="bg-blue-600 text-white px-10 py-4 rounded-2xl font-black hover:bg-blue-500 transition-all shadow-[0_0_40px_rgba(37,99,235,0.3)] text-xs uppercase tracking-widest flex items-center gap-3">Abrir Consola de Monitoreo <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a>
                 </div>
             </div>
 
@@ -95,46 +70,18 @@
                 <div class="bg-white rounded-[2rem] p-8 shadow-lg border border-slate-200">
                     <h3 class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-6">Servicio Contratado</h3>
                     <div class="space-y-5">
-                        <div>
-                            <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Plan Actual</p>
-                            <p id="lblPlan" class="text-lg font-black text-[#1a1f2e]">Cargando...</p>
-                        </div>
-                        <div>
-                            <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">IP Pública Asignada</p>
-                            <div class="inline-block bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg">
-                                <code id="lblIp" class="text-sm font-bold text-blue-600">0.0.0.0</code>
-                            </div>
-                        </div>
+                        <div><p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Plan Actual</p><p id="lblPlan" class="text-lg font-black text-[#1a1f2e]">Cargando...</p></div>
+                        <div><p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">IP Pública Asignada</p><div class="inline-block bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg"><code id="lblIp" class="text-sm font-bold text-blue-600">0.0.0.0</code></div></div>
                     </div>
-                    
                     <div class="mt-8 pt-6 border-t border-slate-100">
                         <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-3">Vigencia del Contrato</p>
                         <div class="flex items-center justify-between gap-4">
-                            <div class="bg-slate-50 border border-slate-100 rounded-xl p-4 w-1/2 text-center">
-                                <p id="lblMesesTotales" class="text-2xl font-black text-[#1a1f2e]">0</p>
-                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Meses totales</p>
-                            </div>
-                            <div class="bg-orange-50 border border-orange-100 rounded-xl p-4 w-1/2 text-center">
-                                <p id="lblMesesRestantes" class="text-2xl font-black text-orange-600">0</p>
-                                <p class="text-[9px] font-bold text-orange-500 uppercase tracking-widest mt-1">Restantes</p>
-                            </div>
+                            <div class="bg-slate-50 border border-slate-100 rounded-xl p-4 w-1/2 text-center"><p id="lblMesesTotales" class="text-2xl font-black text-[#1a1f2e]">0</p><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Meses totales</p></div>
+                            <div class="bg-orange-50 border border-orange-100 rounded-xl p-4 w-1/2 text-center"><p id="lblMesesRestantes" class="text-2xl font-black text-orange-600">0</p><p class="text-[9px] font-bold text-orange-500 uppercase tracking-widest mt-1">Restantes</p></div>
                         </div>
                         <p id="lblFechaHabilitacion" class="text-[10px] text-slate-400 mt-3 italic text-center font-medium">Habilitado el: --/--/--</p>
-                        
-                        <button onclick="descargarSLA()" class="w-full mt-6 flex items-center justify-center gap-3 px-4 py-3 bg-[#1a1f2e] hover:bg-blue-600 text-white rounded-xl transition text-xs font-bold uppercase tracking-widest shadow-md">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                            Descargar SLA (98.99%)
-                        </button>
+                        <button onclick="descargarSLA()" class="w-full mt-6 flex items-center justify-center gap-3 px-4 py-3 bg-[#1a1f2e] hover:bg-blue-600 text-white rounded-xl transition text-xs font-bold uppercase tracking-widest shadow-md"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg> Descargar SLA (98.99%)</button>
                     </div>
-                </div>
-
-                <div class="bg-[#1a1f2e] rounded-[2rem] p-8 shadow-lg text-white">
-                    <h3 class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Soporte Directo</h3>
-                    <p class="text-sm text-slate-300 mb-6">¿Necesitas asistencia técnica inmediata?</p>
-                    <a href="https://wa.me/+56934323575" target="_blank" class="flex items-center justify-center w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl transition shadow-lg">
-                        <svg class="w-5 h-5 mr-2 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.417-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.305 1.652zm6.599-3.835c1.52.909 3.299 1.388 5.112 1.389 5.405 0 9.811-4.406 9.814-9.814.001-2.62-1.019-5.086-2.87-6.938-1.852-1.854-4.32-2.873-6.94-2.873-5.41 0-9.815 4.406-9.817 9.817 0 1.834.51 3.626 1.474 5.196l-.973 3.553 3.636-.954zm10.985-7.119c-.299-.149-1.77-.873-2.044-.973-.274-.1-.473-.149-.672.149-.199.299-.771.972-.945 1.169-.174.199-.349.224-.648.074-.299-.149-1.264-.466-2.408-1.486-.889-.792-1.49-1.77-1.664-2.069-.174-.299-.018-.46.131-.609.135-.133.299-.348.448-.522.149-.174.199-.298.298-.497.1-.199.05-.373-.025-.522-.075-.149-.672-1.62-.922-2.213-.243-.58-.492-.501-.672-.51l-.573-.01c-.199 0-.523.074-.797.373-.273.299-1.045 1.02-1.045 2.487s1.07 2.885 1.22 3.084c.149.199 2.105 3.215 5.099 4.512.712.31 1.269.494 1.703.633.717.227 1.369.195 1.885.118.574-.085 1.77-.721 2.02-1.418.249-.696.249-1.293.174-1.418-.075-.125-.274-.199-.573-.349z"/></svg>
-                        WhatsApp Soporte
-                    </a>
                 </div>
             </div>
         </div>
@@ -142,8 +89,8 @@
         <div class="mt-8 bg-white rounded-[2rem] p-8 md:p-10 shadow-lg border border-slate-200">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                 <div>
-                    <h3 class="text-xl font-black text-[#1a1f2e]">Historial de Tickets</h3>
-                    <p class="text-sm text-slate-500 mt-1">Gestión de requerimientos técnicos activos.</p>
+                    <h3 class="text-xl font-black text-[#1a1f2e]">Historial de Tickets y Soporte</h3>
+                    <p class="text-sm text-slate-500 mt-1">Haga clic en un ticket para ver el seguimiento o adjuntar archivos.</p>
                 </div>
                 <button onclick="document.getElementById('modal-ticket').classList.remove('hidden')" class="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600 transition shadow-md text-sm w-full md:w-auto">
                     + Abrir Nuevo Ticket
@@ -156,7 +103,7 @@
                             <th class="pb-4 font-bold uppercase tracking-wider text-[10px]">ID Ticket</th>
                             <th class="pb-4 font-bold uppercase tracking-wider text-[10px]">Asunto</th>
                             <th class="pb-4 font-bold uppercase tracking-wider text-[10px]">Fecha</th>
-                            <th class="pb-4 font-bold uppercase tracking-wider text-[10px]">Estado</th>
+                            <th class="pb-4 font-bold uppercase tracking-wider text-[10px]">Seguimiento</th>
                         </tr>
                     </thead>
                     <tbody id="tablaTickets" class="text-slate-700"></tbody>
@@ -171,82 +118,87 @@
             <h3 class="text-xl font-black text-[#1a1f2e] mb-2">Historial de Facturación</h3>
             <p class="text-sm text-slate-500 mb-8">Últimos 12 meses emitidos.</p>
             <div id="gridFacturas" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
-            <div id="msgNoFacturas" class="py-10 text-center hidden border-2 border-dashed border-slate-100 rounded-[2rem]">
-                <p class="text-slate-400 italic text-sm">Su estado de cuenta se encuentra al día.</p>
-            </div>
+            <div id="msgNoFacturas" class="py-10 text-center hidden border-2 border-dashed border-slate-100 rounded-[2rem]"><p class="text-slate-400 italic text-sm">Su estado de cuenta se encuentra al día.</p></div>
         </div>
     </main>
 
-    <div id="modal-ticket" class="hidden fixed inset-0 bg-[#1a1f2e]/60 backdrop-blur-sm z-50 flex justify-center items-center p-4">
-        <div class="bg-white rounded-[2rem] p-8 w-full max-w-lg shadow-2xl relative border border-slate-200">
-            <button onclick="document.getElementById('modal-ticket').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-red-500 transition">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
+    <div id="modal-ticket" class="hidden fixed inset-0 bg-[#1a1f2e]/80 backdrop-blur-sm z-50 flex justify-center items-center p-4">
+        <div class="bg-white rounded-[2.5rem] p-8 w-full max-w-lg shadow-2xl relative border border-slate-200">
+            <button onclick="document.getElementById('modal-ticket').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-red-500 transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
             <h3 class="text-2xl font-black mb-2 text-[#1a1f2e]">Generar Ticket</h3>
-            <p class="text-sm text-slate-500 mb-6">Describa su problema técnico. Nuestro equipo responderá a la brevedad.</p>
-            <form id="formNuevoTicket" class="space-y-5">
-                <div>
-                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Asunto</label>
-                    <input type="text" id="tkAsunto" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Ej: Falla de conectividad">
-                </div>
-                <div>
-                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Prioridad (SLA)</label>
-                    <select id="tkPrioridad" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
-                        <option value="Baja">Baja (Consultas/Administrativo)</option>
-                        <option value="Media">Media (Degradación de servicio)</option>
-                        <option value="Alta">Alta (Caída total del enlace)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Descripción</label>
-                    <textarea id="tkDescripcion" required rows="4" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Detalla el problema..."></textarea>
-                </div>
-                <button type="submit" id="btnEnviarTicket" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg mt-2">
-                    Enviar Ticket a Soporte
-                </button>
+            <p class="text-sm text-slate-500 mb-6">Describa su problema técnico y adjunte respaldos si es necesario.</p>
+            <form id="formNuevoTicket" class="space-y-4">
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Asunto</label><input type="text" id="tkAsunto" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 outline-none" placeholder="Ej: Falla de conectividad"></div>
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Prioridad</label><select id="tkPrioridad" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 outline-none"><option value="Baja">Baja (Consultas)</option><option value="Media">Media (Degradación)</option><option value="Alta">Alta (Caída total)</option></select></div>
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Descripción</label><textarea id="tkDescripcion" required rows="3" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 outline-none" placeholder="Detalla el problema..."></textarea></div>
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Archivo Adjunto (Opcional)</label><input type="file" id="tkArchivo" accept="image/*,.pdf,.doc,.docx" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:ring-2 outline-none"></div>
+                <button type="submit" id="btnEnviarTicket" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg mt-2">Enviar Ticket a Soporte</button>
             </form>
         </div>
     </div>
 
-    <footer class="bg-[#161b28] text-slate-400 py-8 text-center text-sm mt-12">
-        <p>© 2026 Globalcom Telecomunicaciones. Todos los derechos reservados.</p>
-    </footer>
+    <div id="modal-ver-ticket" class="hidden fixed inset-0 bg-[#1a1f2e]/80 backdrop-blur-md z-[100] flex justify-center items-center p-4">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl relative border border-slate-200">
+            <button onclick="document.getElementById('modal-ver-ticket').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-red-500 transition z-10"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            <div class="p-8 border-b border-slate-100">
+                <div class="flex justify-between items-start mb-2">
+                    <div><span id="vtPrioridad" class="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md text-white bg-blue-500">ALTA</span><span id="vtId" class="text-xs font-bold text-slate-400 ml-2">#123</span></div>
+                    <span id="vtEstado" class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border">ABIERTO</span>
+                </div>
+                <h3 id="vtAsunto" class="text-2xl font-black text-[#1a1f2e] mt-2">Cargando...</h3>
+            </div>
+            
+            <div class="p-8 overflow-y-auto flex-grow space-y-6 bg-slate-50" id="vtConversacion">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-center mb-3"><span class="text-xs font-black uppercase text-blue-600 tracking-widest">Tú (Descripción Original)</span><span id="vtFecha" class="text-[10px] text-slate-400 font-medium">--</span></div>
+                    <p id="vtDescripcion" class="text-sm text-slate-600 whitespace-pre-wrap">...</p>
+                    <div id="vtAdjuntoOriginal" class="mt-4 hidden"><a id="vtLinkAdjunto" href="#" target="_blank" class="inline-flex items-center text-xs font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Ver Archivo Adjunto</a></div>
+                </div>
+                <div id="vtRespuestas" class="space-y-4"></div>
+            </div>
+            
+            <div class="p-6 border-t border-slate-100 bg-white rounded-b-[2.5rem]" id="vtCajaRespuesta">
+                <form id="formResponderTicket" class="space-y-3">
+                    <input type="hidden" id="vtTicketId">
+                    <textarea id="vtNuevoMensaje" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Añadir comentario o respuesta..."></textarea>
+                    <div class="flex justify-between items-center">
+                        <input type="file" id="vtNuevoAdjunto" accept="image/*,.pdf,.doc,.docx" class="text-xs w-1/2 text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        <button type="submit" id="btnResponder" class="bg-blue-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-blue-700 transition shadow-md text-xs">Enviar Respuesta</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script>
         const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
         const clienteSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const ADMIN_EMAIL = 'contacto@globalcomfibra.cl';
+        let currentEmail = '';
 
         document.addEventListener('DOMContentLoaded', async () => {
             const { data: { session } } = await clienteSupabase.auth.getSession();
             if (!session) { window.location.href = 'login.html'; return; }
             else if (session.user.email === ADMIN_EMAIL) { window.location.href = 'admin.html'; return; }
-
+            currentEmail = session.user.email;
             document.getElementById('cuerpoPagina').classList.remove('hidden');
-            const emailUsuario = session.user.email;
 
-            // 1. CARGAR DATOS DEL CLIENTE
-            const { data: cliente } = await clienteSupabase.from('clientes').select('*').eq('email', emailUsuario).maybeSingle();
-
+            // Cargar Cliente
+            const { data: cliente } = await clienteSupabase.from('clientes').select('*').eq('email', currentEmail).maybeSingle();
             if (cliente) {
-                document.getElementById('lblEmpresa').textContent = cliente.empresa || emailUsuario;
+                document.getElementById('lblEmpresa').textContent = cliente.empresa || currentEmail;
                 document.getElementById('lblId').textContent = cliente.id_cliente || "GCOM-NUEVO";
                 document.getElementById('lblPlan').textContent = cliente.plan || "Dedicado";
                 document.getElementById('lblIp').textContent = cliente.ip || "0.0.0.0";
-                
-                const palabras = (cliente.empresa || emailUsuario).split(' ');
+                const palabras = (cliente.empresa || currentEmail).split(' ');
                 document.getElementById('lblIniciales').textContent = (palabras[0].charAt(0) + (palabras[1] ? palabras[1].charAt(0) : '')).toUpperCase();
-
-                // Dashboard NOC y Credenciales
                 if (cliente.url_dashboard) document.getElementById('btnLinkDashboard').href = cliente.url_dashboard;
                 if (cliente.user_noc && cliente.pass_noc) {
                     document.getElementById('boxCredencialesNoc').classList.remove('hidden');
                     document.getElementById('lblUserNoc').textContent = cliente.user_noc;
                     document.getElementById('lblPassNoc').textContent = cliente.pass_noc;
                 }
-
-                // Cálculo de meses
                 const fHabilitacion = new Date(cliente.created_at);
                 const mesesTotales = parseInt(cliente.contrato_meses) || 12;
                 const mesesPasados = (new Date().getFullYear() - fHabilitacion.getFullYear()) * 12 + (new Date().getMonth() - fHabilitacion.getMonth());
@@ -255,21 +207,10 @@
                 document.getElementById('lblFechaHabilitacion').textContent = `Habilitado el: ${fHabilitacion.toLocaleDateString('es-CL')}`;
             }
 
-            // 2. CARGAR TICKETS SEGUROS
-            try {
-                const { data: tickets } = await clienteSupabase.from('tickets').select('*').eq('email_cliente', emailUsuario).order('created_at', {ascending: false});
-                if (tickets && tickets.length > 0) {
-                    document.getElementById('msgNoTickets').classList.add('hidden');
-                    document.getElementById('tablaTicketsContainer').classList.remove('hidden');
-                    const tabla = document.getElementById('tablaTickets');
-                    tickets.forEach(tk => {
-                        tabla.innerHTML += `<tr class="border-b border-slate-100 hover:bg-slate-50 transition"><td class="py-4 font-mono font-bold text-xs text-blue-600">#${tk.id}</td><td class="py-4 font-medium">${tk.asunto}</td><td class="py-4 text-slate-500 text-xs">${new Date(tk.created_at).toLocaleDateString()}</td><td class="py-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase border border-green-200">${tk.estado}</span></td></tr>`;
-                    });
-                }
-            } catch (e) { console.log("Tickets no disponibles"); }
+            cargarTicketsPortal();
 
-            // 3. CARGAR 12 FACTURAS
-            const { data: facturas } = await clienteSupabase.from('facturas').select('*').eq('email_cliente', emailUsuario).order('created_at', { ascending: false }).limit(12);
+            // Cargar Facturas
+            const { data: facturas } = await clienteSupabase.from('facturas').select('*').eq('email_cliente', currentEmail).order('created_at', { ascending: false }).limit(12);
             const gridFacturas = document.getElementById('gridFacturas');
             if (facturas && facturas.length > 0) {
                 facturas.forEach(f => {
@@ -278,27 +219,160 @@
             } else { document.getElementById('msgNoFacturas').classList.remove('hidden'); }
         });
 
-        // ENVÍO DE TICKET REAL
+        // --- CARGAR TICKETS Y BOTÓN DE SEGUIMIENTO ---
+        async function cargarTicketsPortal() {
+            try {
+                const { data: tickets } = await clienteSupabase.from('tickets').select('*').eq('email_cliente', currentEmail).order('created_at', {ascending: false});
+                const tabla = document.getElementById('tablaTickets');
+                tabla.innerHTML = '';
+                if (tickets && tickets.length > 0) {
+                    document.getElementById('msgNoTickets').classList.add('hidden');
+                    document.getElementById('tablaTicketsContainer').classList.remove('hidden');
+                    
+                    tickets.forEach(tk => {
+                        const esAbierto = tk.estado === 'Abierto';
+                        const badgeEstado = esAbierto ? `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase border border-green-200">Abierto</span>` : `<span class="bg-slate-100 text-slate-500 px-3 py-1 rounded-full text-[10px] font-bold uppercase border border-slate-200">Resuelto</span>`;
+                        const contRespuestas = (tk.seguimiento && tk.seguimiento.length > 0) ? `<span class="ml-2 bg-blue-100 text-blue-700 text-[9px] px-1.5 py-0.5 rounded-full font-bold">${tk.seguimiento.length} resp.</span>` : '';
+                        
+                        tabla.innerHTML += `
+                            <tr class="border-b border-slate-100 hover:bg-slate-50 transition cursor-pointer" onclick="abrirModalTicket(${tk.id})">
+                                <td class="py-4 px-2 font-mono font-bold text-xs text-blue-600">#${tk.id}</td>
+                                <td class="py-4 px-2 font-medium">${tk.asunto} ${contRespuestas}</td>
+                                <td class="py-4 px-2 text-slate-500 text-xs">${new Date(tk.created_at).toLocaleDateString()}</td>
+                                <td class="py-4 px-2">${badgeEstado} <button class="ml-4 text-[9px] font-bold uppercase tracking-widest bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-sm hover:bg-blue-600 hover:text-white transition">Ver Seguimiento</button></td>
+                            </tr>`;
+                    });
+                }
+            } catch (e) { console.log(e); }
+        }
+
+        // --- ABRIR MODAL SEGUIMIENTO ---
+        async function abrirModalTicket(id) {
+            document.getElementById('modal-ver-ticket').classList.remove('hidden');
+            document.getElementById('vtTicketId').value = id;
+            document.getElementById('vtAsunto').textContent = "Cargando...";
+            
+            const { data: tk } = await clienteSupabase.from('tickets').select('*').eq('id', id).single();
+            if(!tk) return;
+
+            document.getElementById('vtId').textContent = `#${tk.id}`;
+            document.getElementById('vtAsunto').textContent = tk.asunto;
+            document.getElementById('vtDescripcion').textContent = tk.descripcion;
+            document.getElementById('vtFecha').textContent = new Date(tk.created_at).toLocaleString('es-CL');
+            
+            // Prioridad Color
+            const p = document.getElementById('vtPrioridad');
+            p.textContent = tk.prioridad;
+            p.className = `text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md text-white ${tk.prioridad==='Alta'?'bg-red-500':tk.prioridad==='Media'?'bg-orange-500':'bg-blue-500'}`;
+
+            // Estado
+            const est = document.getElementById('vtEstado');
+            est.textContent = tk.estado;
+            est.className = `text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border ${tk.estado==='Abierto'?'bg-green-100 text-green-700 border-green-200':'bg-slate-100 text-slate-500 border-slate-200'}`;
+            
+            // Archivo Original
+            if(tk.url_archivo) {
+                document.getElementById('vtAdjuntoOriginal').classList.remove('hidden');
+                document.getElementById('vtLinkAdjunto').href = tk.url_archivo;
+            } else { document.getElementById('vtAdjuntoOriginal').classList.add('hidden'); }
+
+            // Renderizar Historial (JSONB)
+            const contenedor = document.getElementById('vtRespuestas');
+            contenedor.innerHTML = '';
+            if(tk.seguimiento && tk.seguimiento.length > 0) {
+                tk.seguimiento.forEach(msg => {
+                    const esAdmin = msg.autor === 'Soporte Globalcom';
+                    const colorCaja = esAdmin ? 'bg-blue-50 border-blue-100' : 'bg-white border-slate-100';
+                    const colorTextoAutor = esAdmin ? 'text-blue-700' : 'text-slate-700';
+                    const adjuntoHtml = msg.adjunto ? `<a href="${msg.adjunto}" target="_blank" class="inline-flex mt-3 items-center text-[10px] font-bold text-blue-600 bg-white border border-blue-100 px-3 py-1.5 rounded-lg"><svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Archivo Adjunto</a>` : '';
+                    
+                    contenedor.innerHTML += `
+                        <div class="${colorCaja} p-5 rounded-2xl shadow-sm border ml-${esAdmin?'8':'0'} mr-${esAdmin?'0':'8'}">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-black uppercase tracking-widest ${colorTextoAutor}">${msg.autor}</span>
+                                <span class="text-[9px] text-slate-400 font-bold">${new Date(msg.fecha).toLocaleString('es-CL')}</span>
+                            </div>
+                            <p class="text-sm text-slate-600 whitespace-pre-wrap">${msg.mensaje}</p>
+                            ${adjuntoHtml}
+                        </div>`;
+                });
+            }
+
+            // Ocultar caja de respuesta si está resuelto
+            document.getElementById('vtCajaRespuesta').style.display = tk.estado === 'Abierto' ? 'block' : 'none';
+        }
+
+        // --- SUBIR ARCHIVO HELPER ---
+        async function subirArchivoTicket(archivo) {
+            if(!archivo) return null;
+            const ext = archivo.name.split('.').pop();
+            const fileName = `adjunto_${Date.now()}.${ext}`;
+            const { error } = await clienteSupabase.storage.from('tickets_adjuntos').upload(fileName, archivo);
+            if(error) throw error;
+            return clienteSupabase.storage.from('tickets_adjuntos').getPublicUrl(fileName).data.publicUrl;
+        }
+
+        // --- CREAR NUEVO TICKET (CON ARCHIVO) ---
         document.getElementById('formNuevoTicket').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnEnviarTicket');
             const originalText = btn.textContent;
-            btn.textContent = "Sincronizando..."; btn.disabled = true;
+            btn.textContent = "Subiendo ticket..."; btn.disabled = true;
             try {
+                const archivoInput = document.getElementById('tkArchivo').files[0];
+                let urlArchivo = await subirArchivoTicket(archivoInput);
+
                 const { error } = await clienteSupabase.from('tickets').insert({
-                    email_cliente: (await clienteSupabase.auth.getSession()).data.session.user.email,
+                    email_cliente: currentEmail,
                     asunto: document.getElementById('tkAsunto').value,
                     prioridad: document.getElementById('tkPrioridad').value,
                     descripcion: document.getElementById('tkDescripcion').value,
-                    estado: 'Abierto'
+                    url_archivo: urlArchivo,
+                    estado: 'Abierto',
+                    seguimiento: []
                 });
                 if (error) throw error;
-                // Disparo de Edge Function opcional si la configuraste
-                await clienteSupabase.functions.invoke('notify-ticket', { body: { empresa: document.getElementById('lblEmpresa').textContent, emailCliente: (await clienteSupabase.auth.getSession()).data.session.user.email, asunto: document.getElementById('tkAsunto').value, prioridad: document.getElementById('tkPrioridad').value, descripcion: document.getElementById('tkDescripcion').value } });
-                alert('Ticket generado correctamente. Soporte técnico ha sido notificado.');
-                window.location.reload();
+                
+                await clienteSupabase.functions.invoke('notify-ticket', { body: { empresa: document.getElementById('lblEmpresa').textContent, emailCliente: currentEmail, asunto: document.getElementById('tkAsunto').value, prioridad: document.getElementById('tkPrioridad').value, descripcion: document.getElementById('tkDescripcion').value } });
+                
+                alert('Ticket generado correctamente.');
+                document.getElementById('modal-ticket').classList.add('hidden');
+                document.getElementById('formNuevoTicket').reset();
+                cargarTicketsPortal();
             } catch (err) { alert("Error: " + err.message); }
             finally { btn.textContent = originalText; btn.disabled = false; }
+        });
+
+        // --- RESPONDER TICKET (JSONB) ---
+        document.getElementById('formResponderTicket').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnResponder');
+            btn.textContent = "Enviando..."; btn.disabled = true;
+            try {
+                const id = document.getElementById('vtTicketId').value;
+                const mensaje = document.getElementById('vtNuevoMensaje').value;
+                const archivoInput = document.getElementById('vtNuevoAdjunto').files[0];
+                
+                let urlAdjunto = await subirArchivoTicket(archivoInput);
+
+                // Obtener ticket actual para actualizar el array JSONB
+                const { data: tk } = await clienteSupabase.from('tickets').select('seguimiento').eq('id', id).single();
+                let seg = tk.seguimiento || [];
+                seg.push({
+                    autor: 'Cliente',
+                    fecha: new Date().toISOString(),
+                    mensaje: mensaje,
+                    adjunto: urlAdjunto
+                });
+
+                const { error } = await clienteSupabase.from('tickets').update({ seguimiento: seg }).eq('id', id);
+                if(error) throw error;
+
+                document.getElementById('formResponderTicket').reset();
+                abrirModalTicket(id); // Recargar modal
+                cargarTicketsPortal(); // Recargar tabla fondo
+            } catch (err) { alert("Error: " + err.message); }
+            finally { btn.textContent = "Enviar Respuesta"; btn.disabled = false; }
         });
 
         function descargarSLA() { window.open('https://eejsdoeuovcrjicrgxmo.supabase.co/storage/v1/object/public/contratos/SLA%20GLOBALCOM.pdf', '_blank'); }

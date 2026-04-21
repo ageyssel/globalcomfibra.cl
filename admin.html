@@ -31,52 +31,77 @@
             
             <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                 <h2 class="text-2xl font-black text-[#1a1f2e] mb-6 border-b border-slate-100 pb-4">Alta de Nuevo Cliente</h2>
+                
                 <form id="formCrearCliente" class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Razón Social</label>
-                        <input type="text" id="cEmpresa" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">RUT Empresa</label>
-                        <input type="text" id="cRut" required placeholder="12.345.678-9" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Razón Social</label>
+                            <input type="text" id="cEmpresa" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">RUT Empresa</label>
+                            <input type="text" id="cRut" required placeholder="12.345.678-9" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contacto Técnico</label>
-                        <input type="text" id="cContacto" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contacto Facturación</label>
-                        <input type="text" id="cContactoFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contacto Técnico</label>
+                            <input type="text" id="cContacto" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contacto Facturación</label>
+                            <input type="text" id="cContactoFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Portal</label>
-                        <input type="email" id="cEmail" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-                        <div><label class="text-[10px] font-bold text-orange-600 uppercase tracking-widest">Clave Portal</label>
-                        <input type="password" id="cPassword" required class="w-full mt-1 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-500"></div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Portal</label>
+                            <input type="email" id="cEmail" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-orange-600 uppercase tracking-widest">Clave Portal</label>
+                            <input type="password" id="cPassword" required class="w-full mt-1 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-500">
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Facturación</label>
-                        <input type="email" id="cEmailFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fecha Contrato</label>
-                        <input type="date" id="cFecha" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Facturación</label>
+                            <input type="email" id="cEmailFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fecha Contrato</label>
+                            <input type="date" id="cFecha" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Dirección Instalación</label>
-                        <input type="text" id="cDireccion" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Meses Contrato</label>
-                        <input type="number" id="cContratoMeses" required value="12" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Dirección Instalación</label>
+                            <input type="text" id="cDireccion" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Meses Contrato</label>
+                            <input type="number" id="cContratoMeses" required value="12" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">IP Pública</label>
-                        <input type="text" id="cIp" placeholder="0.0.0.0" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Plan Contratado</label>
-                        <select id="cPlan" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
-                            <option>Internet Dedicado 100 Mbps</option>
-                            <option>Internet Dedicado 500 Mbps</option>
-                            <option>Internet Dedicado 1 Gbps</option>
-                            <option>Fibra Oscura / Capa 2</option>
-                        </select></div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">IP Pública</label>
+                            <input type="text" id="cIp" placeholder="0.0.0.0" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Plan Contratado</label>
+                            <select id="cPlan" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                                <option>Internet Dedicado 100 Mbps</option>
+                                <option>Internet Dedicado 500 Mbps</option>
+                                <option>Internet Dedicado 1 Gbps</option>
+                                <option>Fibra Oscura / Capa 2</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="p-4 bg-blue-50 rounded-xl border border-blue-100 space-y-4">
@@ -85,10 +110,14 @@
                             <input type="url" id="cDashboard" placeholder="https://app.purplehackers.com/..." class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div class="grid grid-cols-2 gap-4">
-                            <div><label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Usuario NOC</label>
-                            <input type="text" id="cUserNoc" placeholder="Ej: admin_cliente" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-                            <div><label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Clave NOC</label>
-                            <input type="text" id="cPassNoc" placeholder="***" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                            <div>
+                                <label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Usuario NOC</label>
+                                <input type="text" id="cUserNoc" placeholder="Ej: admin_cliente" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Clave NOC</label>
+                                <input type="text" id="cPassNoc" placeholder="***" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
                         </div>
                     </div>
 
@@ -104,6 +133,7 @@
             </div>
 
             <div class="space-y-8">
+                
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                     <h2 class="text-2xl font-black text-[#1a1f2e] mb-6 border-b border-slate-100 pb-4">Gestión de Clientes</h2>
                     <div class="overflow-hidden rounded-xl border border-slate-100">
@@ -114,20 +144,26 @@
                                     <th class="px-4 py-3 text-right">Acción</th>
                                 </tr>
                             </thead>
-                            <tbody id="tablaClientesBody" class="divide-y divide-slate-100"></tbody>
+                            <tbody id="tablaClientesBody" class="divide-y divide-slate-100">
+                                </tbody>
                         </table>
                     </div>
                 </div>
 
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                     <h2 class="text-2xl font-black text-[#1a1f2e] mb-4">Módulo de Facturación</h2>
+                    
                     <select id="selectClienteFactura" class="w-full mt-2 mb-6 bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500 transition">
                         <option value="">Seleccione un cliente...</option>
                     </select>
 
                     <form id="formFactura" class="space-y-4 bg-green-50 p-6 rounded-xl border border-green-100">
-                        <input type="text" id="inpMes" required placeholder="Mes (Ej: Mayo 2026)" class="w-full bg-white border border-green-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2">
-                        <input type="file" id="inpArchivoFactura" accept=".pdf" required class="w-full bg-white border border-green-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2">
+                        <div>
+                            <input type="text" id="inpMes" required placeholder="Mes (Ej: Mayo 2026)" class="w-full bg-white border border-green-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2">
+                        </div>
+                        <div>
+                            <input type="file" id="inpArchivoFactura" accept=".pdf" required class="w-full bg-white border border-green-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2">
+                        </div>
                         <button type="submit" id="btnSubirFactura" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition shadow-md">
                             Subir y Notificar Factura
                         </button>
@@ -137,8 +173,10 @@
 
             <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mt-4">
                 <div class="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
-                    <h2 class="text-2xl font-black text-[#1a1f2e]">Módulo de Soporte (Tickets)</h2>
-                    <button onclick="cargarTicketsAdmin()" class="text-[10px] font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg uppercase tracking-widest hover:bg-blue-100 transition">Actualizar Tabla</button>
+                    <h2 class="text-2xl font-black text-[#1a1f2e]">Módulo de Soporte y Tracking NOC</h2>
+                    <button onclick="cargarTicketsAdmin()" class="text-[10px] font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg uppercase tracking-widest hover:bg-blue-100 transition">
+                        Actualizar Tabla
+                    </button>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm border-collapse min-w-[700px]">
@@ -147,7 +185,7 @@
                                 <th class="px-4 py-3 rounded-tl-xl">Prioridad</th>
                                 <th class="px-4 py-3">ID / Fecha</th>
                                 <th class="px-4 py-3">Cliente</th>
-                                <th class="px-4 py-3 w-1/3">Asunto</th>
+                                <th class="px-4 py-3 w-1/4">Asunto</th>
                                 <th class="px-4 py-3">Estado</th>
                                 <th class="px-4 py-3 text-right rounded-tr-xl">Acción</th>
                             </tr>
@@ -156,11 +194,11 @@
                             </tbody>
                     </table>
                     <div id="msgNoTicketsAdmin" class="py-10 text-center hidden">
-                        <p class="text-slate-400 italic text-sm">No hay tickets registrados en el sistema.</p>
+                        <p class="text-slate-400 italic text-sm">No hay tickets registrados.</p>
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </main>
 
@@ -179,7 +217,9 @@
                             <p id="detEmail" class="text-slate-500 font-medium text-sm">correo@cliente.cl</p>
                         </div>
                     </div>
-                    <button id="btnEstadoCliente" onclick="toggleEstadoCliente()" data-estado="Activo" class="text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest transition shadow-sm border border-transparent">Activo</button>
+                    <button id="btnEstadoCliente" onclick="toggleEstadoCliente()" data-estado="Activo" class="text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest transition shadow-sm border border-transparent">
+                        Activo
+                    </button>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-10">
@@ -190,40 +230,143 @@
                             <input type="hidden" id="editEmailOriginal">
                             
                             <div class="grid grid-cols-2 gap-3">
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Empresa</label><input type="text" id="eEmpresa" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">RUT</label><input type="text" id="eRut" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Contacto Técnico</label><input type="text" id="eContacto" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Cont. Facturación</label><input type="text" id="eContactoFact" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                            </div>
-                            <div><label class="text-[9px] font-bold text-slate-500 uppercase">Email Facturación</label><input type="email" id="eEmailFact" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                            <div><label class="text-[9px] font-bold text-slate-500 uppercase">Dirección Instalación</label><input type="text" id="eDireccion" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">IP Pública</label><input type="text" id="eIp" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Meses Contrato</label><input type="number" id="eMeses" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                            </div>
-                            <div><label class="text-[9px] font-bold text-slate-500 uppercase">Plan</label><input type="text" id="ePlan" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                            
-                            <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 mt-2 space-y-2">
-                                <div><label class="text-[9px] font-bold text-blue-700 uppercase">Link NOC</label><input type="text" id="eDashboard" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div><label class="text-[9px] font-bold text-blue-700 uppercase">Usuario NOC</label><input type="text" id="eUserNoc" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                                    <div><label class="text-[9px] font-bold text-blue-700 uppercase">Clave NOC</label><input type="text" id="ePassNoc" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
+                                <div>
+                                    <label class="text-[9px] font-bold text-slate-500 uppercase">Empresa</label>
+                                    <input type="text" id="eEmpresa" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
+                                </div>
+                                <div>
+                                    <label class="text-[9px] font-bold text-slate-500 uppercase">RUT</label>
+                                    <input type="text" id="eRut" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
                                 </div>
                             </div>
 
-                            <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-blue-700 transition shadow-md mt-4">Guardar Cambios de Cliente</button>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-[9px] font-bold text-slate-500 uppercase">Contacto Técnico</label>
+                                    <input type="text" id="eContacto" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
+                                </div>
+                                <div>
+                                    <label class="text-[9px] font-bold text-slate-500 uppercase">Cont. Facturación</label>
+                                    <input type="text" id="eContactoFact" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="text-[9px] font-bold text-slate-500 uppercase">Email Facturación</label>
+                                <input type="email" id="eEmailFact" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
+                            </div>
+
+                            <div>
+                                <label class="text-[9px] font-bold text-slate-500 uppercase">Dirección Instalación</label>
+                                <input type="text" id="eDireccion" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-[9px] font-bold text-slate-500 uppercase">IP Pública</label>
+                                    <input type="text" id="eIp" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
+                                </div>
+                                <div>
+                                    <label class="text-[9px] font-bold text-slate-500 uppercase">Meses Contrato</label>
+                                    <input type="number" id="eMeses" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="text-[9px] font-bold text-slate-500 uppercase">Plan</label>
+                                <input type="text" id="ePlan" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
+                            </div>
+                            
+                            <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 mt-2 space-y-2">
+                                <div>
+                                    <label class="text-[9px] font-bold text-blue-700 uppercase">Link NOC</label>
+                                    <input type="text" id="eDashboard" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="text-[9px] font-bold text-blue-700 uppercase">Usuario NOC</label>
+                                        <input type="text" id="eUserNoc" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] font-bold text-blue-700 uppercase">Clave NOC</label>
+                                        <input type="text" id="ePassNoc" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-blue-700 transition shadow-md mt-4">
+                                Guardar Cambios de Cliente
+                            </button>
                         </form>
 
-                        <button id="btnVerContrato" class="w-full bg-[#1a1f2e] text-white py-3 rounded-xl font-bold text-sm hover:bg-slate-800 transition shadow-md">Descargar Contrato PDF Original</button>
+                        <button id="btnVerContrato" class="w-full bg-[#1a1f2e] text-white py-3 rounded-xl font-bold text-sm hover:bg-slate-800 transition shadow-md">
+                            Descargar Contrato PDF Original
+                        </button>
                     </div>
 
                     <div class="space-y-6">
                         <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Historial de Facturas</h3>
-                        <div id="listaFacturasDetalle" class="space-y-3 max-h-[500px] overflow-y-auto pr-2"></div>
+                        <div id="listaFacturasDetalle" class="space-y-3 max-h-[500px] overflow-y-auto pr-2">
+                            </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-ver-ticket-admin" class="hidden fixed inset-0 bg-[#1a1f2e]/80 backdrop-blur-md z-[100] flex justify-center items-center p-4">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl relative border border-slate-200">
+            <button onclick="document.getElementById('modal-ver-ticket-admin').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-red-500 transition z-10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <div class="p-8 border-b border-slate-100 flex justify-between items-end">
+                <div>
+                    <div class="flex items-center mb-2">
+                        <span id="vtaPrioridad" class="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md text-white bg-blue-500">ALTA</span>
+                        <span id="vtaId" class="text-xs font-bold text-slate-400 ml-2">#123</span>
+                        <span id="vtaEmpresa" class="text-xs font-bold text-slate-700 ml-4 border-l border-slate-300 pl-4">Empresa</span>
+                    </div>
+                    <h3 id="vtaAsunto" class="text-2xl font-black text-[#1a1f2e]">Asunto</h3>
+                </div>
+                <div class="text-right">
+                    <span id="vtaEstado" class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border mb-2 inline-block">ABIERTO</span>
+                    <br>
+                    <button id="btnCambiarEstadoAdmin" class="text-[10px] font-bold uppercase tracking-widest bg-red-100 text-red-700 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-200 transition">
+                        Marcar como Resuelto
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-8 overflow-y-auto flex-grow space-y-6 bg-slate-50" id="vtaConversacion">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-black uppercase text-slate-700 tracking-widest">Descripción del Cliente</span>
+                        <span id="vtaFecha" class="text-[10px] text-slate-400 font-medium">--</span>
+                    </div>
+                    <p id="vtaDescripcion" class="text-sm text-slate-600 whitespace-pre-wrap">...</p>
+                    <div id="vtaAdjuntoOriginal" class="mt-4 hidden">
+                        <a id="vtaLinkAdjunto" href="#" target="_blank" class="inline-flex items-center text-xs font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> 
+                            Archivo de Respaldo
+                        </a>
+                    </div>
+                </div>
+                <div id="vtaRespuestas" class="space-y-4">
+                    </div>
+            </div>
+            
+            <div class="p-6 border-t border-slate-100 bg-white rounded-b-[2.5rem]" id="vtaCajaRespuesta">
+                <form id="formResponderTicketAdmin" class="space-y-3">
+                    <input type="hidden" id="vtaTicketId">
+                    <textarea id="vtaNuevoMensaje" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Respuesta oficial del NOC de Globalcom..."></textarea>
+                    <div class="flex justify-between items-center">
+                        <input type="file" id="vtaNuevoAdjunto" accept="image/*,.pdf,.doc,.docx" class="text-xs w-1/2 text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        <button type="submit" id="btnResponderAdmin" class="bg-blue-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-blue-700 transition shadow-md text-xs">
+                            Añadir Respuesta Técnica
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -238,15 +381,19 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             const { data: { session } } = await adminSupabase.auth.getSession();
-            if (!session || session.user.email !== ADMIN_EMAIL) { window.location.href = 'login.html'; return; }
+            if (!session || session.user.email !== ADMIN_EMAIL) { 
+                window.location.href = 'login.html'; 
+                return; 
+            }
             document.getElementById('adminBody').classList.remove('hidden');
-            document.getElementById('adminUserEmail').textContent = session.user.email;
             
             await cargarListaClientes();
             await cargarTicketsAdmin();
         });
 
-        // --- CARGAR CLIENTES ---
+        // ---------------------------------------------
+        // CLIENTES
+        // ---------------------------------------------
         async function cargarListaClientes() {
             const { data: clientes } = await adminSupabase.from('clientes').select('*').order('empresa', { ascending: true });
             const select = document.getElementById('selectClienteFactura');
@@ -258,15 +405,30 @@
             
             if(clientes){
                 clientes.forEach(c => {
-                    mapaClientes[c.email] = c.empresa; // Guardar en mapa para los tickets
-                    const statusDot = (!c.estado || c.estado === 'Activo') ? '<span class="w-2 h-2 rounded-full bg-green-500 inline-block mr-2"></span>' : '<span class="w-2 h-2 rounded-full bg-red-500 inline-block mr-2"></span>';
+                    mapaClientes[c.email] = c.empresa;
+                    const statusDot = (!c.estado || c.estado === 'Activo') 
+                        ? '<span class="w-2 h-2 rounded-full bg-green-500 inline-block mr-2"></span>' 
+                        : '<span class="w-2 h-2 rounded-full bg-red-500 inline-block mr-2"></span>';
+                    
                     select.innerHTML += `<option value="${c.email}" data-fact="${c.correo_facturacion || c.email}">${c.empresa}</option>`;
-                    tabla.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-slate-100 last:border-0"><td class="px-4 py-4 font-bold text-[#1a1f2e] text-xs flex items-center">${statusDot} ${c.empresa}</td><td class="px-4 py-4 text-right"><button onclick="gestionarCliente('${c.email}')" class="text-[9px] font-black uppercase bg-white border border-slate-200 text-slate-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 px-3 py-1.5 rounded-lg transition tracking-widest shadow-sm">Editar / Gestionar</button></td></tr>`;
+                    
+                    tabla.innerHTML += `
+                        <tr class="hover:bg-slate-50 transition border-b border-slate-100 last:border-0">
+                            <td class="px-4 py-4 font-bold text-[#1a1f2e] text-xs flex items-center">${statusDot} ${c.empresa}</td>
+                            <td class="px-4 py-4 text-right">
+                                <button onclick="gestionarCliente('${c.email}')" class="text-[9px] font-black uppercase bg-white border border-slate-200 text-slate-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 px-3 py-1.5 rounded-lg transition tracking-widest shadow-sm">
+                                    Editar / Gestionar
+                                </button>
+                            </td>
+                        </tr>
+                    `;
                 });
             }
         }
 
-        // --- CARGAR Y ORDENAR TICKETS ---
+        // ---------------------------------------------
+        // TICKETS (NOC)
+        // ---------------------------------------------
         async function cargarTicketsAdmin() {
             const tabla = document.getElementById('tablaTicketsAdmin');
             const msgVacio = document.getElementById('msgNoTicketsAdmin');
@@ -281,7 +443,7 @@
             }
             msgVacio.classList.add('hidden');
 
-            // Ordenamiento Lógico: 1. Abiertos primero. 2. Alta > Media > Baja. 3. Más recientes primero.
+            // Orden: Abiertos primero -> Alta -> Media -> Baja -> Resueltos
             tickets.sort((a, b) => {
                 if (a.estado === 'Abierto' && b.estado !== 'Abierto') return -1;
                 if (a.estado !== 'Abierto' && b.estado === 'Abierto') return 1;
@@ -297,33 +459,38 @@
             tabla.innerHTML = '';
             tickets.forEach(tk => {
                 const nombreEmpresa = mapaClientes[tk.email_cliente] || tk.email_cliente;
-                const fecha = new Date(tk.created_at).toLocaleDateString('es-CL', { day: '2-digit', month: 'short', hour: '2-digit', minute:'2-digit'});
+                const fecha = new Date(tk.created_at).toLocaleDateString('es-CL');
                 
-                // Estilos por Prioridad
-                let colorPrio = "bg-slate-100 text-slate-600";
-                if(tk.prioridad === 'Alta') colorPrio = "bg-red-100 text-red-700 border border-red-200";
-                else if(tk.prioridad === 'Media') colorPrio = "bg-orange-100 text-orange-700 border border-orange-200";
-                else if(tk.prioridad === 'Baja') colorPrio = "bg-blue-100 text-blue-700 border border-blue-200";
+                let colorPrio = "bg-slate-100 text-slate-600 border-slate-200";
+                if(tk.prioridad === 'Alta') colorPrio = "bg-red-100 text-red-700 border-red-200";
+                else if(tk.prioridad === 'Media') colorPrio = "bg-orange-100 text-orange-700 border-orange-200";
+                else if(tk.prioridad === 'Baja') colorPrio = "bg-blue-100 text-blue-700 border-blue-200";
 
-                // Estilos por Estado
                 const esAbierto = tk.estado === 'Abierto';
                 const claseFila = esAbierto ? "bg-white" : "bg-slate-50 opacity-60";
-                const badgeEstado = esAbierto ? `<span class="flex items-center gap-1.5 text-orange-600 font-bold"><span class="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span> Abierto</span>` : `<span class="text-green-600 font-bold">Resuelto</span>`;
+                const badgeEstado = esAbierto 
+                    ? `<span class="flex items-center gap-1.5 text-orange-600 font-bold"><span class="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span> Abierto</span>` 
+                    : `<span class="text-green-600 font-bold">Resuelto</span>`;
                 
-                // Botón de Acción
-                const txtBoton = esAbierto ? "Marcar Resuelto" : "Reabrir";
-                const claseBoton = esAbierto ? "bg-green-500 hover:bg-green-600 text-white" : "bg-slate-200 hover:bg-slate-300 text-slate-700";
+                const msgs = (tk.seguimiento && tk.seguimiento.length > 0) ? `<span class="ml-2 bg-blue-100 text-blue-700 text-[9px] px-1.5 py-0.5 rounded-full font-bold">${tk.seguimiento.length}</span>` : '';
 
                 tabla.innerHTML += `
-                    <tr class="border-b border-slate-100 transition hover:bg-slate-50 ${claseFila}">
-                        <td class="px-4 py-4"><span class="px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-widest ${colorPrio}">${tk.prioridad}</span></td>
-                        <td class="px-4 py-4"><p class="font-mono text-xs font-bold text-blue-600">#${tk.id}</p><p class="text-[10px] text-slate-400 mt-0.5">${fecha}</p></td>
+                    <tr class="border-b border-slate-100 transition hover:bg-slate-50 cursor-pointer ${claseFila}" onclick="abrirModalTicketAdmin(${tk.id})">
+                        <td class="px-4 py-4">
+                            <span class="px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-widest border ${colorPrio}">${tk.prioridad}</span>
+                        </td>
+                        <td class="px-4 py-4">
+                            <p class="font-mono text-xs font-bold text-blue-600">#${tk.id}</p>
+                            <p class="text-[9px] text-slate-400 mt-0.5">${fecha}</p>
+                        </td>
                         <td class="px-4 py-4 text-xs font-bold text-[#1a1f2e]">${nombreEmpresa}</td>
-                        <td class="px-4 py-4 text-xs text-slate-600 max-w-xs truncate" title="${tk.descripcion}"><strong>${tk.asunto}</strong><br><span class="text-[10px] font-normal">${tk.descripcion}</span></td>
+                        <td class="px-4 py-4 text-xs text-slate-600 truncate max-w-xs">
+                            <strong>${tk.asunto}</strong> ${msgs}
+                        </td>
                         <td class="px-4 py-4 text-[10px] uppercase tracking-widest">${badgeEstado}</td>
                         <td class="px-4 py-4 text-right">
-                            <button onclick="cambiarEstadoTicket(${tk.id}, '${tk.estado}', '${tk.email_cliente}', \`${tk.asunto}\`, \`${nombreEmpresa}\`)" class="text-[10px] font-bold px-3 py-2 rounded-lg transition shadow-sm ${claseBoton}">
-                                ${txtBoton}
+                            <button class="text-[9px] font-bold px-3 py-1.5 rounded-lg border bg-white shadow-sm hover:bg-blue-600 hover:text-white transition">
+                                Abrir Chat
                             </button>
                         </td>
                     </tr>
@@ -331,44 +498,131 @@
             });
         }
 
-        // --- CAMBIAR ESTADO TICKET Y ENVIAR CORREO ---
-        async function cambiarEstadoTicket(id, estadoActual, emailCliente, asunto, empresa) {
-            const nuevoEstado = estadoActual === 'Abierto' ? 'Resuelto' : 'Abierto';
+        async function abrirModalTicketAdmin(id) {
+            document.getElementById('modal-ver-ticket-admin').classList.remove('hidden');
+            const { data: tk } = await adminSupabase.from('tickets').select('*').eq('id', id).single();
+            if(!tk) return;
+
+            document.getElementById('vtaTicketId').value = tk.id;
+            document.getElementById('vtaId').textContent = `#${tk.id}`;
+            document.getElementById('vtaEmpresa').textContent = mapaClientes[tk.email_cliente] || tk.email_cliente;
+            document.getElementById('vtaAsunto').textContent = tk.asunto;
+            document.getElementById('vtaDescripcion').textContent = tk.descripcion;
+            document.getElementById('vtaFecha').textContent = new Date(tk.created_at).toLocaleString('es-CL');
             
-            if (!confirm(`¿Estás seguro de marcar este ticket como ${nuevoEstado}?`)) return;
+            document.getElementById('vtaPrioridad').textContent = tk.prioridad;
+            document.getElementById('vtaPrioridad').className = `text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md text-white ${tk.prioridad==='Alta'?'bg-red-500':tk.prioridad==='Media'?'bg-orange-500':'bg-blue-500'}`;
 
-            // Mostrar estado de carga (opcionalmente bloqueando UI, aquí usamos alert o simplemente esperamos)
-            try {
-                // 1. Actualizar DB
-                const { error: updateError } = await adminSupabase.from('tickets').update({ estado: nuevoEstado }).eq('id', id);
-                if (updateError) throw updateError;
-
-                // 2. Si se resolvió, disparar Edge Function para notificar
-                if (nuevoEstado === 'Resuelto') {
-                    const { error: fnError } = await adminSupabase.functions.invoke('notify-ticket-resolved', {
-                        body: {
-                            emailCliente: emailCliente,
-                            empresa: empresa,
-                            asunto: asunto,
-                            idTicket: id
-                        }
-                    });
-                    if (fnError) console.error("Error al enviar email de resolución:", fnError);
-                    alert('Ticket marcado como Resuelto y cliente notificado por correo.');
-                } else {
-                    alert('Ticket reabierto correctamente.');
-                }
-
-                // Refrescar tabla
-                cargarTicketsAdmin();
-
-            } catch (err) {
-                alert("Error al actualizar el ticket: " + err.message);
+            const est = document.getElementById('vtaEstado');
+            est.textContent = tk.estado;
+            est.className = `text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border ${tk.estado==='Abierto'?'bg-green-100 text-green-700 border-green-200':'bg-slate-100 text-slate-500 border-slate-200'} mb-2 inline-block`;
+            
+            if(tk.url_archivo) {
+                document.getElementById('vtaAdjuntoOriginal').classList.remove('hidden');
+                document.getElementById('vtaLinkAdjunto').href = tk.url_archivo;
+            } else { 
+                document.getElementById('vtaAdjuntoOriginal').classList.add('hidden'); 
             }
+
+            const btnEst = document.getElementById('btnCambiarEstadoAdmin');
+            btnEst.textContent = tk.estado === 'Abierto' ? "Marcar como Resuelto" : "Reabrir Ticket";
+            btnEst.className = tk.estado === 'Abierto' 
+                ? "text-[10px] font-bold uppercase tracking-widest bg-red-100 text-red-700 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-200 transition" 
+                : "text-[10px] font-bold uppercase tracking-widest bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-300 transition";
+            
+            btnEst.onclick = () => cambiarEstadoRapido(tk.id, tk.estado, tk.email_cliente, tk.asunto, mapaClientes[tk.email_cliente]);
+
+            const contenedor = document.getElementById('vtaRespuestas');
+            contenedor.innerHTML = '';
+            if(tk.seguimiento && tk.seguimiento.length > 0) {
+                tk.seguimiento.forEach(msg => {
+                    const esAdmin = msg.autor === 'Soporte Globalcom';
+                    const colorCaja = esAdmin ? 'bg-blue-50 border-blue-100' : 'bg-white border-slate-100';
+                    const colorTextoAutor = esAdmin ? 'text-blue-700' : 'text-slate-700';
+                    const adjHtml = msg.adjunto ? `<a href="${msg.adjunto}" target="_blank" class="inline-flex mt-3 items-center text-[10px] font-bold text-blue-600 bg-white border border-blue-100 px-3 py-1.5 rounded-lg"><svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Archivo Adjunto</a>` : '';
+                    
+                    contenedor.innerHTML += `
+                        <div class="${colorCaja} p-5 rounded-2xl shadow-sm border ml-${esAdmin?'8':'0'} mr-${esAdmin?'0':'8'}">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-black uppercase tracking-widest ${colorTextoAutor}">${msg.autor}</span>
+                                <span class="text-[9px] text-slate-400 font-bold">${new Date(msg.fecha).toLocaleString('es-CL')}</span>
+                            </div>
+                            <p class="text-sm text-slate-600 whitespace-pre-wrap">${msg.mensaje}</p>
+                            ${adjHtml}
+                        </div>
+                    `;
+                });
+            }
+            
+            document.getElementById('vtaCajaRespuesta').style.display = tk.estado === 'Abierto' ? 'block' : 'none';
         }
 
+        async function subirArchivoTicket(archivo) {
+            if(!archivo) return null;
+            const ext = archivo.name.split('.').pop();
+            const fileName = `adjunto_${Date.now()}.${ext}`;
+            const { error } = await adminSupabase.storage.from('tickets_adjuntos').upload(fileName, archivo);
+            if(error) throw error;
+            return adminSupabase.storage.from('tickets_adjuntos').getPublicUrl(fileName).data.publicUrl;
+        }
 
-        // --- LÓGICA DE ALTA DE CLIENTE (MANTENIDO IGUAL) ---
+        document.getElementById('formResponderTicketAdmin').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnResponderAdmin');
+            btn.textContent = "Sincronizando..."; 
+            btn.disabled = true;
+            
+            try {
+                const id = document.getElementById('vtaTicketId').value;
+                const mensaje = document.getElementById('vtaNuevoMensaje').value;
+                let urlAdjunto = await subirArchivoTicket(document.getElementById('vtaNuevoAdjunto').files[0]);
+
+                const { data: tk } = await adminSupabase.from('tickets').select('seguimiento').eq('id', id).single();
+                let seg = tk.seguimiento || [];
+                seg.push({ 
+                    autor: 'Soporte Globalcom', 
+                    fecha: new Date().toISOString(), 
+                    mensaje: mensaje, 
+                    adjunto: urlAdjunto 
+                });
+
+                const { error } = await adminSupabase.from('tickets').update({ seguimiento: seg }).eq('id', id);
+                if(error) throw error;
+
+                document.getElementById('formResponderTicketAdmin').reset();
+                abrirModalTicketAdmin(id);
+                cargarTicketsAdmin();
+                
+            } catch (err) { 
+                alert("Error: " + err.message); 
+            } finally { 
+                btn.textContent = "Añadir Respuesta Técnica"; 
+                btn.disabled = false; 
+            }
+        });
+
+        async function cambiarEstadoRapido(id, estadoActual, emailCliente, asunto, empresa) {
+            const nuevoEstado = estadoActual === 'Abierto' ? 'Resuelto' : 'Abierto';
+            if (!confirm(`¿Marcar este ticket como ${nuevoEstado}?`)) return;
+            
+            const { error } = await adminSupabase.from('tickets').update({ estado: nuevoEstado }).eq('id', id);
+            if(error) { 
+                alert(error.message); 
+                return; 
+            }
+
+            if (nuevoEstado === 'Resuelto') {
+                await adminSupabase.functions.invoke('notify-ticket-resolved', { 
+                    body: { emailCliente, empresa, asunto, idTicket: id } 
+                });
+            }
+            abrirModalTicketAdmin(id);
+            cargarTicketsAdmin();
+        }
+
+        // ---------------------------------------------
+        // RESTO DE FUNCIONES (ALTA, FACTURAS, ETC)
+        // ---------------------------------------------
         document.getElementById('formCrearCliente').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnCrearCliente');
@@ -420,7 +674,6 @@
             finally { btn.textContent = originalText; btn.disabled = false; }
         });
 
-        // --- GESTIÓN INTEGRAL: MODAL ---
         async function gestionarCliente(email) {
             const modal = document.getElementById('modal-detalle');
             modal.classList.remove('hidden');
@@ -488,7 +741,7 @@
             try {
                 const { data, error } = await adminSupabase.from('clientes').update(updates).eq('email', emailOriginal).select();
                 if (error) throw error;
-                if (!data || data.length === 0) throw new Error("Permiso denegado por seguridad de Base de Datos (RLS).");
+                if (!data || data.length === 0) throw new Error("Permiso denegado por seguridad (RLS).");
 
                 alert("Datos del cliente actualizados correctamente.");
                 document.getElementById('modal-detalle').classList.add('hidden'); 
@@ -532,7 +785,19 @@
             }
 
             facturas.forEach(f => {
-                contenedor.innerHTML += `<div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-2"><span class="text-xs font-black uppercase text-slate-700">${f.mes_anio}</span><div class="flex gap-2"><a href="${f.url_archivo}" target="_blank" class="p-2 text-blue-600 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></a><button onclick="eliminarFactura(${f.id}, '${email}')" class="p-2 text-red-500 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></div></div>`;
+                contenedor.innerHTML += `
+                    <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-2">
+                        <span class="text-xs font-black uppercase text-slate-700">${f.mes_anio}</span>
+                        <div class="flex gap-2">
+                            <a href="${f.url_archivo}" target="_blank" class="p-2 text-blue-600 hover:bg-white rounded-lg transition shadow-sm border border-slate-100">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            </a>
+                            <button onclick="eliminarFactura(${f.id}, '${email}')" class="p-2 text-red-500 hover:bg-white rounded-lg transition shadow-sm border border-slate-100">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
             });
         }
 
