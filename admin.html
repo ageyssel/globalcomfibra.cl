@@ -149,7 +149,6 @@
             </div>
 
             <div class="space-y-8">
-                
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                     <h2 class="text-2xl font-black text-[#1a1f2e] mb-6 border-b border-slate-100 pb-4">Gestión de Clientes</h2>
                     <div class="overflow-hidden rounded-xl border border-slate-100">
@@ -170,10 +169,9 @@
                         <h2 class="text-2xl font-black text-[#1a1f2e]">Facturación con IA</h2>
                     </div>
                     <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
-                        <p class="text-[10px] font-bold text-blue-800 uppercase tracking-widest mb-1">Carga Inteligente (AI)</p>
-                        <p class="text-xs text-blue-600">Arrastra los PDFs sin importar el nombre. La Inteligencia Artificial leerá el interior, extraerá el RUT, el neto, total y fecha, y asignará la factura al cliente correcto.</p>
+                        <p class="text-[10px] font-bold text-blue-800 uppercase tracking-widest mb-1">Carga y Envío Inteligente (Gemini)</p>
+                        <p class="text-xs text-blue-600">Arrastra los PDFs sin importar el nombre. La Inteligencia Artificial leerá el interior, guardará los montos, <strong>notificará al cliente por correo</strong> y asignará la factura.</p>
                     </div>
-
                     <form id="formFacturaMasiva" class="space-y-4">
                         <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition relative">
                             <input type="file" id="inpArchivosMasivos" accept=".pdf" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
@@ -181,13 +179,62 @@
                             <p class="text-sm font-bold text-slate-600">Haz clic o arrastra múltiples PDFs aquí</p>
                             <p class="text-xs text-slate-400 mt-1" id="lblArchivosSeleccionados">0 archivos seleccionados</p>
                         </div>
-                        
                         <div id="progresoFacturas" class="hidden space-y-2">
                             <ul id="logProcesamiento" class="h-32 overflow-y-auto bg-slate-900 text-green-400 font-mono text-[10px] p-3 rounded-lg mt-2"></ul>
                         </div>
-
                         <button type="submit" id="btnProcesarMasivo" class="w-full bg-[#1a1f2e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition shadow-lg mt-2">
                             Analizar y Enviar Facturas
+                        </button>
+                    </form>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-black text-[#1a1f2e]">Carga Histórica (Silenciosa)</h2>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-6">Usa este formulario para registrar deudas o ingresos pasados. <strong>NO se enviará ningún correo</strong> al cliente. El PDF es opcional.</p>
+                    <form id="formCargaHistorica" class="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Cliente</label>
+                            <select id="hCliente" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Seleccione un cliente...</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Concepto / Mes</label>
+                                <input type="text" id="hMes" required placeholder="Ej: Febrero 2026" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fecha de Emisión</label>
+                                <input type="date" id="hFecha" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Valor Neto</label>
+                                <input type="number" id="hNeto" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Valor Total</label>
+                                <input type="number" id="hTotal" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Estado</label>
+                                <select id="hEstado" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none">
+                                    <option value="Pagada">Pagada</option>
+                                    <option value="Pendiente">Pendiente / Vencida</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">PDF (Opcional)</label>
+                                <input type="file" id="hArchivo" accept=".pdf" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs outline-none">
+                            </div>
+                        </div>
+                        <button type="submit" id="btnGuardarHistorico" class="w-full bg-slate-800 text-white font-bold py-3 rounded-lg hover:bg-slate-900 transition shadow-md mt-4">
+                            Guardar Factura Histórica
                         </button>
                     </form>
                 </div>
@@ -219,7 +266,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </main>
 
@@ -228,7 +274,6 @@
             <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition z-10">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
-
             <div class="p-10">
                 <div class="flex items-center justify-between mb-8">
                     <div class="flex items-center gap-6">
@@ -242,7 +287,6 @@
                         Activo
                     </button>
                 </div>
-
                 <div class="grid md:grid-cols-2 gap-10">
                     <div class="space-y-6">
                         <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Datos y Configuración (Editable)</h3>
@@ -275,9 +319,7 @@
                             </div>
                             <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-blue-700 transition shadow-md mt-4">Guardar Cambios de Cliente</button>
                         </form>
-
                         <button id="btnVerContrato" class="w-full bg-[#1a1f2e] text-white py-3 rounded-xl font-bold text-sm hover:bg-slate-800 transition shadow-md">Descargar Contrato PDF Original</button>
-                        
                         <div class="mt-6 border-t border-slate-200 pt-6">
                             <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> Historial de Accesos (Huella Digital)</h3>
                             <div id="listaAccesos" class="space-y-2"><p class="text-[11px] text-slate-400 italic">Cargando ingresos...</p></div>
@@ -374,17 +416,24 @@
             document.getElementById('statTicketsAlta').textContent = ticketsAlta || 0;
         }
 
-        // --- CARGAR LISTA DE CLIENTES ---
+        // --- CARGAR LISTA DE CLIENTES (Y POBLAR SELECT DE CARGA HISTÓRICA) ---
         async function cargarListaClientes() {
             const { data: clientes } = await adminSupabase.from('clientes').select('*').order('empresa', { ascending: true });
             const tabla = document.getElementById('tablaClientesBody');
+            const selectHistorico = document.getElementById('hCliente'); // El nuevo select
+            
             tabla.innerHTML = '';
+            selectHistorico.innerHTML = '<option value="">Seleccione un cliente...</option>';
             mapaClientes = {};
+
             if(clientes){
                 clientes.forEach(c => {
                     mapaClientes[c.email] = c.empresa;
                     const statusDot = (!c.estado || c.estado === 'Activo') ? '<span class="w-2 h-2 rounded-full bg-green-500 inline-block mr-2"></span>' : '<span class="w-2 h-2 rounded-full bg-red-500 inline-block mr-2"></span>';
+                    
                     tabla.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-slate-100 last:border-0"><td class="px-4 py-4 font-bold text-[#1a1f2e] text-xs flex items-center">${statusDot} ${c.empresa}</td><td class="px-4 py-4 text-right"><button onclick="gestionarCliente('${c.email}')" class="text-[9px] font-black uppercase bg-white border border-slate-200 text-slate-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 px-3 py-1.5 rounded-lg transition tracking-widest shadow-sm">Editar / Gestionar</button></td></tr>`;
+                    
+                    selectHistorico.innerHTML += `<option value="${c.email}">${c.empresa}</option>`;
                 });
             }
         }
@@ -506,7 +555,7 @@
             abrirModalTicketAdmin(id); cargarTicketsAdmin();
         }
 
-        // --- GESTIÓN DE CLIENTES / FACTURAS ---
+        // --- GESTIÓN DE CLIENTES / FACTURAS EN MODAL ---
         async function gestionarCliente(email) {
             const modal = document.getElementById('modal-detalle'); modal.classList.remove('hidden');
             const { data: cliente } = await adminSupabase.from('clientes').select('*').eq('email', email).single();
@@ -593,13 +642,11 @@
         async function cambiarEstadoFactura(id, nuevoEstado, email, diasPagoCliente) { await adminSupabase.from('facturas').update({ estado: nuevoEstado }).eq('id', id); cargarFacturasDetalle(email, diasPagoCliente); cargarDashboard(); }
         async function eliminarFactura(id, email, diasPagoCliente) { if (!confirm('¿Eliminar esta factura?')) return; await adminSupabase.from('facturas').delete().eq('id', id); cargarFacturasDetalle(email, diasPagoCliente); cargarDashboard(); }
 
-        // --- 7. EL CEREBRO DE LA IA (GEMINI BASE64) ---
+        // --- FACTURACIÓN MASIVA IA GEMINI (CONVERSIÓN BASE64 SEGURA) ---
         const inputArchivos = document.getElementById('inpArchivosMasivos');
         const lblSeleccionados = document.getElementById('lblArchivosSeleccionados');
 
-        inputArchivos.addEventListener('change', () => { 
-            lblSeleccionados.textContent = `${inputArchivos.files.length} archivos seleccionados listos para procesar`; 
-        });
+        inputArchivos.addEventListener('change', () => { lblSeleccionados.textContent = `${inputArchivos.files.length} archivos seleccionados listos para procesar`; });
 
         // Función vital que traduce el PDF a texto antes de enviarlo a Supabase
         const fileToBase64 = (file) => new Promise((resolve, reject) => {
@@ -660,6 +707,51 @@
             document.getElementById('formFacturaMasiva').reset(); 
             lblSeleccionados.textContent = "0 archivos seleccionados";
             cargarDashboard(); 
+        });
+
+        // --- CARGA HISTÓRICA MANUAL (NUEVO) ---
+        document.getElementById('formCargaHistorica').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnGuardarHistorico');
+            btn.disabled = true; btn.textContent = "Guardando...";
+
+            try {
+                const email = document.getElementById('hCliente').value;
+                const mes = document.getElementById('hMes').value;
+                const fecha = document.getElementById('hFecha').value;
+                const neto = document.getElementById('hNeto').value;
+                const total = document.getElementById('hTotal').value;
+                const estado = document.getElementById('hEstado').value;
+                let urlArchivo = "#"; // Por defecto si no suben PDF
+
+                const archivo = document.getElementById('hArchivo').files[0];
+                if (archivo) {
+                    const fileName = `factura_historica_${email}_${Date.now()}.pdf`;
+                    const { error: uploadError } = await adminSupabase.storage.from('facturas').upload(fileName, archivo);
+                    if (uploadError) throw uploadError;
+                    urlArchivo = adminSupabase.storage.from('facturas').getPublicUrl(fileName).data.publicUrl;
+                }
+
+                const { error: dbError } = await adminSupabase.from('facturas').insert({
+                    email_cliente: email,
+                    mes_anio: mes,
+                    fecha_emision: fecha,
+                    valor_neto: neto,
+                    valor_total: total,
+                    estado: estado,
+                    url_archivo: urlArchivo
+                });
+
+                if (dbError) throw dbError;
+
+                alert("Factura histórica registrada con éxito (Sin notificar al cliente).");
+                document.getElementById('formCargaHistorica').reset();
+                cargarDashboard();
+            } catch(err) {
+                alert("Error: " + err.message);
+            } finally {
+                btn.disabled = false; btn.textContent = "Guardar Factura Histórica";
+            }
         });
 
         async function cerrarSesion() { await adminSupabase.auth.signOut(); window.location.href = 'index.html'; }
