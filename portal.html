@@ -184,6 +184,19 @@
             currentEmail = session.user.email;
             document.getElementById('cuerpoPagina').classList.remove('hidden');
 
+            // ---------------------------------------------------------
+            // RASTREADOR DE HUELLA DE ACCESO
+            // ---------------------------------------------------------
+            // Solo registra si es un inicio de sesión nuevo (evita contar los "F5")
+            if (!sessionStorage.getItem('huella_registrada')) {
+                await clienteSupabase.from('registro_accesos').insert({
+                    email_cliente: emailUsuario,
+                    navegador: navigator.userAgent // Guarda si entró desde Chrome, iPhone, etc.
+                });
+                sessionStorage.setItem('huella_registrada', 'true');
+            }
+            // ---------------------------------------------------------
+
             // Cargar Cliente
             const { data: cliente } = await clienteSupabase.from('clientes').select('*').eq('email', currentEmail).maybeSingle();
             if (cliente) {
