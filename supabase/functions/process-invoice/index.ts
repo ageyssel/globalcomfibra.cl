@@ -11,7 +11,7 @@ serve(async (req) => {
 
   try {
     const { fileName, fileBase64 } = await req.json()
-    if (!fileBase64) throw new Error("El archivo PDF no llegó correctamente al servidor de Supabase.")
+    if (!fileBase64) throw new Error("El archivo no llegó correctamente.")
 
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -19,12 +19,12 @@ serve(async (req) => {
     )
 
     const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY')
-    if (!GEMINI_API_KEY) throw new Error("La API Key de Gemini NO se encontró. Vuelve a ejecutar el comando 'supabase secrets set'")
+    if (!GEMINI_API_KEY) throw new Error("La API Key no existe en el servidor.")
 
-    const promptText = "Eres un contador experto. Extrae de esta factura chilena: RUT del cliente al que se le cobra (sin puntos ni guion, termina en K o numero), Monto Neto (solo numero entero), Monto Total (solo numero entero), Fecha de Emision (YYYY-MM-DD) y Mes del servicio (ej: Abril 2026). Responde estrictamente con un JSON valido con las llaves: rut, neto, total, fecha, mes."
+    const promptText = "Eres un contador experto. Extrae de esta factura chilena: RUT del cliente (sin puntos ni guion, termina en K o numero), Monto Neto (solo numero entero), Monto Total (solo numero entero), Fecha de Emision (YYYY-MM-DD) y Mes del servicio (ej: Abril 2026). Responde estrictamente un JSON puro con las llaves: rut, neto, total, fecha, mes."
 
-    // CAMBIO APLICADO AQUÍ: gemini-1.5-flash-latest
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`, {
+    // ¡MAGIA AQUÍ! Usamos tu motor moderno: gemini-2.5-flash
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -41,11 +41,11 @@ serve(async (req) => {
     const geminiResult = await response.json()
 
     if (!response.ok) {
-        throw new Error(`Google rechazó la conexión: ${geminiResult.error?.message || 'Error desconocido'}`)
+        throw new Error(`Error de Google: ${geminiResult.error?.message || 'Error desconocido'}`)
     }
 
     if (!geminiResult.candidates || geminiResult.candidates.length === 0) {
-        throw new Error("Gemini leyó el archivo pero no pudo extraer ningún dato.")
+        throw new Error("Gemini no pudo extraer ningún dato.")
     }
 
     const dataString = geminiResult.candidates[0].content.parts[0].text
@@ -53,20 +53,20 @@ serve(async (req) => {
     try {
         invoiceData = JSON.parse(dataString)
     } catch(e) {
-        throw new Error(`Gemini no devolvió un formato válido. Respuesta obtenida: ${dataString}`)
+        throw new Error(`Error de formato IA: ${dataString}`)
     }
 
     const rutLimpioIA = invoiceData.rut.toString().replace(/[\.\-]/g, '').toUpperCase()
 
-    const { data: clientes, error: errCliente } = await supabaseAdmin.from('clientes').select('email, empresa, rut, correo_facturacion')
-    if (errCliente) throw new Error(`Error en Base de Datos: ${errCliente.message}`)
+    const { data: clientes, error: errCliente } = await supabaseAdmin.from('clientes').select('email, empresa, rut, correo_facturacion, dias_pago')
+    if (errCliente) throw new Error(`Error BD: ${errCliente.message}`)
 
     const cliente = clientes.find(c => {
       if(!c.rut) return false;
       return c.rut.replace(/[\.\-]/g, '').toUpperCase() === rutLimpioIA;
     })
 
-    if (!cliente) throw new Error(`El RUT extraído de la factura (${invoiceData.rut}) no coincide con ningún cliente registrado en el sistema.`)
+    if (!cliente) throw new Error(`El RUT extraído de la factura (${invoiceData.rut}) no coincide con ningún cliente registrado.`)
 
     const binaryString = atob(fileBase64)
     const bytes = new Uint8Array(binaryString.length)
@@ -74,9 +74,16 @@ serve(async (req) => {
 
     const storageName = `factura_${cliente.email}_${Date.now()}.pdf`
     const { error: uploadError } = await supabaseAdmin.storage.from('facturas').upload(storageName, bytes.buffer, { contentType: 'application/pdf' })
-    if (uploadError) throw new Error(`Error subiendo PDF a Supabase: ${uploadError.message}`)
+    if (uploadError) throw new Error(`Error Subida: ${uploadError.message}`)
 
     const { data: { publicUrl } } = supabaseAdmin.storage.from('facturas').getPublicUrl(storageName)
+
+    const diasPago = cliente.dias_pago || 30;
+    const fechaEmision = new Date(invoiceData.fecha);
+    const fechaVencimiento = new Date(fechaEmision);
+    fechaVencimiento.setDate(fechaVencimiento.getDate() + diasPago);
+    fechaVencimiento.setHours(23, 59, 59, 999);
+    const estadoInicial = (new Date() > fechaVencimiento) ? 'Vencida' : 'Pendiente';
 
     const { error: dbError } = await supabaseAdmin.from('facturas').insert({
       email_cliente: cliente.email,
@@ -85,9 +92,9 @@ serve(async (req) => {
       valor_neto: invoiceData.neto,
       valor_total: invoiceData.total,
       fecha_emision: invoiceData.fecha,
-      estado: 'Pendiente'
+      estado: estadoInicial
     })
-    if (dbError) throw new Error(`Error guardando en historial: ${dbError.message}`)
+    if (dbError) throw new Error(`Error guardando en BD: ${dbError.message}`)
 
     await supabaseAdmin.functions.invoke('send-invoice-notification', {
       body: { emailCliente: cliente.email, correoFacturacion: cliente.correo_facturacion || cliente.email, mesAnio: invoiceData.mes, urlArchivo: publicUrl, empresa: cliente.empresa, tipo: 'mensual' }
