@@ -149,6 +149,7 @@
             </div>
 
             <div class="space-y-8">
+                
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                     <h2 class="text-2xl font-black text-[#1a1f2e] mb-6 border-b border-slate-100 pb-4">Gestión de Clientes</h2>
                     <div class="overflow-hidden rounded-xl border border-slate-100">
@@ -172,6 +173,7 @@
                         <p class="text-[10px] font-bold text-blue-800 uppercase tracking-widest mb-1">Carga Inteligente (Gemini)</p>
                         <p class="text-xs text-blue-600">Arrastra los PDFs sin importar el nombre. La Inteligencia Artificial leerá el interior, extraerá el RUT, el neto, total y fecha, y asignará la factura al cliente correcto.</p>
                     </div>
+
                     <form id="formFacturaMasiva" class="space-y-4">
                         <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition relative">
                             <input type="file" id="inpArchivosMasivos" accept=".pdf" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
@@ -179,9 +181,11 @@
                             <p class="text-sm font-bold text-slate-600">Haz clic o arrastra múltiples PDFs aquí</p>
                             <p class="text-xs text-slate-400 mt-1" id="lblArchivosSeleccionados">0 archivos seleccionados</p>
                         </div>
+                        
                         <div id="progresoFacturas" class="hidden space-y-2">
                             <ul id="logProcesamiento" class="h-32 overflow-y-auto bg-slate-900 text-green-400 font-mono text-[10px] p-3 rounded-lg mt-2"></ul>
                         </div>
+
                         <button type="submit" id="btnProcesarMasivo" class="w-full bg-[#1a1f2e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition shadow-lg mt-2">
                             Analizar y Enviar Facturas
                         </button>
@@ -215,6 +219,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </main>
 
@@ -223,6 +228,7 @@
             <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition z-10">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
+
             <div class="p-10">
                 <div class="flex items-center justify-between mb-8">
                     <div class="flex items-center gap-6">
@@ -236,6 +242,7 @@
                         Activo
                     </button>
                 </div>
+
                 <div class="grid md:grid-cols-2 gap-10">
                     <div class="space-y-6">
                         <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Datos y Configuración (Editable)</h3>
@@ -268,7 +275,9 @@
                             </div>
                             <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-blue-700 transition shadow-md mt-4">Guardar Cambios de Cliente</button>
                         </form>
+
                         <button id="btnVerContrato" class="w-full bg-[#1a1f2e] text-white py-3 rounded-xl font-bold text-sm hover:bg-slate-800 transition shadow-md">Descargar Contrato PDF Original</button>
+                        
                         <div class="mt-6 border-t border-slate-200 pt-6">
                             <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> Historial de Accesos (Huella Digital)</h3>
                             <div id="listaAccesos" class="space-y-2"><p class="text-[11px] text-slate-400 italic">Cargando ingresos...</p></div>
@@ -584,13 +593,15 @@
         async function cambiarEstadoFactura(id, nuevoEstado, email, diasPagoCliente) { await adminSupabase.from('facturas').update({ estado: nuevoEstado }).eq('id', id); cargarFacturasDetalle(email, diasPagoCliente); cargarDashboard(); }
         async function eliminarFactura(id, email, diasPagoCliente) { if (!confirm('¿Eliminar esta factura?')) return; await adminSupabase.from('facturas').delete().eq('id', id); cargarFacturasDetalle(email, diasPagoCliente); cargarDashboard(); }
 
-        // --- FACTURACIÓN MASIVA IA GEMINI (CONVERSIÓN BASE64 SEGURA) ---
+        // --- 7. EL CEREBRO DE LA IA (GEMINI BASE64) ---
         const inputArchivos = document.getElementById('inpArchivosMasivos');
         const lblSeleccionados = document.getElementById('lblArchivosSeleccionados');
 
-        inputArchivos.addEventListener('change', () => { lblSeleccionados.textContent = `${inputArchivos.files.length} archivos seleccionados listos para procesar`; });
+        inputArchivos.addEventListener('change', () => { 
+            lblSeleccionados.textContent = `${inputArchivos.files.length} archivos seleccionados listos para procesar`; 
+        });
 
-        // Función vital para transformar el PDF en texto antes de enviarlo
+        // Función vital que traduce el PDF a texto antes de enviarlo a Supabase
         const fileToBase64 = (file) => new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -602,9 +613,16 @@
             e.preventDefault();
             const archivos = inputArchivos.files;
             if (archivos.length === 0) return alert("Selecciona al menos una factura.");
-            const log = document.getElementById('logProcesamiento'); const btn = document.getElementById('btnProcesarMasivo'); const boxProgreso = document.getElementById('progresoFacturas');
             
-            boxProgreso.classList.remove('hidden'); log.innerHTML = ''; btn.disabled = true; btn.textContent = "IA Analizando Facturas...";
+            const log = document.getElementById('logProcesamiento'); 
+            const btn = document.getElementById('btnProcesarMasivo'); 
+            const boxProgreso = document.getElementById('progresoFacturas');
+            
+            boxProgreso.classList.remove('hidden'); 
+            log.innerHTML = ''; 
+            btn.disabled = true; 
+            btn.textContent = "IA Analizando Facturas...";
+            
             let procesadas = 0; let errores = 0;
 
             for (let archivo of archivos) {
@@ -612,6 +630,7 @@
                 log.scrollTop = log.scrollHeight;
                 
                 try {
+                    // La magia ocurre aquí: Convertimos el PDF a código puro para que la red no lo bloquee
                     const base64Texto = await fileToBase64(archivo);
 
                     const response = await adminSupabase.functions.invoke('process-invoice', {
@@ -632,12 +651,14 @@
                 log.scrollTop = log.scrollHeight;
             }
 
-            btn.disabled = false; btn.textContent = "Analizar y Enviar Facturas";
+            btn.disabled = false; 
+            btn.textContent = "Analizar y Enviar Facturas";
             log.innerHTML += `<li class="text-blue-400 font-bold mt-2">=== PROCESO TERMINADO ===</li>`;
             log.innerHTML += `<li class="text-blue-400">Exitosas: ${procesadas} | Errores: ${errores}</li>`;
             log.scrollTop = log.scrollHeight;
             
-            document.getElementById('formFacturaMasiva').reset(); lblSeleccionados.textContent = "0 archivos seleccionados";
+            document.getElementById('formFacturaMasiva').reset(); 
+            lblSeleccionados.textContent = "0 archivos seleccionados";
             cargarDashboard(); 
         });
 
