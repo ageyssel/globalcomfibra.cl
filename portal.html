@@ -87,42 +87,11 @@
         </div>
 
         <div class="mt-8 bg-white rounded-[2rem] p-8 md:p-10 shadow-lg border border-slate-200">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                <div>
-                    <h3 class="text-xl font-black text-[#1a1f2e]">Historial de Tickets y Soporte</h3>
-                    <p class="text-sm text-slate-500 mt-1">Haga clic en un ticket para ver el seguimiento o adjuntar archivos.</p>
-                </div>
-                <button onclick="document.getElementById('modal-ticket').classList.remove('hidden')" class="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600 transition shadow-md text-sm w-full md:w-auto">
-                    + Abrir Nuevo Ticket
-                </button>
-            </div>
-            <div class="overflow-x-auto">
-                <table id="tablaTicketsContainer" class="w-full text-left text-sm border-collapse min-w-[600px] hidden">
-                    <thead>
-                        <tr class="border-b border-slate-200 text-slate-500">
-                            <th class="pb-4 font-bold uppercase tracking-wider text-[10px]">ID Ticket</th>
-                            <th class="pb-4 font-bold uppercase tracking-wider text-[10px]">Asunto</th>
-                            <th class="pb-4 font-bold uppercase tracking-wider text-[10px]">Fecha</th>
-                            <th class="pb-4 font-bold uppercase tracking-wider text-[10px]">Seguimiento</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaTickets" class="text-slate-700"></tbody>
-                </table>
-                <div id="msgNoTickets" class="py-12 text-center">
-                    <p class="text-slate-400 italic text-sm">No existen tickets activos registrados.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-8 bg-white rounded-[2rem] p-8 md:p-10 shadow-lg border border-slate-200">
             <h3 class="text-xl font-black text-[#1a1f2e] mb-2">Estado de Cuenta y Facturación</h3>
-            <p class="text-sm text-slate-500 mb-8">Últimos 12 meses emitidos.</p>
+            <p class="text-sm text-slate-500 mb-8">Historial de documentos.</p>
             
-            <div id="gridFacturas" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
-            
-            <div id="msgNoFacturas" class="py-10 text-center hidden border-2 border-dashed border-slate-100 rounded-[2rem]">
-                <p class="text-slate-400 italic text-sm">Su estado de cuenta se encuentra al día.</p>
-            </div>
+            <div id="gridFacturas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <div id="msgNoFacturas" class="py-10 text-center hidden border-2 border-dashed border-slate-100 rounded-[2rem]"><p class="text-slate-400 italic text-sm">Su estado de cuenta se encuentra al día.</p></div>
         </div>
     </main>
 
@@ -130,47 +99,13 @@
         <div class="bg-white rounded-[2.5rem] p-8 w-full max-w-lg shadow-2xl relative border border-slate-200">
             <button onclick="document.getElementById('modal-ticket').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-red-500 transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
             <h3 class="text-2xl font-black mb-2 text-[#1a1f2e]">Generar Ticket</h3>
-            <p class="text-sm text-slate-500 mb-6">Describa su problema técnico y adjunte respaldos si es necesario.</p>
             <form id="formNuevoTicket" class="space-y-4">
-                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Asunto</label><input type="text" id="tkAsunto" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 outline-none" placeholder="Ej: Falla de conectividad"></div>
-                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Prioridad</label><select id="tkPrioridad" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 outline-none"><option value="Baja">Baja (Consultas)</option><option value="Media">Media (Degradación)</option><option value="Alta">Alta (Caída total)</option></select></div>
-                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Descripción</label><textarea id="tkDescripcion" required rows="3" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 outline-none" placeholder="Detalla el problema..."></textarea></div>
-                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Archivo Adjunto (Opcional)</label><input type="file" id="tkArchivo" accept="image/*,.pdf,.doc,.docx" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:ring-2 outline-none"></div>
-                <button type="submit" id="btnEnviarTicket" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg mt-2">Enviar Ticket a Soporte</button>
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Asunto</label><input type="text" id="tkAsunto" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 outline-none"></div>
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Prioridad</label><select id="tkPrioridad" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 outline-none"><option value="Baja">Baja</option><option value="Media">Media</option><option value="Alta">Alta</option></select></div>
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Descripción</label><textarea id="tkDescripcion" required rows="3" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 outline-none"></textarea></div>
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Adjunto (Opcional)</label><input type="file" id="tkArchivo" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:ring-2 outline-none"></div>
+                <button type="submit" id="btnEnviarTicket" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg mt-2">Enviar</button>
             </form>
-        </div>
-    </div>
-
-    <div id="modal-ver-ticket" class="hidden fixed inset-0 bg-[#1a1f2e]/80 backdrop-blur-md z-[100] flex justify-center items-center p-4">
-        <div class="bg-white rounded-[2.5rem] w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl relative border border-slate-200">
-            <button onclick="document.getElementById('modal-ver-ticket').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-red-500 transition z-10"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-            <div class="p-8 border-b border-slate-100">
-                <div class="flex justify-between items-start mb-2">
-                    <div><span id="vtPrioridad" class="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md text-white bg-blue-500">ALTA</span><span id="vtId" class="text-xs font-bold text-slate-400 ml-2">#123</span></div>
-                    <span id="vtEstado" class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border">ABIERTO</span>
-                </div>
-                <h3 id="vtAsunto" class="text-2xl font-black text-[#1a1f2e] mt-2">Cargando...</h3>
-            </div>
-            
-            <div class="p-8 overflow-y-auto flex-grow space-y-6 bg-slate-50" id="vtConversacion">
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                    <div class="flex justify-between items-center mb-3"><span class="text-xs font-black uppercase text-blue-600 tracking-widest">Tú (Descripción Original)</span><span id="vtFecha" class="text-[10px] text-slate-400 font-medium">--</span></div>
-                    <p id="vtDescripcion" class="text-sm text-slate-600 whitespace-pre-wrap">...</p>
-                    <div id="vtAdjuntoOriginal" class="mt-4 hidden"><a id="vtLinkAdjunto" href="#" target="_blank" class="inline-flex items-center text-xs font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Ver Archivo Adjunto</a></div>
-                </div>
-                <div id="vtRespuestas" class="space-y-4"></div>
-            </div>
-            
-            <div class="p-6 border-t border-slate-100 bg-white rounded-b-[2.5rem]" id="vtCajaRespuesta">
-                <form id="formResponderTicket" class="space-y-3">
-                    <input type="hidden" id="vtTicketId">
-                    <textarea id="vtNuevoMensaje" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Añadir comentario o respuesta..."></textarea>
-                    <div class="flex justify-between items-center">
-                        <input type="file" id="vtNuevoAdjunto" accept="image/*,.pdf,.doc,.docx" class="text-xs w-1/2 text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                        <button type="submit" id="btnResponder" class="bg-blue-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-blue-700 transition shadow-md text-xs">Enviar Respuesta</button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
 
@@ -180,7 +115,7 @@
         const clienteSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const ADMIN_EMAIL = 'contacto@globalcomfibra.cl';
         let currentEmail = '';
-        let diasPagoCliente = 30; // Valor por defecto
+        let diasPagoCliente = 30;
 
         const fm = (v) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(v);
 
@@ -191,244 +126,81 @@
             currentEmail = session.user.email;
             document.getElementById('cuerpoPagina').classList.remove('hidden');
 
-            if (!sessionStorage.getItem('huella_registrada')) {
-                await clienteSupabase.from('registro_accesos').insert({
-                    email_cliente: currentEmail,
-                    navegador: navigator.userAgent
-                });
-                sessionStorage.setItem('huella_registrada', 'true');
-            }
-
             const { data: cliente } = await clienteSupabase.from('clientes').select('*').eq('email', currentEmail).maybeSingle();
             if (cliente) {
                 diasPagoCliente = cliente.dias_pago || 30; 
-
                 document.getElementById('lblEmpresa').textContent = cliente.empresa || currentEmail;
-                document.getElementById('lblId').textContent = cliente.id_cliente || "GCOM-NUEVO";
                 document.getElementById('lblPlan').textContent = cliente.plan || "Dedicado";
                 document.getElementById('lblIp').textContent = cliente.ip || "0.0.0.0";
-                const palabras = (cliente.empresa || currentEmail).split(' ');
-                document.getElementById('lblIniciales').textContent = (palabras[0].charAt(0) + (palabras[1] ? palabras[1].charAt(0) : '')).toUpperCase();
-                if (cliente.url_dashboard) document.getElementById('btnLinkDashboard').href = cliente.url_dashboard;
-                if (cliente.user_noc && cliente.pass_noc) {
-                    document.getElementById('boxCredencialesNoc').classList.remove('hidden');
-                    document.getElementById('lblUserNoc').textContent = cliente.user_noc;
-                    document.getElementById('lblPassNoc').textContent = cliente.pass_noc;
-                }
-                const fHabilitacion = new Date(cliente.created_at);
+                
+                const fHabilitacion = new Date(cliente.fecha_inicio || cliente.created_at);
                 const mesesTotales = parseInt(cliente.contrato_meses) || 12;
                 const mesesPasados = (new Date().getFullYear() - fHabilitacion.getFullYear()) * 12 + (new Date().getMonth() - fHabilitacion.getMonth());
                 document.getElementById('lblMesesTotales').textContent = mesesTotales;
                 document.getElementById('lblMesesRestantes').textContent = Math.max(0, mesesTotales - mesesPasados);
-                document.getElementById('lblFechaHabilitacion').textContent = `Habilitado el: ${fHabilitacion.toLocaleDateString('es-CL')}`;
             }
-
-            cargarTicketsPortal();
             cargarFacturasPortal(); 
         });
 
-        // --- CARGAR TICKETS ---
-        async function cargarTicketsPortal() {
-            try {
-                const { data: tickets } = await clienteSupabase.from('tickets').select('*').eq('email_cliente', currentEmail).order('created_at', {ascending: false});
-                const tabla = document.getElementById('tablaTickets');
-                tabla.innerHTML = '';
-                if (tickets && tickets.length > 0) {
-                    document.getElementById('msgNoTickets').classList.add('hidden');
-                    document.getElementById('tablaTicketsContainer').classList.remove('hidden');
-                    
-                    tickets.forEach(tk => {
-                        const esAbierto = tk.estado === 'Abierto';
-                        const badgeEstado = esAbierto ? `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase border border-green-200">Abierto</span>` : `<span class="bg-slate-100 text-slate-500 px-3 py-1 rounded-full text-[10px] font-bold uppercase border border-slate-200">Resuelto</span>`;
-                        const contRespuestas = (tk.seguimiento && tk.seguimiento.length > 0) ? `<span class="ml-2 bg-blue-100 text-blue-700 text-[9px] px-1.5 py-0.5 rounded-full font-bold">${tk.seguimiento.length} resp.</span>` : '';
-                        
-                        tabla.innerHTML += `
-                            <tr class="border-b border-slate-100 hover:bg-slate-50 transition cursor-pointer" onclick="abrirModalTicket(${tk.id})">
-                                <td class="py-4 px-2 font-mono font-bold text-xs text-blue-600">#${tk.id}</td>
-                                <td class="py-4 px-2 font-medium">${tk.asunto} ${contRespuestas}</td>
-                                <td class="py-4 px-2 text-slate-500 text-xs">${new Date(tk.created_at).toLocaleDateString()}</td>
-                                <td class="py-4 px-2">${badgeEstado} <button class="ml-4 text-[9px] font-bold uppercase tracking-widest bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-sm hover:bg-blue-600 hover:text-white transition">Ver Seguimiento</button></td>
-                            </tr>`;
-                    });
-                }
-            } catch (e) { console.log(e); }
-        }
-
-        // --- CARGAR FACTURAS (FINANCIERO CON 3 ESTADOS) ---
         async function cargarFacturasPortal() {
-            const { data: facturas } = await clienteSupabase
-                .from('facturas')
-                .select('*')
-                .eq('email_cliente', currentEmail)
-                .order('created_at', { ascending: false })
-                .limit(12);
-
+            const { data: facturas } = await clienteSupabase.from('facturas').select('*').eq('email_cliente', currentEmail).order('created_at', { ascending: false });
             const grid = document.getElementById('gridFacturas');
             grid.innerHTML = '';
             
             if (facturas && facturas.length > 0) {
                 document.getElementById('msgNoFacturas').classList.add('hidden');
-                
                 const hoy = new Date();
 
                 facturas.forEach(f => {
-                    const fechaEmision = f.fecha_emision ? new Date(f.fecha_emision) : new Date(f.created_at);
-                    const fechaVencimiento = new Date(fechaEmision);
-                    fechaVencimiento.setDate(fechaVencimiento.getDate() + diasPagoCliente);
-                    fechaVencimiento.setHours(23, 59, 59, 999);
+                    const fEmision = new Date(f.fecha_emision || f.created_at);
+                    const fVencimiento = new Date(fEmision);
+                    fVencimiento.setDate(fVencimiento.getDate() + diasPagoCliente);
+                    fVencimiento.setHours(23, 59, 59, 999);
+                    const diffTime = fVencimiento - hoy;
+                    const diasRestantes = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                    let badgeColor = '';
-                    let estadoTexto = '';
+                    let estadoCalculado = f.estado;
+                    let badgeColor = ''; let badgeTexto = ''; let textoDias = '';
 
-                    if (f.estado === 'Pagada') {
-                        badgeColor = 'bg-green-100 text-green-700 border border-green-200';
-                        estadoTexto = 'Pagada';
-                    } else if (hoy > fechaVencimiento) {
-                        badgeColor = 'bg-red-100 text-red-700 border border-red-200 shadow-sm';
-                        estadoTexto = 'Vencida';
-                    } else {
-                        badgeColor = 'bg-blue-100 text-blue-700 border border-blue-200';
-                        estadoTexto = 'Pendiente';
+                    if (estadoCalculado !== 'Pagada') {
+                        estadoCalculado = (diasRestantes < 0) ? 'Vencida' : 'Pendiente';
                     }
 
-                    const fechaVisual = fechaEmision.toLocaleDateString('es-CL');
-                    const totalFormatted = fm(f.valor_total || 0);
+                    if (estadoCalculado === 'Pagada') {
+                        badgeColor = 'bg-green-100 text-green-700 border-green-200'; badgeTexto = 'Pagada';
+                    } else if (estadoCalculado === 'Vencida') {
+                        badgeColor = 'bg-red-100 text-red-700 border-red-200 shadow-sm'; badgeTexto = 'Vencida';
+                        textoDias = `<p class="text-red-500 text-[10px] font-bold mt-2 text-center">⚠️ Atrasada por ${Math.abs(diasRestantes)} días</p>`;
+                    } else {
+                        badgeColor = 'bg-blue-100 text-blue-700 border-blue-200'; badgeTexto = 'Pendiente';
+                        textoDias = `<p class="text-blue-500 text-[10px] font-bold mt-2 text-center">Vence en ${diasRestantes} días</p>`;
+                    }
+
+                    const neto = f.valor_neto || 0;
+                    const total = f.valor_total || 0;
+                    const iva = total - neto;
 
                     grid.innerHTML += `
-                        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm transition hover:shadow-md">
+                        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition">
                             <div class="flex justify-between items-start mb-4">
-                                <span class="text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-md ${badgeColor}">${estadoTexto}</span>
-                                <p class="text-[10px] text-slate-400 font-bold">Emisión: ${fechaVisual}</p>
+                                <span class="text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-md border ${badgeColor}">${badgeTexto}</span>
+                                <p class="text-[10px] font-black text-slate-400 bg-slate-50 px-2 py-1 rounded-md border border-slate-100">DTE: ${fEmision.toLocaleDateString('es-CL')}</p>
                             </div>
-                            <p class="text-xs font-black text-[#1a1f2e] uppercase mb-1">${f.mes_anio}</p>
-                            <p class="text-lg font-black text-slate-700 mb-4">${totalFormatted}</p>
-                            
-                            <a href="${f.url_archivo}" target="_blank" class="flex items-center justify-center w-full py-2 bg-slate-50 hover:bg-blue-50 border border-slate-100 hover:border-blue-100 text-blue-600 rounded-xl text-[10px] font-bold uppercase tracking-widest transition">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                Descargar PDF
+                            <p class="text-xs font-black text-[#1a1f2e] uppercase mb-4 text-center">${f.mes_anio}</p>
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4 grid grid-cols-2 gap-2 text-center">
+                                <div><p class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Neto</p><p class="text-sm font-mono text-slate-700">${fm(neto)}</p></div>
+                                <div><p class="text-[9px] font-bold uppercase tracking-widest text-slate-400">IVA</p><p class="text-sm font-mono text-slate-700">${fm(iva)}</p></div>
+                                <div class="col-span-2 mt-2 pt-2 border-t border-slate-200"><p class="text-[9px] font-bold uppercase tracking-widest text-blue-500">Monto a Pagar</p><p class="text-2xl font-black text-blue-600">${fm(total)}</p></div>
+                            </div>
+                            <a href="${f.url_archivo}" target="_blank" class="flex items-center justify-center w-full py-3 bg-[#1a1f2e] hover:bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest transition shadow-md">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> Descargar Documento
                             </a>
+                            ${textoDias}
                         </div>`;
                 });
-            } else { 
-                document.getElementById('msgNoFacturas').classList.remove('hidden'); 
-            }
+            } else { document.getElementById('msgNoFacturas').classList.remove('hidden'); }
         }
 
-        // --- ABRIR MODAL SEGUIMIENTO TICKET ---
-        async function abrirModalTicket(id) {
-            document.getElementById('modal-ver-ticket').classList.remove('hidden');
-            document.getElementById('vtTicketId').value = id;
-            document.getElementById('vtAsunto').textContent = "Cargando...";
-            
-            const { data: tk } = await clienteSupabase.from('tickets').select('*').eq('id', id).single();
-            if(!tk) return;
-
-            document.getElementById('vtId').textContent = `#${tk.id}`;
-            document.getElementById('vtAsunto').textContent = tk.asunto;
-            document.getElementById('vtDescripcion').textContent = tk.descripcion;
-            document.getElementById('vtFecha').textContent = new Date(tk.created_at).toLocaleString('es-CL');
-            
-            const p = document.getElementById('vtPrioridad');
-            p.textContent = tk.prioridad;
-            p.className = `text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md text-white ${tk.prioridad==='Alta'?'bg-red-500':tk.prioridad==='Media'?'bg-orange-500':'bg-blue-500'}`;
-
-            const est = document.getElementById('vtEstado');
-            est.textContent = tk.estado;
-            est.className = `text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border ${tk.estado==='Abierto'?'bg-green-100 text-green-700 border-green-200':'bg-slate-100 text-slate-500 border-slate-200'}`;
-            
-            if(tk.url_archivo) {
-                document.getElementById('vtAdjuntoOriginal').classList.remove('hidden');
-                document.getElementById('vtLinkAdjunto').href = tk.url_archivo;
-            } else { document.getElementById('vtAdjuntoOriginal').classList.add('hidden'); }
-
-            const contenedor = document.getElementById('vtRespuestas');
-            contenedor.innerHTML = '';
-            if(tk.seguimiento && tk.seguimiento.length > 0) {
-                tk.seguimiento.forEach(msg => {
-                    const esAdmin = msg.autor === 'Soporte Globalcom';
-                    const colorCaja = esAdmin ? 'bg-blue-50 border-blue-100' : 'bg-white border-slate-100';
-                    const colorTextoAutor = esAdmin ? 'text-blue-700' : 'text-slate-700';
-                    const adjuntoHtml = msg.adjunto ? `<a href="${msg.adjunto}" target="_blank" class="inline-flex mt-3 items-center text-[10px] font-bold text-blue-600 bg-white border border-blue-100 px-3 py-1.5 rounded-lg"><svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Archivo Adjunto</a>` : '';
-                    
-                    contenedor.innerHTML += `
-                        <div class="${colorCaja} p-5 rounded-2xl shadow-sm border ml-${esAdmin?'8':'0'} mr-${esAdmin?'0':'8'}">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-xs font-black uppercase tracking-widest ${colorTextoAutor}">${msg.autor}</span>
-                                <span class="text-[9px] text-slate-400 font-bold">${new Date(msg.fecha).toLocaleString('es-CL')}</span>
-                            </div>
-                            <p class="text-sm text-slate-600 whitespace-pre-wrap">${msg.mensaje}</p>
-                            ${adjuntoHtml}
-                        </div>`;
-                });
-            }
-            document.getElementById('vtCajaRespuesta').style.display = tk.estado === 'Abierto' ? 'block' : 'none';
-        }
-
-        async function subirArchivoTicket(archivo) {
-            if(!archivo) return null;
-            const ext = archivo.name.split('.').pop();
-            const fileName = `adjunto_${Date.now()}.${ext}`;
-            const { error } = await clienteSupabase.storage.from('tickets_adjuntos').upload(fileName, archivo);
-            if(error) throw error;
-            return clienteSupabase.storage.from('tickets_adjuntos').getPublicUrl(fileName).data.publicUrl;
-        }
-
-        document.getElementById('formNuevoTicket').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnEnviarTicket');
-            const originalText = btn.textContent;
-            btn.textContent = "Subiendo ticket..."; btn.disabled = true;
-            try {
-                const archivoInput = document.getElementById('tkArchivo').files[0];
-                let urlArchivo = await subirArchivoTicket(archivoInput);
-
-                const { error } = await clienteSupabase.from('tickets').insert({
-                    email_cliente: currentEmail,
-                    asunto: document.getElementById('tkAsunto').value,
-                    prioridad: document.getElementById('tkPrioridad').value,
-                    descripcion: document.getElementById('tkDescripcion').value,
-                    url_archivo: urlArchivo,
-                    estado: 'Abierto',
-                    seguimiento: []
-                });
-                if (error) throw error;
-                
-                await clienteSupabase.functions.invoke('notify-ticket', { body: { empresa: document.getElementById('lblEmpresa').textContent, emailCliente: currentEmail, asunto: document.getElementById('tkAsunto').value, prioridad: document.getElementById('tkPrioridad').value, descripcion: document.getElementById('tkDescripcion').value } });
-                
-                alert('Ticket generado correctamente.');
-                document.getElementById('modal-ticket').classList.add('hidden');
-                document.getElementById('formNuevoTicket').reset();
-                cargarTicketsPortal();
-            } catch (err) { alert("Error: " + err.message); }
-            finally { btn.textContent = originalText; btn.disabled = false; }
-        });
-
-        document.getElementById('formResponderTicket').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnResponder');
-            btn.textContent = "Enviando..."; btn.disabled = true;
-            try {
-                const id = document.getElementById('vtTicketId').value;
-                const mensaje = document.getElementById('vtNuevoMensaje').value;
-                const archivoInput = document.getElementById('vtNuevoAdjunto').files[0];
-                
-                let urlAdjunto = await subirArchivoTicket(archivoInput);
-
-                const { data: tk } = await clienteSupabase.from('tickets').select('seguimiento').eq('id', id).single();
-                let seg = tk.seguimiento || [];
-                seg.push({ autor: 'Cliente', fecha: new Date().toISOString(), mensaje: mensaje, adjunto: urlAdjunto });
-
-                const { error } = await clienteSupabase.from('tickets').update({ seguimiento: seg }).eq('id', id);
-                if(error) throw error;
-
-                document.getElementById('formResponderTicket').reset();
-                abrirModalTicket(id); 
-                cargarTicketsPortal(); 
-            } catch (err) { alert("Error: " + err.message); }
-            finally { btn.textContent = "Enviar Respuesta"; btn.disabled = false; }
-        });
-
-        function descargarSLA() { window.open('https://eejsdoeuovcrjicrgxmo.supabase.co/storage/v1/object/public/contratos/SLA%20GLOBALCOM.pdf', '_blank'); }
         async function cerrarSesion() { await clienteSupabase.auth.signOut(); window.location.href = 'index.html'; }
     </script>
 </body>
