@@ -103,10 +103,10 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                    <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-black text-[#1a1f2e]">Facturación Automatizada</h2></div>
-                    <div class="bg-green-50 border border-green-100 rounded-xl p-4 mb-6">
-                        <p class="text-[10px] font-bold text-green-800 uppercase tracking-widest mb-1">Carga Inteligente Gratis</p>
-                        <p class="text-[11px] text-green-600">Nombre Obligatorio: <strong>RUT_MESAÑO.pdf</strong> (Ej: 76123456K_Abril2026.pdf). El navegador extraerá el dinero automáticamente.</p>
+                    <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-black text-[#1a1f2e]">Carga Inteligente de Facturas</h2></div>
+                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
+                        <p class="text-[10px] font-bold text-blue-800 uppercase tracking-widest mb-1">Extracción Automática DTE</p>
+                        <p class="text-[11px] text-blue-600">Nombre Obligatorio: <strong>RUT_MESAÑO.pdf</strong> (Ej: 76123456K_Abril2026.pdf). La Plataforma extraerá automáticamente la información del DTE.</p>
                     </div>
 
                     <form id="formFacturaMasiva" class="space-y-4">
@@ -127,14 +127,14 @@
 
                         <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition relative">
                             <input type="file" id="inpArchivosMasivos" accept=".pdf" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                            <svg class="w-10 h-10 mx-auto text-slate-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                            <svg class="w-10 h-10 mx-auto text-slate-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
                             <p class="text-sm font-bold text-slate-600">Haz clic o arrastra PDFs aquí</p>
                             <p class="text-xs text-slate-400 mt-1" id="lblArchivosSeleccionados">0 archivos seleccionados</p>
                         </div>
                         <div id="progresoFacturas" class="hidden space-y-2">
                             <ul id="logProcesamiento" class="h-32 overflow-y-auto bg-slate-900 text-green-400 font-mono text-[10px] p-3 rounded-lg mt-2"></ul>
                         </div>
-                        <button type="submit" id="btnProcesarMasivo" class="w-full bg-[#1a1f2e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition shadow-lg mt-2">Analizar y Enviar Facturas</button>
+                        <button type="submit" id="btnProcesarMasivo" class="w-full bg-[#1a1f2e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition shadow-lg mt-2">Analizar DTE y Enviar Facturas</button>
                     </form>
                 </div>
 
@@ -176,65 +176,57 @@
         </div>
     </main>
 
-    <div id="modal-detalle" class="hidden fixed inset-0 bg-[#1a1f2e]/80 backdrop-blur-md z-[100] flex justify-center items-center p-4">
-        <div class="bg-white rounded-[2.5rem] w-full max-w-5xl max-h-[95vh] overflow-y-auto shadow-2xl relative border border-slate-200">
-            <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition z-10"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+    <div id="modal-detalle" class="hidden fixed inset-0 bg-[#1a1f2e]/90 backdrop-blur-md z-[100] flex justify-center items-center p-4">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-6xl max-h-[95vh] overflow-y-auto shadow-2xl relative">
+            <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition z-10"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            
             <div class="p-10">
-                <div class="flex items-center justify-between mb-8">
-                    <div class="flex items-center gap-6">
-                        <div id="detIniciales" class="h-16 w-16 rounded-3xl bg-blue-600 text-white flex items-center justify-center text-2xl font-black shadow-lg">?</div>
-                        <div><h2 id="detEmpresa" class="text-3xl font-black text-[#1a1f2e]">Nombre Empresa</h2><p id="detEmail" class="text-slate-500 font-medium text-sm">correo@cliente.cl</p></div>
-                    </div>
-                    <button id="btnEstadoCliente" onclick="toggleEstadoCliente()" data-estado="Activo" class="text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest transition shadow-sm border border-transparent">Activo</button>
+                <div class="flex items-center gap-6 mb-8 border-b border-slate-100 pb-6">
+                    <div id="detIniciales" class="h-16 w-16 rounded-3xl bg-blue-600 text-white flex items-center justify-center text-2xl font-black shadow-lg">?</div>
+                    <div><h2 id="detEmpresa" class="text-3xl font-black text-[#1a1f2e]">Nombre Empresa</h2><p id="detEmail" class="text-slate-500 text-sm">email@cliente.cl</p></div>
                 </div>
+
                 <div class="grid md:grid-cols-2 gap-10">
                     <div class="space-y-6">
-                        <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Datos y Configuración Completa</h3>
+                        <h3 class="text-xs font-black uppercase tracking-widest text-blue-600">Configuración Completa</h3>
                         <form id="formEditarCliente" class="bg-slate-50 rounded-3xl p-6 border border-slate-100 space-y-4">
                             <input type="hidden" id="editEmailOriginal">
                             <div class="grid grid-cols-2 gap-3">
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Razón Social</label><input type="text" id="eEmpresa" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">RUT</label><input type="text" id="eRut" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500">Razón Social</label><input type="text" id="eEmpresa" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500">RUT</label><input type="text" id="eRut" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs"></div>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Contacto Técnico</label><input type="text" id="eContacto" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Cont. Facturación</label><input type="text" id="eContactoFact" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500">Contacto Técnico</label><input type="text" id="eContacto" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500">Cont. Facturación</label><input type="text" id="eContactoFact" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs"></div>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Email Facturación</label><input type="email" id="eEmailFact" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Fecha Habilitación</label><input type="date" id="eFecha" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500">Email Facturación</label><input type="email" id="eEmailFact" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500">Días Pago</label><input type="number" id="eDiasPago" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs"></div>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
-                                <div class="col-span-2"><label class="text-[9px] font-bold text-slate-500 uppercase">Dirección Instalación</label><input type="text" id="eDireccion" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500">IP Pública</label><input type="text" id="eIp" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500">Plan</label><select id="ePlan" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs"><option>Internet Dedicado 100 Mbps</option><option>Internet Dedicado 500 Mbps</option><option>Internet Dedicado 1 Gbps</option><option>Fibra Oscura / Capa 2</option></select></div>
                             </div>
-                            <div class="grid grid-cols-3 gap-3">
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Días Pago</label><input type="number" id="eDiasPago" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Meses Contrato</label><input type="number" id="eMeses" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">IP Pública</label><input type="text" id="eIp" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                            </div>
-                            <div><label class="text-[9px] font-bold text-slate-500 uppercase">Plan</label><select id="ePlan" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"><option>Internet Dedicado 100 Mbps</option><option>Internet Dedicado 500 Mbps</option><option>Internet Dedicado 1 Gbps</option><option>Fibra Oscura / Capa 2</option></select></div>
-                            <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 mt-2 space-y-2">
-                                <div><label class="text-[9px] font-bold text-blue-700 uppercase">Link NOC</label><input type="text" id="eDashboard" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div><label class="text-[9px] font-bold text-blue-700 uppercase">Usuario NOC</label><input type="text" id="eUserNoc" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
-                                    <div><label class="text-[9px] font-bold text-blue-700 uppercase">Clave NOC</label><input type="text" id="ePassNoc" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
+                            <div class="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                                <label class="text-[9px] font-bold text-blue-700">Link NOC Dashboard</label>
+                                <input type="url" id="eDashboard" class="w-full bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs mb-2">
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="text" id="eUserNoc" placeholder="Usuario NOC" class="bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs">
+                                    <input type="text" id="ePassNoc" placeholder="Clave NOC" class="bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs">
                                 </div>
                             </div>
-                            <div class="border-t border-slate-200 pt-4 mt-2">
-                                <label class="text-[9px] font-bold text-slate-500 uppercase">Subir/Reemplazar Contrato PDF</label>
-                                <input type="file" id="eArchivoContrato" accept=".pdf" class="w-full mt-1 text-[10px] bg-white border border-slate-200 rounded-lg px-2 py-1">
-                                <a id="btnVerContratoActual" href="#" target="_blank" class="hidden mt-2 inline-block text-blue-600 text-[10px] font-bold underline hover:text-blue-800">Ver contrato actual cargado</a>
+                            <div class="border-t pt-4">
+                                <label class="text-[9px] font-bold text-slate-500">Actualizar Contrato (PDF)</label>
+                                <input type="file" id="eArchivoContrato" accept=".pdf" class="w-full text-[10px] mt-1">
+                                <a id="btnVerContratoActual" href="#" target="_blank" class="hidden mt-2 inline-block text-blue-600 text-[10px] font-bold underline">Ver contrato actual cargado</a>
                             </div>
-                            <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-blue-700 transition shadow-md mt-4">Guardar Cambios de Cliente</button>
+                            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-xs hover:bg-blue-700 transition shadow-md">Guardar Cambios del Cliente</button>
                         </form>
-                        <div class="mt-6 border-t border-slate-200 pt-6">
-                            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> Historial de Accesos (Huella Digital)</h3>
-                            <div id="listaAccesos" class="space-y-2"><p class="text-[11px] text-slate-400 italic">Cargando ingresos...</p></div>
-                        </div>
                     </div>
+
                     <div class="space-y-6">
-                        <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Historial de Facturas</h3>
-                        <div id="listaFacturasDetalle" class="space-y-3 max-h-[500px] overflow-y-auto pr-2"></div>
+                        <h3 class="text-xs font-black uppercase tracking-widest text-blue-600">Estado de Cuenta Dinámico</h3>
+                        <div id="listaFacturasDetalle" class="space-y-4 max-h-[600px] overflow-y-auto pr-2"></div>
                     </div>
                 </div>
             </div>
@@ -293,8 +285,7 @@
             await cargarDashboard(); 
         });
 
-        // Selector "Otros servicios"
-        window.toggleOtroServicio = function() {
+        function toggleOtroServicio() {
             const select = document.getElementById('fTipoServicio');
             const box = document.getElementById('boxOtroServicio');
             if (select.value === 'Otros') {
@@ -370,7 +361,6 @@
             } catch (err) { alert(err.message); } finally { btn.textContent = originalText; btn.disabled = false; }
         });
 
-        // --- FACTURACIÓN MASIVA (Con límite, campos extra y NOMBRES CORRECTOS) ---
         const inputArchivos = document.getElementById('inpArchivosMasivos');
         const lblSeleccionados = document.getElementById('lblArchivosSeleccionados');
 
@@ -391,7 +381,6 @@
             reader.onerror = error => reject(error);
         });
 
-        // ¡AQUÍ ESTÁ LA CORRECCIÓN CLAVE DEL ERROR 'REPLACE'!
         document.getElementById('formFacturaMasiva').addEventListener('submit', async (e) => {
             e.preventDefault();
             const archivos = inputArchivos.files;
@@ -423,7 +412,6 @@
                     const rutExtraido = partes[0].toUpperCase();
                     const mesAnioExtraido = `${partes[1]} (${servicioFinal})`;
 
-                    // Lectura del PDF
                     const arrayBuffer = await archivo.arrayBuffer();
                     const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
                     let texto = "";
@@ -437,10 +425,28 @@
                     const mNeto = texto.match(/Monto Neto\s*\$?\s*([\d\.]+)/i);
                     const totalExt = mTotal ? mTotal[1].replace(/\./g, '') : 0;
                     const netoExt = mNeto ? mNeto[1].replace(/\./g, '') : 0;
+                    
+                    // Extraer fecha DTE
+                    let fechaDTE = new Date().toISOString().split('T')[0];
+                    const regexFecha = /Fecha Emisi[óo]n:?\s*(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}|\d{1,2}\s+de\s+[a-zA-Z]+\.?\s+(?:de\s+)?\d{4})/i;
+                    const matchFecha = texto.match(regexFecha);
+                    if (matchFecha) {
+                        let d = matchFecha[1].toLowerCase();
+                        let partesFecha = d.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+                        if (partesFecha) {
+                            fechaDTE = `${partesFecha[3]}-${partesFecha[2].padStart(2,'0')}-${partesFecha[1].padStart(2,'0')}`;
+                        } else {
+                            const meses = {ene:'01',feb:'02',mar:'03',abr:'04',may:'05',jun:'06',jul:'07',ago:'08',sep:'09',oct:'10',nov:'11',dic:'12'};
+                            partesFecha = d.match(/(\d{1,2})\s+de\s+([a-z]{3})[a-z]*\.?\s+(?:de\s+)?(\d{4})/);
+                            if (partesFecha) {
+                                let m = meses[partesFecha[2]];
+                                if (m) fechaDTE = `${partesFecha[3]}-${m}-${partesFecha[1].padStart(2,'0')}`;
+                            }
+                        }
+                    }
 
                     const base64Texto = await fileToBase64(archivo);
 
-                    // AHORA ENVIAMOS LAS VARIABLES EXACTAS QUE ESPERA EL SERVIDOR GRATUITO
                     const response = await adminSupabase.functions.invoke('process-invoice', {
                         body: { 
                             fileName: archivo.name, 
@@ -449,7 +455,7 @@
                             mes: mesAnioExtraido,
                             neto: netoExt,
                             total: totalExt,
-                            fecha: new Date().toISOString().split('T')[0]
+                            fecha: fechaDTE
                         }
                     });
 
@@ -467,7 +473,7 @@
                 log.scrollTop = log.scrollHeight;
             }
 
-            btn.disabled = false; btn.textContent = "Analizar y Enviar Facturas";
+            btn.disabled = false; btn.textContent = "Analizar DTE y Enviar Facturas";
             log.innerHTML += `<li class="text-blue-400 font-bold mt-2">=== TERMINADO ===</li>`;
             log.innerHTML += `<li class="text-blue-400">Exitosas: ${procesadas} | Errores: ${errores}</li>`;
             log.scrollTop = log.scrollHeight;
@@ -478,7 +484,6 @@
             cargarDashboard(); 
         });
 
-        // --- CARGA HISTÓRICA MANUAL ---
         document.getElementById('formCargaHistorica').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnGuardarHistorico');
@@ -507,7 +512,6 @@
             } catch(err) { alert("Error: " + err.message); } finally { btn.disabled = false; btn.textContent = "Guardar Factura Histórica"; }
         });
 
-        // --- SOPORTE NOC ---
         async function cargarTicketsAdmin() {
             const tabla = document.getElementById('tablaTicketsAdmin');
             const msgVacio = document.getElementById('msgNoTicketsAdmin');
@@ -601,7 +605,6 @@
             abrirModalTicketAdmin(id); cargarTicketsAdmin();
         }
 
-        // --- GESTIÓN DE CLIENTES Y EDITOR COMPLETO ---
         async function gestionarCliente(email) {
             const modal = document.getElementById('modal-detalle'); modal.classList.remove('hidden');
             const { data: cliente } = await adminSupabase.from('clientes').select('*').eq('email', email).single();
@@ -611,7 +614,6 @@
             document.getElementById('detIniciales').textContent = cliente.empresa.substring(0,1).toUpperCase();
             document.getElementById('editEmailOriginal').value = cliente.email;
             
-            // Llenar campos del form
             document.getElementById('eEmpresa').value = cliente.empresa || '';
             document.getElementById('eRut').value = cliente.rut || '';
             document.getElementById('eContacto').value = cliente.contacto || '';
@@ -627,7 +629,6 @@
             document.getElementById('eUserNoc').value = cliente.user_noc || '';
             document.getElementById('ePassNoc').value = cliente.pass_noc || '';
             
-            // Botón contrato actual
             const btnContrato = document.getElementById('btnVerContratoActual');
             if (cliente.url_contrato && cliente.url_contrato !== '') {
                 btnContrato.href = cliente.url_contrato;
@@ -710,21 +711,65 @@
             contenedor.innerHTML = '';
             if (!facturas || facturas.length === 0) { contenedor.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-10">No hay facturas registradas.</p>'; return; }
             const hoy = new Date();
-            facturas.forEach(f => {
-                const fechaEmision = f.fecha_emision ? new Date(f.fecha_emision) : new Date(f.created_at);
+            facturas.forEach(fact => {
+                const fechaEmision = fact.fecha_emision ? new Date(fact.fecha_emision) : new Date(fact.created_at);
                 const fechaVencimiento = new Date(fechaEmision); fechaVencimiento.setDate(fechaVencimiento.getDate() + diasPagoCliente); fechaVencimiento.setHours(23, 59, 59, 999);
-                let badgeEstado = '';
-                if (f.estado === 'Pagada') badgeEstado = `<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">Pagada</span>`;
-                else if (hoy > fechaVencimiento) badgeEstado = `<span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">Vencida</span>`;
-                else badgeEstado = `<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">Pendiente</span>`;
-                const btnMarcarPago = f.estado === 'Pagada' ? `<button onclick="cambiarEstadoFactura(${f.id}, 'Pendiente', '${email}', ${diasPagoCliente})" class="text-[9px] font-bold text-slate-500 hover:text-orange-500 transition underline tracking-widest">Marcar Pendiente</button>` : `<button onclick="cambiarEstadoFactura(${f.id}, 'Pagada', '${email}', ${diasPagoCliente})" class="text-[9px] font-bold text-slate-500 hover:text-green-600 transition underline tracking-widest">Marcar Pagada</button>`;
-                contenedor.innerHTML += `<div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-2"><div class="flex items-center justify-between mb-2"><span class="text-xs font-black uppercase text-slate-700">${f.mes_anio}</span>${badgeEstado}</div><div class="flex justify-between items-center mt-1"><div><p class="text-[10px] font-bold text-slate-400">Neto: ${fm(f.valor_neto || 0)}</p><p class="text-xs font-black text-[#1a1f2e]">Total: ${fm(f.valor_total || 0)}</p></div><div class="flex gap-2 items-center">${btnMarcarPago}<a href="${f.url_archivo}" target="_blank" class="p-2 text-blue-600 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></a><button onclick="eliminarFactura(${f.id}, '${email}', ${diasPagoCliente})" class="p-2 text-red-500 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></div></div></div>`;
+                let badgeEstado = ''; let textoDias = '';
+                const diffTime = fechaVencimiento - hoy;
+                const diasRestantes = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                let estadoCalculado = fact.estado;
+                if (estadoCalculado !== 'Pagada') estadoCalculado = (diasRestantes < 0) ? 'Vencida' : 'Pendiente';
+
+                if (estadoCalculado === 'Pagada') {
+                    badgeEstado = `<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">Pagada</span>`;
+                } else if (estadoCalculado === 'Vencida') {
+                    badgeEstado = `<span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">Vencida</span>`;
+                    textoDias = `<p class="text-red-500 text-[10px] font-bold mt-1">⚠️ Atrasada por ${Math.abs(diasRestantes)} días</p>`;
+                } else {
+                    badgeEstado = `<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">Pendiente</span>`;
+                    textoDias = `<p class="text-blue-500 text-[10px] font-bold mt-1">Vence en ${diasRestantes} días</p>`;
+                }
+
+                const neto = fact.valor_neto || 0;
+                const total = fact.valor_total || 0;
+                const iva = total - neto;
+
+                const btnMarcar = estadoCalculado === 'Pagada' 
+                    ? `<button onclick="cambiarEstadoFactura('${fact.id}', 'Pendiente', '${email}', ${diasPagoCliente})" class="text-[10px] font-bold text-slate-500 hover:text-orange-500 underline">Marcar Pendiente</button>` 
+                    : `<button onclick="cambiarEstadoFactura('${fact.id}', 'Pagada', '${email}', ${diasPagoCliente})" class="text-[10px] font-bold text-slate-500 hover:text-green-600 underline">Marcar Pagada</button>`;
+                    
+                const btnDel = `<button onclick="eliminarFactura('${fact.id}', '${email}', ${diasPagoCliente})" class="p-2 text-red-500 hover:bg-white rounded-lg border border-slate-200 shadow-sm transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`;
+
+                contenedor.innerHTML += `
+                <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col gap-3">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs font-black uppercase text-[#1a1f2e]">${fact.mes_anio}</span>
+                            ${textoDias}
+                        </div>
+                        <div>${badgeEstado}</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-2 text-[10px]">
+                        <div><p class="text-slate-400 font-bold uppercase tracking-widest">Emisión</p><p class="font-mono text-slate-700">${fechaEmision.toLocaleDateString('es-CL')}</p></div>
+                        <div><p class="text-slate-400 font-bold uppercase tracking-widest">Neto</p><p class="font-mono text-slate-700">${fm(neto)}</p></div>
+                        <div><p class="text-slate-400 font-bold uppercase tracking-widest">IVA</p><p class="font-mono text-slate-700">${fm(iva)}</p></div>
+                        <div><p class="text-slate-400 font-bold uppercase tracking-widest">Total</p><p class="font-mono font-black text-blue-600">${fm(total)}</p></div>
+                    </div>
+                    <div class="flex justify-between items-center mt-1">
+                        ${btnMarcar}
+                        <div class="flex gap-2">
+                            <a href="${fact.url_archivo}" target="_blank" class="p-2 text-blue-600 hover:bg-white rounded-lg border border-slate-200 shadow-sm transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></a>
+                            ${btnDel}
+                        </div>
+                    </div>
+                </div>`;
             });
         }
 
-        async function cambiarEstadoFactura(id, nuevoEstado, email, diasPagoCliente) { await adminSupabase.from('facturas').update({ estado: nuevoEstado }).eq('id', id); cargarFacturasDetalle(email, diasPagoCliente); cargarDashboard(); }
-        async function eliminarFactura(id, email, diasPagoCliente) { if (!confirm('¿Eliminar esta factura?')) return; await adminSupabase.from('facturas').delete().eq('id', id); cargarFacturasDetalle(email, diasPagoCliente); cargarDashboard(); }
-        async function cerrarSesion() { await adminSupabase.auth.signOut(); window.location.href = 'index.html'; }
+        window.cambiarEstadoFactura = async function(id, nuevoEstado, email, diasPagoCliente) { await adminSupabase.from('facturas').update({ estado: nuevoEstado }).eq('id', id); cargarFacturasDetalle(email, diasPagoCliente); cargarDashboard(); }
+        window.eliminarFactura = async function(id, email, diasPagoCliente) { if (!confirm('¿Seguro que deseas eliminar esta factura?')) return; await adminSupabase.from('facturas').delete().eq('id', id); cargarFacturasDetalle(email, diasPagoCliente); cargarDashboard(); }
+        window.cerrarSesion = async function() { await adminSupabase.auth.signOut(); window.location.href = 'index.html'; }
     </script>
 </body>
 </html>
