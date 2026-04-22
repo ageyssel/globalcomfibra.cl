@@ -23,25 +23,44 @@ serve(async (req) => {
 
     const promptText = "Eres un contador experto. Extrae de esta factura chilena: RUT del cliente (sin puntos ni guion, termina en K o numero), Monto Neto (solo numero entero), Monto Total (solo numero entero), Fecha de Emision (YYYY-MM-DD) y Mes del servicio (ej: Abril 2026). Responde estrictamente un JSON puro con las llaves: rut, neto, total, fecha, mes."
 
-    // ¡MAGIA AQUÍ! Usamos tu motor moderno: gemini-2.5-flash
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{
-          parts: [
-            { text: promptText },
-            { inline_data: { mime_type: "application/pdf", data: fileBase64 } }
-          ]
-        }],
-        generationConfig: { response_mime_type: "application/json" }
-      })
-    })
+    // --- SISTEMA ANTI-SATURACIÓN ---
+    let response;
+    let geminiResult;
+    let intentos = 0;
+    const maxIntentos = 3;
 
-    const geminiResult = await response.json()
+    while (intentos < maxIntentos) {
+        // Usamos el modelo 2.0 (Ultra estable y de producción)
+        response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [
+                { text: promptText },
+                { inline_data: { mime_type: "application/pdf", data: fileBase64 } }
+              ]
+            }],
+            generationConfig: { response_mime_type: "application/json" }
+          })
+        })
 
-    if (!response.ok) {
-        throw new Error(`Error de Google: ${geminiResult.error?.message || 'Error desconocido'}`)
+        geminiResult = await response.json()
+
+        if (response.ok) {
+            break; // Google respondió con éxito, salimos del bucle.
+        } else {
+            const errMsg = geminiResult.error?.message || 'Error desconocido';
+            // Si hay alta demanda (saturación), esperamos y reintentamos en silencio
+            if (errMsg.includes("high demand") || response.status === 429 || response.status === 503) {
+                intentos++;
+                if (intentos < maxIntentos) {
+                    await new Promise(resolve => setTimeout(resolve, 2500 * intentos)); // Espera progresiva
+                    continue;
+                }
+            }
+            throw new Error(`Error de Google: ${errMsg}`);
+        }
     }
 
     if (!geminiResult.candidates || geminiResult.candidates.length === 0) {
