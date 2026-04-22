@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Globalcom | Gestión de Clientes</title>
+    <title>Admin Globalcom | Gestión 100% Operativa</title>
     <link rel="icon" href="img/favicon.png" type="image/png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style> body { font-family: 'Inter', sans-serif; } </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen hidden" id="adminBody">
 
@@ -102,10 +103,10 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                    <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-black text-[#1a1f2e]">Facturación con IA</h2></div>
-                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
-                        <p class="text-[10px] font-bold text-blue-800 uppercase tracking-widest mb-1">Carga Inteligente Automática</p>
-                        <p class="text-[11px] text-blue-600">Nombre Obligatorio: <strong>RUT_MESAÑO.pdf</strong> (Ej: 76123456K_Abril2026.pdf). Máx 20 archivos.</p>
+                    <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-black text-[#1a1f2e]">Facturación Automatizada</h2></div>
+                    <div class="bg-green-50 border border-green-100 rounded-xl p-4 mb-6">
+                        <p class="text-[10px] font-bold text-green-800 uppercase tracking-widest mb-1">Carga Inteligente Gratis</p>
+                        <p class="text-[11px] text-green-600">Nombre Obligatorio: <strong>RUT_MESAÑO.pdf</strong> (Ej: 76123456K_Abril2026.pdf). El navegador extraerá el dinero automáticamente.</p>
                     </div>
 
                     <form id="formFacturaMasiva" class="space-y-4">
@@ -275,6 +276,7 @@
     </div>
 
     <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
         const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
         const adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -368,7 +370,7 @@
             } catch (err) { alert(err.message); } finally { btn.textContent = originalText; btn.disabled = false; }
         });
 
-        // --- FACTURACIÓN MASIVA (Con límite y campos extra) ---
+        // --- FACTURACIÓN MASIVA (Con límite, campos extra y NOMBRES CORRECTOS) ---
         const inputArchivos = document.getElementById('inpArchivosMasivos');
         const lblSeleccionados = document.getElementById('lblArchivosSeleccionados');
 
@@ -389,6 +391,7 @@
             reader.onerror = error => reject(error);
         });
 
+        // ¡AQUÍ ESTÁ LA CORRECCIÓN CLAVE DEL ERROR 'REPLACE'!
         document.getElementById('formFacturaMasiva').addEventListener('submit', async (e) => {
             e.preventDefault();
             const archivos = inputArchivos.files;
@@ -404,12 +407,12 @@
             const boxProgreso = document.getElementById('progresoFacturas');
             
             boxProgreso.classList.remove('hidden'); log.innerHTML = ''; 
-            btn.disabled = true; btn.textContent = "IA Analizando Facturas...";
+            btn.disabled = true; btn.textContent = "Extrayendo Datos...";
             
             let procesadas = 0; let errores = 0;
 
             for (let archivo of archivos) {
-                log.innerHTML += `<li>[🤖 IA] Analizando: ${archivo.name}...</li>`;
+                log.innerHTML += `<li>[>] Procesando: ${archivo.name}...</li>`;
                 log.scrollTop = log.scrollHeight;
                 
                 try {
@@ -417,16 +420,36 @@
                     const partes = nombreSinExt.split('_');
                     if (partes.length < 2) throw new Error("Nombre debe ser RUT_MESAÑO.pdf");
                     
-                    const rutSugerido = partes[0].toUpperCase();
-                    const mesAnioSugerido = `${partes[1]} (${servicioFinal})`;
+                    const rutExtraido = partes[0].toUpperCase();
+                    const mesAnioExtraido = `${partes[1]} (${servicioFinal})`;
+
+                    // Lectura del PDF
+                    const arrayBuffer = await archivo.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+                    let texto = "";
+                    for(let i=1; i<=pdf.numPages; i++){
+                        const pag = await pdf.getPage(i);
+                        const cont = await pag.getTextContent();
+                        texto += cont.items.map(it => it.str).join(" ");
+                    }
+
+                    const mTotal = texto.match(/Total\s*\$?\s*([\d\.]+)/i);
+                    const mNeto = texto.match(/Monto Neto\s*\$?\s*([\d\.]+)/i);
+                    const totalExt = mTotal ? mTotal[1].replace(/\./g, '') : 0;
+                    const netoExt = mNeto ? mNeto[1].replace(/\./g, '') : 0;
+
                     const base64Texto = await fileToBase64(archivo);
 
+                    // AHORA ENVIAMOS LAS VARIABLES EXACTAS QUE ESPERA EL SERVIDOR GRATUITO
                     const response = await adminSupabase.functions.invoke('process-invoice', {
                         body: { 
                             fileName: archivo.name, 
                             fileBase64: base64Texto,
-                            rutSugerido: rutSugerido,
-                            mesSugerido: mesAnioSugerido
+                            rut: rutExtraido,
+                            mes: mesAnioExtraido,
+                            neto: netoExt,
+                            total: totalExt,
+                            fecha: new Date().toISOString().split('T')[0]
                         }
                     });
 
@@ -435,7 +458,7 @@
                         throw new Error((res && res.error) || response.error?.message || "Error desconocido");
                     }
 
-                    log.innerHTML += `<li class="text-green-400">[OK] Detectado: ${fm(res.data.total)} CLP. Cliente: ${res.empresa}.</li>`;
+                    log.innerHTML += `<li class="text-green-400">[OK] Detectado: ${fm(totalExt)} CLP. Cliente: ${res.empresa}.</li>`;
                     procesadas++;
                 } catch (err) {
                     log.innerHTML += `<li class="text-red-400">[ERROR] ${archivo.name}: ${err.message}</li>`;
