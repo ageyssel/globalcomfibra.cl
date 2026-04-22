@@ -29,20 +29,20 @@
     <section class="max-w-7xl mx-auto px-6 pt-10">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Recaudación Total (Pagado)</p>
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Recaudación (Pagado)</p>
                 <h3 id="statTotalPagado" class="text-2xl font-black text-green-600">$0</h3>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Por Recaudar (Pendiente)</p>
-                <h3 id="statTotalPendiente" class="text-2xl font-black text-orange-500">$0</h3>
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Por Recaudar (Al día)</p>
+                <h3 id="statTotalPendiente" class="text-2xl font-black text-blue-500">$0</h3>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-red-200 bg-red-50/30">
+                <p class="text-[10px] font-black text-red-400 uppercase tracking-widest mb-1">Deuda Vencida</p>
+                <h3 id="statTotalVencido" class="text-2xl font-black text-red-600">$0</h3>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Tickets Críticos (Alta)</p>
-                <h3 id="statTicketsAlta" class="text-2xl font-black text-red-600">0</h3>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Accesos de Clientes Hoy</p>
-                <h3 id="statAccesosHoy" class="text-2xl font-black text-blue-600">0</h3>
+                <h3 id="statTicketsAlta" class="text-2xl font-black text-orange-500">0</h3>
             </div>
         </div>
     </section>
@@ -98,24 +98,28 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="col-span-2">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Dirección Instalación</label>
                             <input type="text" id="cDireccion" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Meses Contrato</label>
-                            <input type="number" id="cContratoMeses" required value="12" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Días de Pago</label>
+                            <input type="number" id="cDiasPago" required value="30" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Meses Contrato</label>
+                            <input type="number" id="cContratoMeses" required value="12" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
                         <div>
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">IP Pública</label>
                             <input type="text" id="cIp" placeholder="0.0.0.0" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Plan Contratado</label>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Plan</label>
                             <select id="cPlan" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                                 <option>Internet Dedicado 100 Mbps</option>
                                 <option>Internet Dedicado 500 Mbps</option>
@@ -281,9 +285,15 @@
                                 </div>
                             </div>
 
-                            <div>
-                                <label class="text-[9px] font-bold text-slate-500 uppercase">Email Facturación</label>
-                                <input type="email" id="eEmailFact" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
+                            <div class="grid grid-cols-3 gap-3">
+                                <div class="col-span-2">
+                                    <label class="text-[9px] font-bold text-slate-500 uppercase">Email Facturación</label>
+                                    <input type="email" id="eEmailFact" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
+                                </div>
+                                <div>
+                                    <label class="text-[9px] font-bold text-slate-500 uppercase">Días Pago</label>
+                                    <input type="number" id="eDiasPago" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1">
+                                </div>
                             </div>
 
                             <div>
@@ -436,28 +446,47 @@
         });
 
         // ---------------------------------------------
-        // DASHBOARD Y MÉTRICAS
+        // DASHBOARD Y MÉTRICAS (LÓGICA VENCIDA/PENDIENTE)
         // ---------------------------------------------
         async function cargarDashboard() {
-            const { data: facturas } = await adminSupabase.from('facturas').select('valor_total, estado');
-            let pagado = 0; let pendiente = 0;
+            // Un JOIN inteligente para traer la factura y los días de pago de su cliente
+            const { data: facturas } = await adminSupabase
+                .from('facturas')
+                .select('valor_total, estado, fecha_emision, clientes(dias_pago)');
+
+            let pagado = 0; 
+            let pendiente = 0;
+            let vencido = 0;
+            const hoy = new Date();
             
             if(facturas) {
                 facturas.forEach(f => {
-                    if(f.estado === 'Pagada') pagado += Number(f.valor_total || 0);
-                    else pendiente += Number(f.valor_total || 0);
+                    const monto = Number(f.valor_total || 0);
+                    if(f.estado === 'Pagada') {
+                        pagado += monto;
+                    } else {
+                        // Cálculo dinámico de vencimiento
+                        const diasPago = f.clientes?.dias_pago || 30;
+                        const fechaEmision = f.fecha_emision ? new Date(f.fecha_emision) : new Date();
+                        const fechaVencimiento = new Date(fechaEmision);
+                        fechaVencimiento.setDate(fechaVencimiento.getDate() + diasPago);
+                        fechaVencimiento.setHours(23, 59, 59, 999);
+
+                        if (hoy > fechaVencimiento) {
+                            vencido += monto; // Ya pasó la fecha límite
+                        } else {
+                            pendiente += monto; // Aún está dentro del plazo
+                        }
+                    }
                 });
             }
             
             document.getElementById('statTotalPagado').textContent = fm(pagado);
             document.getElementById('statTotalPendiente').textContent = fm(pendiente);
+            document.getElementById('statTotalVencido').textContent = fm(vencido);
 
             const { count: ticketsAlta } = await adminSupabase.from('tickets').select('*', { count: 'exact', head: true }).eq('prioridad', 'Alta').eq('estado', 'Abierto');
             document.getElementById('statTicketsAlta').textContent = ticketsAlta || 0;
-
-            const hoy = new Date().toISOString().split('T')[0];
-            const { count: accesosHoy } = await adminSupabase.from('registro_accesos').select('*', { count: 'exact', head: true }).gte('created_at', hoy);
-            document.getElementById('statAccesosHoy').textContent = accesosHoy || 0;
         }
 
         // ---------------------------------------------
@@ -522,6 +551,7 @@
                             fecha_inicio: document.getElementById('cFecha').value,
                             direccion: document.getElementById('cDireccion').value,
                             contrato_meses: document.getElementById('cContratoMeses').value,
+                            dias_pago: parseInt(document.getElementById('cDiasPago').value) || 30, // Nuevo campo
                             ip: document.getElementById('cIp').value,
                             plan: document.getElementById('cPlan').value,
                             url_dashboard: document.getElementById('cDashboard').value,
@@ -756,6 +786,7 @@
             document.getElementById('eDireccion').value = cliente.direccion || '';
             document.getElementById('eIp').value = cliente.ip || '';
             document.getElementById('eMeses').value = cliente.contrato_meses || '12';
+            document.getElementById('eDiasPago').value = cliente.dias_pago || 30; // Días dinámicos
             document.getElementById('ePlan').value = cliente.plan || '';
             document.getElementById('eDashboard').value = cliente.url_dashboard || '';
             document.getElementById('eUserNoc').value = cliente.user_noc || '';
@@ -794,7 +825,8 @@
                 containerAcc.innerHTML = '<p class="text-[11px] text-slate-400 italic">Sin ingresos registrados.</p>'; 
             }
 
-            cargarFacturasDetalle(email);
+            // Pasamos los días de pago para calcular estado visual
+            cargarFacturasDetalle(email, cliente.dias_pago || 30);
         }
 
         document.getElementById('formEditarCliente').addEventListener('submit', async (e) => {
@@ -813,6 +845,7 @@
                 direccion: document.getElementById('eDireccion').value,
                 ip: document.getElementById('eIp').value,
                 contrato_meses: document.getElementById('eMeses').value,
+                dias_pago: parseInt(document.getElementById('eDiasPago').value) || 30, // Guardar días
                 plan: document.getElementById('ePlan').value,
                 url_dashboard: document.getElementById('eDashboard').value,
                 user_noc: document.getElementById('eUserNoc').value,
@@ -827,6 +860,7 @@
                 alert("Datos del cliente actualizados correctamente.");
                 document.getElementById('modal-detalle').classList.add('hidden'); 
                 cargarListaClientes(); 
+                cargarDashboard();
             } catch (err) { alert("Error al intentar guardar: " + err.message); }
             finally { btn.textContent = originalText; btn.disabled = false; }
         });
@@ -855,8 +889,8 @@
             }
         }
 
-        // LECTURA DE FACTURAS EN EL PERFIL + BOTONES PAGO
-        async function cargarFacturasDetalle(email) {
+        // LECTURA DE FACTURAS EN EL PERFIL + LÓGICA VENCIMIENTO
+        async function cargarFacturasDetalle(email, diasPagoCliente) {
             const contenedor = document.getElementById('listaFacturasDetalle');
             contenedor.innerHTML = '<p class="text-xs italic">Cargando...</p>';
             const { data: facturas } = await adminSupabase.from('facturas').select('*').eq('email_cliente', email).order('created_at', { ascending: false });
@@ -866,15 +900,28 @@
                 contenedor.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-10">No hay facturas registradas.</p>'; return;
             }
 
+            const hoy = new Date();
+
             facturas.forEach(f => {
-                const esPagada = f.estado === 'Pagada';
-                const badgeEstado = esPagada 
-                    ? `<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">Pagada</span>` 
-                    : `<span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">Pendiente</span>`;
+                // Lógica de 3 estados
+                const fechaEmision = f.fecha_emision ? new Date(f.fecha_emision) : new Date(f.created_at);
+                const fechaVencimiento = new Date(fechaEmision);
+                fechaVencimiento.setDate(fechaVencimiento.getDate() + diasPagoCliente);
+                fechaVencimiento.setHours(23, 59, 59, 999);
+
+                let badgeEstado = '';
                 
-                const btnMarcarPago = esPagada 
-                    ? `<button onclick="cambiarEstadoFactura(${f.id}, 'Pendiente', '${email}')" class="text-[9px] font-bold text-slate-500 hover:text-orange-500 transition underline tracking-widest">Marcar Pendiente</button>` 
-                    : `<button onclick="cambiarEstadoFactura(${f.id}, 'Pagada', '${email}')" class="text-[9px] font-bold text-slate-500 hover:text-green-600 transition underline tracking-widest">Marcar Pagada</button>`;
+                if (f.estado === 'Pagada') {
+                    badgeEstado = `<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">Pagada</span>`;
+                } else if (hoy > fechaVencimiento) {
+                    badgeEstado = `<span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">Vencida</span>`;
+                } else {
+                    badgeEstado = `<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">Pendiente</span>`;
+                }
+                
+                const btnMarcarPago = f.estado === 'Pagada'
+                    ? `<button onclick="cambiarEstadoFactura(${f.id}, 'Pendiente', '${email}', ${diasPagoCliente})" class="text-[9px] font-bold text-slate-500 hover:text-orange-500 transition underline tracking-widest">Marcar Pendiente</button>` 
+                    : `<button onclick="cambiarEstadoFactura(${f.id}, 'Pagada', '${email}', ${diasPagoCliente})" class="text-[9px] font-bold text-slate-500 hover:text-green-600 transition underline tracking-widest">Marcar Pagada</button>`;
                 
                 contenedor.innerHTML += `
                     <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-2">
@@ -892,7 +939,7 @@
                                 <a href="${f.url_archivo}" target="_blank" class="p-2 text-blue-600 hover:bg-white rounded-lg transition shadow-sm border border-slate-100">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                 </a>
-                                <button onclick="eliminarFactura(${f.id}, '${email}')" class="p-2 text-red-500 hover:bg-white rounded-lg transition shadow-sm border border-slate-100">
+                                <button onclick="eliminarFactura(${f.id}, '${email}', ${diasPagoCliente})" class="p-2 text-red-500 hover:bg-white rounded-lg transition shadow-sm border border-slate-100">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </div>
@@ -902,16 +949,16 @@
             });
         }
 
-        async function cambiarEstadoFactura(id, nuevoEstado, email) {
+        async function cambiarEstadoFactura(id, nuevoEstado, email, diasPagoCliente) {
             await adminSupabase.from('facturas').update({ estado: nuevoEstado }).eq('id', id);
-            cargarFacturasDetalle(email); 
+            cargarFacturasDetalle(email, diasPagoCliente); 
             cargarDashboard(); // Actualiza los billetes del header
         }
 
-        async function eliminarFactura(id, email) {
+        async function eliminarFactura(id, email, diasPagoCliente) {
             if (!confirm('¿Eliminar esta factura?')) return;
             await adminSupabase.from('facturas').delete().eq('id', id);
-            cargarFacturasDetalle(email);
+            cargarFacturasDetalle(email, diasPagoCliente);
             cargarDashboard();
         }
 
