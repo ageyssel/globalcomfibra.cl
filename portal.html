@@ -21,8 +21,10 @@
             </div>
             <div class="flex items-center space-x-6">
                 <div class="text-right hidden md:block">
+                    <select id="selectorEmpresa" class="hidden text-xs bg-slate-100 border border-slate-200 rounded-lg px-3 py-1 font-bold text-[#1a1f2e] outline-none cursor-pointer hover:bg-slate-200 transition mb-1" onchange="cambiarEmpresaActiva(this.value)"></select>
+                    
                     <p id="lblEmpresa" class="text-xs font-bold text-[#1a1f2e]">Cargando...</p>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">ID: <span id="lblId">----</span></p>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">ID: <span id="lblId">----</span></p>
                 </div>
                 <div id="lblIniciales" class="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm border border-slate-200 uppercase">-</div>
                 <a href="#" onclick="cerrarSesion()" class="text-[10px] font-black text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg transition uppercase tracking-wider">Cerrar Sesión</a>
@@ -179,8 +181,11 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
         const clienteSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const ADMIN_EMAIL = 'contacto@globalcomfibra.cl';
-        let currentEmail = '';
-        let diasPagoCliente = 30; // Valor por defecto
+        
+        let currentEmail = ''; 
+        let diasPagoCliente = 30;
+        let misEmpresas = [];
+        let empresaActiva = null;
 
         const fm = (v) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(v);
 
@@ -188,6 +193,7 @@
             const { data: { session } } = await clienteSupabase.auth.getSession();
             if (!session) { window.location.href = 'login.html'; return; }
             else if (session.user.email === ADMIN_EMAIL) { window.location.href = 'admin.html'; return; }
+            
             currentEmail = session.user.email;
             document.getElementById('cuerpoPagina').classList.remove('hidden');
 
@@ -199,35 +205,63 @@
                 sessionStorage.setItem('huella_registrada', 'true');
             }
 
-            const { data: cliente } = await clienteSupabase.from('clientes').select('*').eq('email', currentEmail).maybeSingle();
-            if (cliente) {
-                diasPagoCliente = cliente.dias_pago || 30; 
-
-                document.getElementById('lblEmpresa').textContent = cliente.empresa || currentEmail;
-                document.getElementById('lblId').textContent = cliente.id_cliente || "GCOM-NUEVO";
-                document.getElementById('lblPlan').textContent = cliente.plan || "Dedicado";
-                document.getElementById('lblIp').textContent = cliente.ip || "0.0.0.0";
-                const palabras = (cliente.empresa || currentEmail).split(' ');
-                document.getElementById('lblIniciales').textContent = (palabras[0].charAt(0) + (palabras[1] ? palabras[1].charAt(0) : '')).toUpperCase();
-                if (cliente.url_dashboard) document.getElementById('btnLinkDashboard').href = cliente.url_dashboard;
-                if (cliente.user_noc && cliente.pass_noc) {
-                    document.getElementById('boxCredencialesNoc').classList.remove('hidden');
-                    document.getElementById('lblUserNoc').textContent = cliente.user_noc;
-                    document.getElementById('lblPassNoc').textContent = cliente.pass_noc;
+            // BUSCAMOS TODAS LAS EMPRESAS DEL CLIENTE
+            const { data: clientes } = await clienteSupabase.from('clientes').select('*').eq('email', currentEmail);
+            
+            if (clientes && clientes.length > 0) {
+                misEmpresas = clientes;
+                const selector = document.getElementById('selectorEmpresa');
+                
+                // SI TIENE MÁS DE UNA EMPRESA, MOSTRAR EL DESPLEGABLE
+                if(misEmpresas.length > 1) {
+                    selector.classList.remove('hidden');
+                    document.getElementById('lblEmpresa').classList.add('hidden');
+                    
+                    misEmpresas.forEach((emp, index) => {
+                        selector.innerHTML += `<option value="${index}">${emp.empresa}</option>`;
+                    });
+                } else {
+                    document.getElementById('lblEmpresa').textContent = misEmpresas[0].empresa;
                 }
-                const fHabilitacion = new Date(cliente.created_at);
-                const mesesTotales = parseInt(cliente.contrato_meses) || 12;
-                const mesesPasados = (new Date().getFullYear() - fHabilitacion.getFullYear()) * 12 + (new Date().getMonth() - fHabilitacion.getMonth());
-                document.getElementById('lblMesesTotales').textContent = mesesTotales;
-                document.getElementById('lblMesesRestantes').textContent = Math.max(0, mesesTotales - mesesPasados);
-                document.getElementById('lblFechaHabilitacion').textContent = `Habilitado el: ${fHabilitacion.toLocaleDateString('es-CL')}`;
-            }
 
-            cargarTicketsPortal();
-            cargarFacturasPortal(); 
+                // CARGAMOS LA PRIMERA POR DEFECTO
+                cambiarEmpresaActiva(0);
+            }
         });
 
-        // --- CARGAR TICKETS ---
+        // FUNCIÓN QUE ACTUALIZA TODO EL PORTAL AL CAMBIAR DE EMPRESA
+        window.cambiarEmpresaActiva = function(index) {
+            empresaActiva = misEmpresas[index];
+            diasPagoCliente = empresaActiva.dias_pago || 30; 
+
+            document.getElementById('lblId').textContent = empresaActiva.id_cliente || "GCOM-NUEVO";
+            document.getElementById('lblPlan').textContent = empresaActiva.plan || "Dedicado";
+            document.getElementById('lblIp').textContent = empresaActiva.ip || "0.0.0.0";
+            
+            const palabras = (empresaActiva.empresa || currentEmail).split(' ');
+            document.getElementById('lblIniciales').textContent = (palabras[0].charAt(0) + (palabras[1] ? palabras[1].charAt(0) : '')).toUpperCase();
+            
+            if (empresaActiva.url_dashboard) document.getElementById('btnLinkDashboard').href = empresaActiva.url_dashboard;
+            
+            if (empresaActiva.user_noc && empresaActiva.pass_noc) {
+                document.getElementById('boxCredencialesNoc').classList.remove('hidden');
+                document.getElementById('lblUserNoc').textContent = empresaActiva.user_noc;
+                document.getElementById('lblPassNoc').textContent = empresaActiva.pass_noc;
+            } else {
+                document.getElementById('boxCredencialesNoc').classList.add('hidden');
+            }
+            
+            const fHabilitacion = new Date(empresaActiva.created_at);
+            const mesesTotales = parseInt(empresaActiva.contrato_meses) || 12;
+            const mesesPasados = (new Date().getFullYear() - fHabilitacion.getFullYear()) * 12 + (new Date().getMonth() - fHabilitacion.getMonth());
+            document.getElementById('lblMesesTotales').textContent = mesesTotales;
+            document.getElementById('lblMesesRestantes').textContent = Math.max(0, mesesTotales - mesesPasados);
+            document.getElementById('lblFechaHabilitacion').textContent = `Habilitado el: ${fHabilitacion.toLocaleDateString('es-CL')}`;
+
+            cargarTicketsPortal(); 
+            cargarFacturasPortal(); 
+        }
+
         async function cargarTicketsPortal() {
             try {
                 const { data: tickets } = await clienteSupabase.from('tickets').select('*').eq('email_cliente', currentEmail).order('created_at', {ascending: false});
@@ -246,7 +280,7 @@
                             <tr class="border-b border-slate-100 hover:bg-slate-50 transition cursor-pointer" onclick="abrirModalTicket('${tk.id}')">
                                 <td class="py-4 px-2 font-mono font-bold text-xs text-blue-600">#${tk.id}</td>
                                 <td class="py-4 px-2 font-medium">${tk.asunto} ${contRespuestas}</td>
-                                <td class="py-4 px-2 text-slate-500 text-xs">${new Date(tk.created_at).toLocaleDateString()}</td>
+                                <td class="py-4 px-2 text-slate-500 text-xs">${new Date(tk.created_at).toLocaleDateString('es-CL')}</td>
                                 <td class="py-4 px-2">${badgeEstado} <button class="ml-4 text-[9px] font-bold uppercase tracking-widest bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-sm hover:bg-blue-600 hover:text-white transition">Ver Seguimiento</button></td>
                             </tr>`;
                     });
@@ -254,7 +288,6 @@
             } catch (e) { console.log(e); }
         }
 
-        // --- CARGAR FACTURAS (FINANCIERO CON 3 ESTADOS) ---
         async function cargarFacturasPortal() {
             const { data: facturas } = await clienteSupabase
                 .from('facturas')
@@ -274,11 +307,8 @@
                 facturas.forEach(f => {
                     const fechaEmision = f.fecha_emision ? new Date(f.fecha_emision) : new Date(f.created_at);
                     const fechaVencimiento = new Date(fechaEmision);
-                    fechaVencimiento.setDate(fechaVencimiento.getDate() + diasPagoCliente);
+                    fechaVencimiento.setDate(fechaVencimiento.getDate() + Number(diasPagoCliente));
                     fechaVencimiento.setHours(23, 59, 59, 999);
-
-                    let badgeColor = '';
-                    let estadoTexto = '';
 
                     const diffTime = fechaVencimiento - hoy;
                     const diasRestantes = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -288,19 +318,29 @@
                         estadoCalculado = (diasRestantes < 0) ? 'Vencida' : 'Pendiente';
                     }
 
+                    let badgeColor = '';
+                    let estadoTexto = '';
+                    let textoDias = '';
+
                     if (estadoCalculado === 'Pagada') {
                         badgeColor = 'bg-green-100 text-green-700 border border-green-200';
                         estadoTexto = 'Pagada';
+                        textoDias = `<p class="text-green-500 text-[10px] font-bold mt-2 text-center">Pagada al día</p>`;
                     } else if (estadoCalculado === 'Vencida') {
                         badgeColor = 'bg-red-100 text-red-700 border border-red-200 shadow-sm';
                         estadoTexto = 'Vencida';
+                        textoDias = `<p class="text-red-500 text-[10px] font-bold mt-2 text-center">⚠️ Atrasada por ${Math.abs(diasRestantes)} días</p>`;
                     } else {
                         badgeColor = 'bg-blue-100 text-blue-700 border border-blue-200';
                         estadoTexto = 'Pendiente';
+                        textoDias = `<p class="text-blue-500 text-[10px] font-bold mt-2 text-center">Vence en ${diasRestantes} días</p>`;
                     }
 
                     const fechaVisual = fechaEmision.toLocaleDateString('es-CL');
-                    const totalFormatted = fm(f.valor_total || 0);
+                    const neto = f.valor_neto || 0;
+                    const total = f.valor_total || 0;
+                    const iva = total - neto;
+                    const totalFormatted = fm(total);
 
                     grid.innerHTML += `
                         <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm transition hover:shadow-md">
@@ -308,13 +348,19 @@
                                 <span class="text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-md ${badgeColor}">${estadoTexto}</span>
                                 <p class="text-[10px] text-slate-400 font-bold">Emisión: ${fechaVisual}</p>
                             </div>
-                            <p class="text-xs font-black text-[#1a1f2e] uppercase mb-1">${f.mes_anio}</p>
-                            <p class="text-lg font-black text-slate-700 mb-4">${totalFormatted}</p>
+                            <p class="text-xs font-black text-[#1a1f2e] uppercase mb-1 text-center">${f.mes_anio}</p>
+                            <p class="text-lg font-black text-slate-700 mb-4 text-center">${totalFormatted}</p>
                             
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 mb-4 grid grid-cols-2 gap-2 text-center">
+                                <div><p class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Neto</p><p class="text-sm font-mono text-slate-700">${fm(neto)}</p></div>
+                                <div><p class="text-[9px] font-bold uppercase tracking-widest text-slate-400">IVA</p><p class="text-sm font-mono text-slate-700">${fm(iva)}</p></div>
+                            </div>
+
                             <a href="${f.url_archivo}" target="_blank" class="flex items-center justify-center w-full py-2 bg-slate-50 hover:bg-blue-50 border border-slate-100 hover:border-blue-100 text-blue-600 rounded-xl text-[10px] font-bold uppercase tracking-widest transition">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                 Descargar PDF
                             </a>
+                            ${textoDias}
                         </div>`;
                 });
             } else { 
@@ -322,7 +368,6 @@
             }
         }
 
-        // --- ABRIR MODAL SEGUIMIENTO TICKET ---
         async function abrirModalTicket(id) {
             document.getElementById('modal-ver-ticket').classList.remove('hidden');
             document.getElementById('vtTicketId').value = id;
@@ -401,7 +446,7 @@
                 });
                 if (error) throw error;
                 
-                await clienteSupabase.functions.invoke('notify-ticket', { body: { empresa: document.getElementById('lblEmpresa').textContent, emailCliente: currentEmail, asunto: document.getElementById('tkAsunto').value, prioridad: document.getElementById('tkPrioridad').value, descripcion: document.getElementById('tkDescripcion').value } });
+                await clienteSupabase.functions.invoke('notify-ticket', { body: { empresa: empresaActiva ? empresaActiva.empresa : currentEmail, emailCliente: currentEmail, asunto: document.getElementById('tkAsunto').value, prioridad: document.getElementById('tkPrioridad').value, descripcion: document.getElementById('tkDescripcion').value } });
                 
                 alert('Ticket generado correctamente.');
                 document.getElementById('modal-ticket').classList.add('hidden');
