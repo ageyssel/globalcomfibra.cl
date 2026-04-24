@@ -320,7 +320,7 @@
                     const statusDot = (!c.estado || c.estado === 'Activo') ? '<span class="w-2 h-2 rounded-full bg-green-500 inline-block mr-2"></span>' : '<span class="w-2 h-2 rounded-full bg-red-500 inline-block mr-2"></span>';
                     tabla.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-slate-100 last:border-0"><td class="px-4 py-4 font-bold text-[#1a1f2e] text-xs flex items-center">${statusDot} ${c.empresa}</td><td class="px-4 py-4 text-right"><button onclick="gestionarCliente('${c.rut}')" class="text-[9px] font-black uppercase bg-white border border-slate-200 text-slate-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 px-3 py-1.5 rounded-lg transition tracking-widest shadow-sm">Editar / Gestionar</button></td></tr>`;
                     
-                    // ALMACENA EL RUT PARA EL FILTRO MULTI-EMPRESA
+                    // ALMACENA EL RUT Y EMAIL PARA EL FILTRO INTELIGENTE DE ADMIN
                     selectH.innerHTML += `<option value="${c.rut}" data-email="${c.email}">${c.empresa}</option>`;
                 });
             }
@@ -491,7 +491,7 @@
             const btn = document.getElementById('btnGuardarHistorico');
             btn.disabled = true; btn.textContent = "Guardando...";
             try {
-                // OBTENER RUT Y EMAIL DESDE EL SELECTOR PARA FILTRO PERFECTO
+                // Obtener RUT y Email para vincular correctamente y usar el filtro Inteligente
                 const opt = document.getElementById('hCliente').selectedOptions[0];
                 const rutCliente = opt.value;
                 const emailCliente = opt.dataset.email;
@@ -499,6 +499,7 @@
                 let urlArchivo = "#";
                 const archivo = document.getElementById('hArchivo').files[0];
                 if (archivo) {
+                    // Guardamos el RUT en el nombre del archivo para el filtro
                     const fileName = `factura_historica_${rutCliente}_${Date.now()}.pdf`;
                     await adminSupabase.storage.from('facturas').upload(fileName, archivo);
                     urlArchivo = adminSupabase.storage.from('facturas').getPublicUrl(fileName).data.publicUrl;
@@ -600,7 +601,7 @@
         }
 
         window.eliminarMensajeTicket = async function(id, index) {
-            if(!confirm("¿Eliminar este mensaje permanentemente? El cliente no lo verá más y no quedará rastro.")) return;
+            if(!confirm("¿Eliminar este mensaje permanentemente? El cliente no lo verá más y no dejará rastro.")) return;
             try {
                 const { data: tk } = await adminSupabase.from('tickets').select('seguimiento').eq('id', id).single();
                 if(!tk) return;
@@ -753,13 +754,26 @@
 
         async function cargarFacturasDetalle(rut, email, diasPagoCliente) {
             const contenedor = document.getElementById('listaFacturasDetalle'); contenedor.innerHTML = '<p class="text-xs italic">Cargando...</p>';
+            
+            // VERIFICAR SI TIENE MÚLTIPLES EMPRESAS PARA SABER SI ACTIVAR EL FILTRO
+            const { data: empCheck } = await adminSupabase.from('clientes').select('rut').eq('email', email);
+            const esMulti = empCheck && empCheck.length > 1;
+
             const { data: facturasRaw } = await adminSupabase.from('facturas').select('*').eq('email_cliente', email).order('created_at', { ascending: false });
             
-            // EL FILTRO MAESTRO: Solo cargar facturas donde el link PDF incluya el RUT
-            const facturas = facturasRaw ? facturasRaw.filter(f => f.url_archivo && f.url_archivo.includes(rut)) : [];
+            let facturas = facturasRaw || [];
+            
+            // FILTRO INTELIGENTE: Solo filtra si hay varias empresas bajo el mismo correo
+            if (esMulti && rut) {
+                const rutLimpio = rut.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                facturas = facturas.filter(f => {
+                    if (!f.url_archivo) return true; // Mostramos por precaución si no hay PDF
+                    return f.url_archivo.toUpperCase().replace(/[^A-Z0-9]/g, '').includes(rutLimpio);
+                });
+            }
             
             contenedor.innerHTML = '';
-            if (!facturas || facturas.length === 0) { contenedor.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-10">No hay facturas registradas para esta empresa.</p>'; return; }
+            if (!facturas || facturas.length === 0) { contenedor.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-10">No hay facturas registradas.</p>'; return; }
             const hoy = new Date();
             facturas.forEach(fact => {
                 const fechaEmision = fact.fecha_emision ? new Date(fact.fecha_emision) : new Date(fact.created_at);
