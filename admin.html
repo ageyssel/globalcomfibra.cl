@@ -496,10 +496,11 @@
                 const rutCliente = opt.value;
                 const emailCliente = opt.dataset.email;
                 
-                let urlArchivo = "#";
+                // AQUÍ ESTÁ EL BLINDAJE PARA EL MULTI-EMPRESA MANUAL
+                let urlArchivo = `#RUT-${rutCliente}`;
+                
                 const archivo = document.getElementById('hArchivo').files[0];
                 if (archivo) {
-                    // Guardamos el RUT en el nombre del archivo para el filtro
                     const fileName = `factura_historica_${rutCliente}_${Date.now()}.pdf`;
                     await adminSupabase.storage.from('facturas').upload(fileName, archivo);
                     urlArchivo = adminSupabase.storage.from('facturas').getPublicUrl(fileName).data.publicUrl;
@@ -580,7 +581,6 @@
                     const colorTextoAutor = esAdmin ? 'text-blue-700' : 'text-slate-700';
                     const adjHtml = msg.adjunto ? `<a href="${msg.adjunto}" target="_blank" class="inline-flex mt-3 items-center text-[10px] font-bold text-blue-600 bg-white border border-blue-100 px-3 py-1.5 rounded-lg"><svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Archivo Adjunto</a>` : '';
                     
-                    // BOTÓN DE BORRADO SILENCIOSO
                     const btnBorrar = `<button onclick="eliminarMensajeTicket(${tk.id}, ${index})" class="ml-3 text-red-400 hover:text-red-600 transition" title="Eliminar mensaje permanentemente"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`;
 
                     contenedor.innerHTML += `
@@ -754,26 +754,17 @@
 
         async function cargarFacturasDetalle(rut, email, diasPagoCliente) {
             const contenedor = document.getElementById('listaFacturasDetalle'); contenedor.innerHTML = '<p class="text-xs italic">Cargando...</p>';
-            
-            // VERIFICAR SI TIENE MÚLTIPLES EMPRESAS PARA SABER SI ACTIVAR EL FILTRO
-            const { data: empCheck } = await adminSupabase.from('clientes').select('rut').eq('email', email);
-            const esMulti = empCheck && empCheck.length > 1;
-
             const { data: facturasRaw } = await adminSupabase.from('facturas').select('*').eq('email_cliente', email).order('created_at', { ascending: false });
             
-            let facturas = facturasRaw || [];
-            
-            // FILTRO INTELIGENTE: Solo filtra si hay varias empresas bajo el mismo correo
-            if (esMulti && rut) {
-                const rutLimpio = rut.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-                facturas = facturas.filter(f => {
-                    if (!f.url_archivo) return true; // Mostramos por precaución si no hay PDF
-                    return f.url_archivo.toUpperCase().replace(/[^A-Z0-9]/g, '').includes(rutLimpio);
-                });
-            }
+            // EL FILTRO MAESTRO REPARADO: Funciona para PDFs y cargas manuales ocultas
+            const rutLimpio = rut.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+            const facturas = facturasRaw ? facturasRaw.filter(f => {
+                const archivoStr = f.url_archivo || "";
+                return archivoStr.toUpperCase().replace(/[^A-Z0-9]/g, '').includes(rutLimpio);
+            }) : [];
             
             contenedor.innerHTML = '';
-            if (!facturas || facturas.length === 0) { contenedor.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-10">No hay facturas registradas.</p>'; return; }
+            if (!facturas || facturas.length === 0) { contenedor.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-10">No hay facturas registradas para esta empresa.</p>'; return; }
             const hoy = new Date();
             facturas.forEach(fact => {
                 const fechaEmision = fact.fecha_emision ? new Date(fact.fecha_emision) : new Date(fact.created_at);
@@ -802,8 +793,12 @@
                 const btnMarcar = estadoCalculado === 'Pagada' 
                     ? `<button onclick="cambiarEstadoFactura('${fact.id}', 'Pendiente', '${rut}', '${email}', ${diasPagoCliente})" class="text-[10px] font-bold text-slate-500 hover:text-orange-500 transition underline tracking-widest">Marcar Pendiente</button>` 
                     : `<button onclick="cambiarEstadoFactura('${fact.id}', 'Pagada', '${rut}', '${email}', ${diasPagoCliente})" class="text-[10px] font-bold text-slate-500 hover:text-green-600 transition underline tracking-widest">Marcar Pagada</button>`;
-                    
-                const btnDel = `<button onclick="eliminarFactura('${fact.id}', '${rut}', '${email}', ${diasPagoCliente})" class="p-2 text-red-500 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`;
+                
+                // Carga histórica manual (Sin PDF) bloquea el botón
+                const btnDel = (fact.url_archivo && !fact.url_archivo.startsWith("#") && fact.url_archivo !== "")
+                    ? `<a href="${fact.url_archivo}" target="_blank" class="p-2 text-blue-600 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></a>
+                       <button onclick="eliminarFactura('${fact.id}', '${rut}', '${email}', ${diasPagoCliente})" class="p-2 text-red-500 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`
+                    : `<button onclick="eliminarFactura('${fact.id}', '${rut}', '${email}', ${diasPagoCliente})" class="p-2 text-red-500 hover:bg-white rounded-lg transition shadow-sm border border-slate-100 w-full col-span-2 flex justify-center"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`;
 
                 contenedor.innerHTML += `
                 <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-2">
@@ -819,8 +814,7 @@
                     </div>
                     <div class="flex justify-between items-center mt-2">
                         ${btnMarcar}
-                        <div class="flex gap-2">
-                            <a href="${fact.url_archivo}" target="_blank" class="p-2 text-blue-600 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></a>
+                        <div class="flex gap-2 w-auto">
                             ${btnDel}
                         </div>
                     </div>
