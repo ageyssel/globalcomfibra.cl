@@ -1,658 +1,813 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Globalcom | Gestión 100% Operativa</title>
-<link rel="icon" href="img/favicon.png" type="image/png">
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-<style>body { font-family: 'Inter', sans-serif; }</style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Globalcom | Gestión 100% Operativa</title>
+    <link rel="icon" href="img/favicon.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; }</style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen hidden" id="adminBody">
-<nav class="bg-[#1a1f2e] text-white py-4 px-6 sticky top-0 z-50 shadow-md">
-<div class="max-w-7xl mx-auto flex justify-between items-center">
-<div class="flex items-center space-x-4"><span class="font-black text-xl tracking-tight">GLOBALCOM ADMIN</span><span class="bg-red-500 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-widest">NOC & CRM</span></div>
-<div class="flex items-center space-x-6"><span id="adminUserEmail" class="text-[10px] font-bold text-slate-400 hidden md:inline">admin@globalcomfibra.cl</span><button onclick="cerrarSesion()" class="text-sm font-bold text-slate-300 hover:text-white transition">Salir</button></div>
-</div>
-</nav>
-<section class="max-w-7xl mx-auto px-6 pt-10">
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200"><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Recaudación (Pagado)</p><h3 id="statTotalPagado" class="text-2xl font-black text-green-600">$0</h3></div>
-<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200"><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Por Recaudar (Al día)</p><h3 id="statTotalPendiente" class="text-2xl font-black text-blue-500">$0</h3></div>
-<div class="bg-white p-6 rounded-2xl shadow-sm border border-red-200 bg-red-50/30"><p class="text-[10px] font-black text-red-400 uppercase tracking-widest mb-1">Deuda Vencida</p><h3 id="statTotalVencido" class="text-2xl font-black text-red-600">$0</h3></div>
-<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200"><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Tickets Críticos (Alta)</p><h3 id="statTicketsAlta" class="text-2xl font-black text-orange-500">0</h3></div>
-</div>
-</section>
-<main class="max-w-7xl mx-auto px-6 py-10">
-<div class="grid lg:grid-cols-2 gap-8">
-<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-<h2 class="text-2xl font-black text-[#1a1f2e] mb-6 border-b border-slate-100 pb-4">Alta de Nuevo Cliente</h2>
-<form id="formCrearCliente" class="space-y-4">
-<div class="grid grid-cols-2 gap-4">
-    <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Razón Social</label><input type="text" id="cEmpresa" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-    <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">RUT (sin puntos ni guion)</label><input type="text" id="cRut" required placeholder="76123456K" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-</div>
-<div class="grid grid-cols-2 gap-4">
-    <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contacto Técnico</label><input type="text" id="cContacto" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-    <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contacto Facturación</label><input type="text" id="cContactoFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-</div>
-<div class="grid grid-cols-2 gap-4">
-    <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Portal</label><input type="email" id="cEmail" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-    <div><label class="text-[10px] font-bold text-orange-600 uppercase tracking-widest">Clave Portal</label><input type="password" id="cPassword" required class="w-full mt-1 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-500"></div>
-</div>
-<div class="grid grid-cols-2 gap-4">
-    <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Facturación</label><input type="email" id="cEmailFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-    <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fecha Habilitación</label><input type="date" id="cFecha" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-</div>
-<div class="grid grid-cols-3 gap-4">
-    <div class="col-span-2"><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Dirección Instalación</label><input type="text" id="cDireccion" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-    <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Días Pago</label><input type="number" id="cDiasPago" required value="30" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-</div>
-<div class="grid grid-cols-3 gap-4">
-    <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Meses Contrato</label><input type="number" id="cContratoMeses" required value="12" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-    <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">IP Pública</label><input type="text" id="cIp" placeholder="0.0.0.0" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-    <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Plan</label><select id="cPlan" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"><option>Internet Dedicado 100 Mbps</option><option>Internet Dedicado 500 Mbps</option><option>Internet Dedicado 1 Gbps</option><option>Fibra Oscura / Capa 2</option></select></div>
-</div>
-<div class="p-4 bg-blue-50 rounded-xl border border-blue-100 space-y-4">
-    <div><label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Link NOC (PurpleHackers)</label><input type="url" id="cDashboard" placeholder="https://app.purplehackers.com/..." class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-    <div class="grid grid-cols-2 gap-4">
-        <div><label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Usuario NOC</label><input type="text" id="cUserNoc" placeholder="Ej: admin_cliente" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-        <div><label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Clave NOC</label><input type="text" id="cPassNoc" placeholder="***" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-    </div>
-</div>
-<div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contrato PDF</label><input type="file" id="cArchivoContrato" accept=".pdf" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-<button type="submit" id="btnCrearCliente" class="w-full bg-[#1a1f2e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition shadow-lg">Crear Cliente y Cuenta</button>
-</form>
-</div>
-<div class="space-y-8">
-<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-<div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-black text-[#1a1f2e]">Carga Inteligente de Facturas</h2></div>
-<div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
-<p class="text-[10px] font-bold text-blue-800 uppercase tracking-widest mb-1">Extracción Automática DTE</p>
-<p class="text-xs text-blue-600">Nombre Obligatorio: <strong>RUT_MESAÑO.pdf</strong> (Ej: 76123456K_Abril2026.pdf). La Plataforma extraerá automáticamente la información del DTE.</p>
-</div>
-<form id="formFacturaMasiva" class="space-y-4">
-<div class="grid grid-cols-2 gap-4 mb-4">
-<div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Tipo de Servicio</label><select id="fTipoServicio" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500" onchange="toggleOtroServicio()"><option value="Servicio Mensual">Servicio Mensual</option><option value="Habilitación">Habilitación</option><option value="Otros">Otros servicios</option></select></div>
-<div id="boxOtroServicio" class="hidden"><label class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Especificar (Máx 20 chars)</label><input type="text" id="fNombreOtro" maxlength="20" placeholder="Ej: Visita Técnica" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-</div>
-<div class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition relative">
-<input type="file" id="inpArchivosMasivos" accept=".pdf" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-<svg class="w-10 h-10 mx-auto text-slate-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-<p class="text-sm font-bold text-slate-600" id="lblArchivosSeleccionados">Selecciona hasta 20 PDFs</p>
-</div>
-<div id="progresoFacturas" class="hidden space-y-2"><ul id="logProcesamiento" class="h-32 overflow-y-auto bg-slate-900 text-green-400 font-mono text-[10px] p-3 rounded-lg mt-2"></ul></div>
-<button type="submit" id="btnProcesarMasivo" class="w-full bg-[#1a1f2e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition shadow-lg mt-2">Analizar DTE y Enviar Facturas</button>
-</form>
-</div>
-<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-<h2 class="text-2xl font-black text-[#1a1f2e] mb-6 border-b border-slate-100 pb-4">Gestión de Clientes</h2>
-<div class="overflow-hidden rounded-xl border border-slate-100"><table class="w-full text-left text-sm"><thead class="bg-slate-50 text-[10px] font-black uppercase text-slate-400 tracking-widest"><tr><th class="px-4 py-3">Empresa</th><th class="px-4 py-3 text-right">Acción</th></tr></thead><tbody id="tablaClientesBody" class="divide-y divide-slate-100"></tbody></table></div>
-</div>
-<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-<div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-black text-[#1a1f2e]">Carga Histórica (Silenciosa)</h2></div>
-<p class="text-xs text-slate-500 mb-6">Usa este formulario para registrar deudas o ingresos pasados. <strong>NO se enviará ningún correo</strong> al cliente.</p>
-<form id="formCargaHistorica" class="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-100">
-<div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Cliente</label><select id="hCliente" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"><option value="">Seleccione un cliente...</option></select></div>
-<div class="grid grid-cols-2 gap-4"><div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Concepto / Mes</label><input type="text" id="hMes" required placeholder="Ej: Febrero 2026" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div><div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fecha de Emisión</label><input type="date" id="hFecha" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div></div>
-<div class="grid grid-cols-2 gap-4"><div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Valor Neto</label><input type="number" id="hNeto" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div><div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Valor Total</label><input type="number" id="hTotal" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div></div>
-<div class="grid grid-cols-2 gap-4"><div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Estado</label><select id="hEstado" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"><option value="Pagada">Pagada</option><option value="Pendiente">Pendiente / Vencida</option></select></div><div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">PDF (Opcional)</label><input type="file" id="hArchivo" accept=".pdf" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs outline-none focus:ring-2 focus:ring-blue-500"></div></div>
-<button type="submit" id="btnGuardarHistorico" class="w-full bg-slate-800 text-white font-bold py-3 rounded-lg hover:bg-slate-900 transition shadow-md mt-4">Guardar Factura Histórica</button>
-</form>
-</div>
-</div>
-<div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mt-4">
-<div class="flex justify-between items-center mb-6 border-b border-slate-100 pb-4"><h2 class="text-2xl font-black text-[#1a1f2e]">Módulo de Soporte y Tracking NOC</h2><button onclick="cargarTicketsAdmin()" class="text-[10px] font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg uppercase tracking-widest hover:bg-blue-100 transition">Actualizar Tabla</button></div>
-<div class="overflow-x-auto"><table class="w-full text-left text-sm border-collapse min-w-[700px]"><thead class="bg-slate-50 text-[10px] font-black uppercase text-slate-400 tracking-widest"><tr><th class="px-4 py-3 rounded-tl-xl">Prioridad</th><th class="px-4 py-3">ID / Fecha</th><th class="px-4 py-3">Cliente</th><th class="px-4 py-3 w-1/4">Asunto</th><th class="px-4 py-3">Estado</th><th class="px-4 py-3 text-right rounded-tr-xl">Acción</th></tr></thead><tbody id="tablaTicketsAdmin" class="divide-y divide-slate-100"></tbody></table><div id="msgNoTicketsAdmin" class="py-10 text-center hidden"><p class="text-slate-400 italic text-sm">No hay tickets registrados.</p></div></div>
-</div>
-</div>
-</main>
 
-<div id="modal-detalle" class="hidden fixed inset-0 bg-[#1a1f2e]/90 backdrop-blur-md z-[100] flex justify-center items-center p-4">
-<div class="bg-white rounded-[2.5rem] w-full max-w-6xl max-h-[95vh] overflow-y-auto shadow-2xl relative">
-<button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition z-10"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg></button>
-<div class="p-10">
-<div class="flex items-center justify-between mb-8 border-b border-slate-100 pb-6">
-<div class="flex items-center gap-6"><div id="detIniciales" class="h-16 w-16 rounded-3xl bg-blue-600 text-white flex items-center justify-center text-2xl font-black shadow-lg">?</div><div><h2 id="detEmpresa" class="text-3xl font-black text-[#1a1f2e]">Nombre Empresa</h2><p id="detEmail" class="text-slate-500 text-sm">email@cliente.cl</p></div></div>
-<button id="btnEstadoCliente" onclick="toggleEstadoCliente()" data-estado="Activo" class="text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest transition shadow-sm border border-transparent">Activo</button>
-</div>
-<div class="grid md:grid-cols-2 gap-10">
-<div class="space-y-6">
-<h3 class="text-xs font-black uppercase tracking-widest text-blue-600">Configuración Completa</h3>
-<form id="formEditarCliente" class="bg-slate-50 rounded-3xl p-6 border border-slate-100 space-y-4">
-<input type="hidden" id="editRutOriginal">
-<div class="grid grid-cols-2 gap-3"><div><label class="text-[9px] font-bold text-slate-500 uppercase">Razón Social</label><input type="text" id="eEmpresa" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div><div><label class="text-[9px] font-bold text-slate-500 uppercase">RUT</label><input type="text" id="eRut" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div></div>
-<div class="grid grid-cols-2 gap-3"><div><label class="text-[9px] font-bold text-slate-500 uppercase">Contacto Técnico</label><input type="text" id="eContacto" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div><div><label class="text-[9px] font-bold text-slate-500 uppercase">Cont. Facturación</label><input type="text" id="eContactoFact" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div></div>
-<div class="grid grid-cols-2 gap-3"><div><label class="text-[9px] font-bold text-slate-500 uppercase">Email Facturación</label><input type="email" id="eEmailFact" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div><div><label class="text-[9px] font-bold text-slate-500 uppercase">Fecha Habilitación</label><input type="date" id="eFecha" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div></div>
-<div class="grid grid-cols-2 gap-3"><div class="col-span-2"><label class="text-[9px] font-bold text-slate-500 uppercase">Dirección Instalación</label><input type="text" id="eDireccion" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div></div>
-<div class="grid grid-cols-3 gap-3"><div><label class="text-[9px] font-bold text-slate-500 uppercase">Días Pago</label><input type="number" id="eDiasPago" required class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div><div><label class="text-[9px] font-bold text-slate-500 uppercase">Meses Contrato</label><input type="number" id="eMeses" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div><div><label class="text-[9px] font-bold text-slate-500 uppercase">IP Pública</label><input type="text" id="eIp" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div></div>
-<div><label class="text-[9px] font-bold text-slate-500 uppercase">Plan</label><select id="ePlan" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"><option>Internet Dedicado 100 Mbps</option><option>Internet Dedicado 500 Mbps</option><option>Internet Dedicado 1 Gbps</option><option>Fibra Oscura / Capa 2</option></select></div>
-<div class="bg-blue-50 p-3 rounded-lg border border-blue-100 mt-2 space-y-2"><div><label class="text-[9px] font-bold text-blue-700 uppercase">Link NOC</label><input type="text" id="eDashboard" class="w-full bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div><div class="grid grid-cols-2 gap-3"><div><label class="text-[9px] font-bold text-blue-700 uppercase">Usuario NOC</label><input type="text" id="eUserNoc" class="w-full bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div><div><label class="text-[9px] font-bold text-blue-700 uppercase">Clave NOC</label><input type="text" id="ePassNoc" class="w-full bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div></div></div>
-<div class="border-t border-slate-200 pt-4 mt-2"><label class="text-[9px] font-bold text-slate-500 uppercase">Subir/Reemplazar Contrato PDF</label><input type="file" id="eArchivoContrato" accept=".pdf" class="w-full mt-1 text-[10px] bg-white border border-slate-200 rounded-lg px-2 py-1 outline-none focus:ring-1 focus:ring-blue-500"><a id="btnVerContratoActual" href="#" target="_blank" class="hidden mt-2 inline-block text-blue-600 text-[10px] font-bold underline hover:text-blue-800">Ver contrato actual cargado</a></div>
-<button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-blue-700 transition shadow-md mt-4">Guardar Cambios de Cliente</button>
-</form>
-<div class="mt-6 border-t border-slate-200 pt-6"><h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> Historial de Accesos (Huella Digital)</h3><div id="listaAccesos" class="space-y-2"><p class="text-[11px] text-slate-400 italic">Cargando ingresos...</p></div></div>
-</div>
-<div class="space-y-6"><h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Historial de Facturas</h3><div id="listaFacturasDetalle" class="space-y-3 max-h-[500px] overflow-y-auto pr-2"></div></div>
-</div>
-</div>
-</div>
-</div>
-
-<div id="modal-ver-ticket-admin" class="hidden fixed inset-0 bg-[#1a1f2e]/80 backdrop-blur-md z-[100] flex justify-center items-center p-4">
-<div class="bg-white rounded-[2.5rem] w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl relative border border-slate-200">
-<button onclick="document.getElementById('modal-ver-ticket-admin').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-red-500 transition z-10"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-<div class="p-8 border-b border-slate-100 flex justify-between items-end"><div><div class="flex items-center mb-2"><span id="vtaPrioridad" class="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md text-white bg-blue-500">ALTA</span><span id="vtaId" class="text-xs font-bold text-slate-400 ml-2">#123</span><span id="vtaEmpresa" class="text-xs font-bold text-slate-700 ml-4 border-l border-slate-300 pl-4">Empresa</span></div><h3 id="vtaAsunto" class="text-2xl font-black text-[#1a1f2e]">Asunto</h3></div><div class="text-right"><span id="vtaEstado" class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border mb-2 inline-block">ABIERTO</span><br><button id="btnCambiarEstadoAdmin" class="text-[10px] font-bold uppercase tracking-widest bg-red-100 text-red-700 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-200 transition">Marcar como Resuelto</button></div></div>
-<div class="p-8 overflow-y-auto flex-grow space-y-6 bg-slate-50" id="vtaConversacion"><div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100"><div class="flex justify-between items-center mb-3"><span class="text-xs font-black uppercase text-slate-700 tracking-widest">Descripción del Cliente</span><span id="vtaFecha" class="text-[10px] text-slate-400 font-medium">--</span></div><p id="vtaDescripcion" class="text-sm text-slate-600 whitespace-pre-wrap">...</p><div id="vtaAdjuntoOriginal" class="mt-4 hidden"><a id="vtaLinkAdjunto" href="#" target="_blank" class="inline-flex items-center text-xs font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Archivo de Respaldo</a></div></div><div id="vtaRespuestas" class="space-y-4"></div></div>
-<div class="p-6 border-t border-slate-100 bg-white rounded-b-[2.5rem]" id="vtaCajaRespuesta"><form id="formResponderTicketAdmin" class="space-y-3"><input type="hidden" id="vtaTicketId"><textarea id="vtaNuevoMensaje" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Respuesta oficial del NOC..."></textarea><div class="flex justify-between items-center"><input type="file" id="vtaNuevoAdjunto" accept="image/*,.pdf,.doc,.docx" class="text-xs w-1/2 text-slate-500"><button type="submit" id="btnResponderAdmin" class="bg-blue-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-blue-700 transition shadow-md text-xs">Añadir Respuesta Técnica</button></div></form></div>
-</div>
-</div>
-
-<script>
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
-const adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-const ADMIN_EMAIL = 'contacto@globalcomfibra.cl'; 
-let mapaClientes = {}; 
-let mapaDiasPago = {};
-const fm = (v) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(v);
-
-document.addEventListener('DOMContentLoaded', async () => {
-    const { data: { session } } = await adminSupabase.auth.getSession();
-    if (!session || session.user.email !== ADMIN_EMAIL) { window.location.href = 'login.html'; return; }
-    document.getElementById('adminBody').classList.remove('hidden');
-    await cargarListaClientes();
-    await cargarTicketsAdmin();
-    await cargarDashboard(); 
-});
-
-function toggleOtroServicio() {
-    const select = document.getElementById('fTipoServicio');
-    const box = document.getElementById('boxOtroServicio');
-    if (select.value === 'Otros') {
-        box.classList.remove('hidden');
-        document.getElementById('fNombreOtro').required = true;
-    } else {
-        box.classList.add('hidden');
-        document.getElementById('fNombreOtro').required = false;
-    }
-}
-
-async function cargarListaClientes() {
-    const { data: clientes } = await adminSupabase.from('clientes').select('*').order('empresa', { ascending: true });
-    const tabla = document.getElementById('tablaClientesBody');
-    const selectH = document.getElementById('hCliente');
-    tabla.innerHTML = ''; selectH.innerHTML = '<option value="">Seleccione un cliente...</option>';
-    mapaClientes = {};
-    mapaDiasPago = {};
-    if(clientes){
-        clientes.forEach(c => {
-            mapaClientes[c.email] = c.empresa;
-            mapaDiasPago[c.email] = c.dias_pago || 30;
-            const statusDot = (!c.estado || c.estado === 'Activo') ? '<span class="w-2 h-2 rounded-full bg-green-500 inline-block mr-2"></span>' : '<span class="w-2 h-2 rounded-full bg-red-500 inline-block mr-2"></span>';
-            tabla.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-slate-100 last:border-0"><td class="px-4 py-4 font-bold text-[#1a1f2e] text-xs flex items-center">${statusDot} ${c.empresa}</td><td class="px-4 py-4 text-right"><button onclick="gestionarCliente('${c.rut}')" class="text-[9px] font-black uppercase bg-white border border-slate-200 text-slate-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 px-3 py-1.5 rounded-lg transition tracking-widest shadow-sm">Editar / Gestionar</button></td></tr>`;
-            selectH.innerHTML += `<option value="${c.email}">${c.empresa}</option>`;
-        });
-    }
-}
-
-async function cargarDashboard() {
-    if (Object.keys(mapaDiasPago).length === 0) await cargarListaClientes();
-    const { data: facturas, error } = await adminSupabase.from('facturas').select('*');
-    if (error) console.error("Error cargando facturas:", error);
-    
-    let pagado = 0; let pendiente = 0; let vencido = 0;
-    const hoy = new Date();
-    
-    if(facturas) {
-        facturas.forEach(f => {
-            const monto = Number(f.valor_total || 0);
-            if(f.estado === 'Pagada') {
-                pagado += monto;
-            } else {
-                const dp = Number(mapaDiasPago[f.email_cliente] || 30);
-                const fechaEmision = f.fecha_emision ? new Date(f.fecha_emision) : new Date(f.created_at || new Date());
-                const fechaVencimiento = new Date(fechaEmision);
-                fechaVencimiento.setDate(fechaVencimiento.getDate() + dp);
-                fechaVencimiento.setHours(23, 59, 59, 999);
-                if (hoy > fechaVencimiento) vencido += monto; 
-                else pendiente += monto; 
-            }
-        });
-    }
-    document.getElementById('statTotalPagado').textContent = fm(pagado);
-    document.getElementById('statTotalPendiente').textContent = fm(pendiente);
-    document.getElementById('statTotalVencido').textContent = fm(vencido);
-    const { count: ticketsAlta } = await adminSupabase.from('tickets').select('*', { count: 'exact', head: true }).eq('prioridad', 'Alta').eq('estado', 'Abierto');
-    document.getElementById('statTicketsAlta').textContent = ticketsAlta || 0;
-}
-
-document.getElementById('formCrearCliente').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('btnCrearCliente');
-    const originalText = btn.textContent;
-    btn.textContent = "Sincronizando..."; btn.disabled = true;
-    try {
-        const email = document.getElementById('cEmail').value.trim().toLowerCase();
-        const password = document.getElementById('cPassword').value;
-        let urlContrato = "";
-        const archivo = document.getElementById('cArchivoContrato').files[0];
-        if (archivo) {
-            const fileName = `contrato_${email}_${Date.now()}.pdf`;
-            await adminSupabase.storage.from('contratos').upload(fileName, archivo);
-            urlContrato = adminSupabase.storage.from('contratos').getPublicUrl(fileName).data.publicUrl;
-        }
-        const { error } = await adminSupabase.functions.invoke('create-client', { body: { email, password, clientData: { empresa: document.getElementById('cEmpresa').value, rut: document.getElementById('cRut').value, contacto: document.getElementById('cContacto').value, contacto_facturacion: document.getElementById('cContactoFact').value, correo_facturacion: document.getElementById('cEmailFact').value.trim().toLowerCase(), fecha_inicio: document.getElementById('cFecha').value, direccion: document.getElementById('cDireccion').value, contrato_meses: document.getElementById('cContratoMeses').value, dias_pago: parseInt(document.getElementById('cDiasPago').value) || 30, ip: document.getElementById('cIp').value, plan: document.getElementById('cPlan').value, url_dashboard: document.getElementById('cDashboard').value, user_noc: document.getElementById('cUserNoc').value, pass_noc: document.getElementById('cPassNoc').value, url_contrato: urlContrato, estado: 'Activo', id_cliente: 'GCOM-' + Math.floor(1000 + Math.random() * 9000) } } });
-        if (error) throw error;
-        alert("Éxito al crear cliente."); document.getElementById('formCrearCliente').reset(); cargarListaClientes();
-    } catch (err) { alert(err.message); } finally { btn.textContent = originalText; btn.disabled = false; }
-});
-
-const inputArchivos = document.getElementById('inpArchivosMasivos');
-const lblSeleccionados = document.getElementById('lblArchivosSeleccionados');
-
-inputArchivos.addEventListener('change', () => { 
-    if (inputArchivos.files.length > 20) {
-        alert("Por seguridad del servidor, el máximo permitido es de 20 archivos por subida.");
-        inputArchivos.value = "";
-        lblSeleccionados.textContent = "0 archivos seleccionados";
-        return;
-    }
-    lblSeleccionados.textContent = `${inputArchivos.files.length} archivos listos para procesar`; 
-});
-
-const fileToBase64 = (file) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = error => reject(error);
-});
-
-function extraerFechaDTE(texto) {
-    const regex = /Fecha Emisi[óo]n:?\s*(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}|\d{1,2}\s+de\s+[a-zA-Z]+\.?\s+(?:de\s+)?\d{4})/i;
-    const match = texto.match(regex);
-    if(!match) return new Date().toISOString().split('T')[0];
-    let d = match[1].toLowerCase();
-    let partes = d.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
-    if(partes) return `${partes[3]}-${partes[2].padStart(2,'0')}-${partes[1].padStart(2,'0')}`;
-    const meses = {ene:'01',feb:'02',mar:'03',abr:'04',may:'05',jun:'06',jul:'07',ago:'08',sep:'09',oct:'10',nov:'11',dic:'12'};
-    partes = d.match(/(\d{1,2})\s+de\s+([a-z]{3})[a-z]*\.?\s+(?:de\s+)?(\d{4})/);
-    if(partes) { let m = meses[partes[2]]; if(m) return `${partes[3]}-${m}-${partes[1].padStart(2,'0')}`; }
-    return new Date().toISOString().split('T')[0];
-}
-
-document.getElementById('formFacturaMasiva').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const archivos = inputArchivos.files;
-    if (archivos.length === 0) return alert("Selecciona al menos una factura.");
-    if (archivos.length > 20) return alert("Máximo 20 archivos por subida.");
-    
-    const tipoServicio = document.getElementById('fTipoServicio').value;
-    const servicioEspecifico = document.getElementById('fNombreOtro').value;
-    const servicioFinal = tipoServicio === 'Otros' ? servicioEspecifico : tipoServicio;
-
-    const log = document.getElementById('logProcesamiento'); 
-    const btn = document.getElementById('btnProcesarMasivo'); 
-    const boxProgreso = document.getElementById('progresoFacturas');
-    
-    boxProgreso.classList.remove('hidden'); log.innerHTML = ''; 
-    btn.disabled = true; btn.textContent = "Extrayendo Datos...";
-    
-    let procesadas = 0; let errores = 0;
-
-    for (let archivo of archivos) {
-        log.innerHTML += `<li>[>] Procesando: ${archivo.name}...</li>`;
-        log.scrollTop = log.scrollHeight;
-        
-        try {
-            const nombreSinExt = archivo.name.replace(/\.pdf$/i, '');
-            const partes = nombreSinExt.split('_');
-            if (partes.length < 2) throw new Error("Nombre debe ser RUT_MESAÑO.pdf");
-            
-            const rutExtraido = partes[0].toUpperCase();
-            const mesAnioExtraido = `${partes[1]} (${servicioFinal})`;
-
-            const arrayBuffer = await archivo.arrayBuffer();
-            const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
-            let texto = "";
-            for(let i=1; i<=pdf.numPages; i++){
-                const pag = await pdf.getPage(i);
-                const cont = await pag.getTextContent();
-                texto += cont.items.map(it => it.str).join(" ");
-            }
-
-            const mTotal = texto.match(/Total\s*\$?\s*([\d\.]+)/i);
-            const mNeto = texto.match(/Monto Neto\s*\$?\s*([\d\.]+)/i);
-            const totalExt = mTotal ? mTotal[1].replace(/\./g, '') : 0;
-            const netoExt = mNeto ? mNeto[1].replace(/\./g, '') : 0;
-            const fechaDTE = extraerFechaDTE(texto);
-
-            const base64Texto = await fileToBase64(archivo);
-
-            const response = await adminSupabase.functions.invoke('process-invoice', {
-                body: { fileName: archivo.name, fileBase64: base64Texto, rut: rutExtraido, mes: mesAnioExtraido, neto: netoExt, total: totalExt, fecha: fechaDTE }
-            });
-
-            const res = response.data;
-            if (response.error || (res && res.error)) { throw new Error((res && res.error) || response.error?.message || "Error desconocido"); }
-
-            log.innerHTML += `<li class="text-green-400">[OK] Detectado: ${fm(totalExt)} CLP. Cliente: ${res.empresa}.</li>`;
-            procesadas++;
-        } catch (err) {
-            log.innerHTML += `<li class="text-red-400">[ERROR] ${archivo.name}: ${err.message}</li>`;
-            errores++;
-        }
-        log.scrollTop = log.scrollHeight;
-    }
-
-    btn.disabled = false; btn.textContent = "Analizar DTE y Enviar Facturas";
-    log.innerHTML += `<li class="text-blue-400 font-bold mt-2">=== TERMINADO ===</li>`;
-    log.innerHTML += `<li class="text-blue-400">Exitosas: ${procesadas} | Errores: ${errores}</li>`;
-    log.scrollTop = log.scrollHeight;
-    
-    document.getElementById('formFacturaMasiva').reset(); 
-    lblSeleccionados.textContent = "0 archivos seleccionados";
-    document.getElementById('boxOtroServicio').classList.add('hidden');
-    cargarDashboard(); 
-});
-
-document.getElementById('formCargaHistorica').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('btnGuardarHistorico');
-    btn.disabled = true; btn.textContent = "Guardando...";
-    try {
-        const email = document.getElementById('hCliente').value;
-        let urlArchivo = "#";
-        const archivo = document.getElementById('hArchivo').files[0];
-        if (archivo) {
-            const fileName = `factura_historica_${email}_${Date.now()}.pdf`;
-            await adminSupabase.storage.from('facturas').upload(fileName, archivo);
-            urlArchivo = adminSupabase.storage.from('facturas').getPublicUrl(fileName).data.publicUrl;
-        }
-
-        const { error: dbError } = await adminSupabase.from('facturas').insert({
-            email_cliente: email, mes_anio: document.getElementById('hMes').value,
-            fecha_emision: document.getElementById('hFecha').value, valor_neto: document.getElementById('hNeto').value,
-            valor_total: document.getElementById('hTotal').value, estado: document.getElementById('hEstado').value,
-            url_archivo: urlArchivo
-        });
-        if (dbError) throw dbError;
-
-        alert("Factura histórica registrada con éxito (Sin notificar al cliente).");
-        document.getElementById('formCargaHistorica').reset();
-        cargarDashboard();
-    } catch(err) { alert("Error: " + err.message); } finally { btn.disabled = false; btn.textContent = "Guardar Factura Histórica"; }
-});
-
-async function cargarTicketsAdmin() {
-    const tabla = document.getElementById('tablaTicketsAdmin');
-    const msgVacio = document.getElementById('msgNoTicketsAdmin');
-    tabla.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-xs italic text-slate-400">Cargando...</td></tr>';
-    const { data: tickets, error } = await adminSupabase.from('tickets').select('*');
-    if (error || !tickets || tickets.length === 0) { tabla.innerHTML = ''; msgVacio.classList.remove('hidden'); return; }
-    msgVacio.classList.add('hidden');
-    tickets.sort((a, b) => {
-        if (a.estado === 'Abierto' && b.estado !== 'Abierto') return -1;
-        if (a.estado !== 'Abierto' && b.estado === 'Abierto') return 1;
-        const prioridades = { 'Alta': 3, 'Media': 2, 'Baja': 1 };
-        if ((prioridades[a.prioridad]||0) !== (prioridades[b.prioridad]||0)) return (prioridades[b.prioridad]||0) - (prioridades[a.prioridad]||0);
-        return new Date(b.created_at) - new Date(a.created_at);
-    });
-    tabla.innerHTML = '';
-    tickets.forEach(tk => {
-        const nombreEmpresa = mapaClientes[tk.email_cliente] || tk.email_cliente;
-        const fecha = new Date(tk.created_at).toLocaleDateString('es-CL');
-        let colorPrio = "bg-slate-100 text-slate-600";
-        if(tk.prioridad === 'Alta') colorPrio = "bg-red-100 text-red-700 border-red-200";
-        else if(tk.prioridad === 'Media') colorPrio = "bg-orange-100 text-orange-700 border-orange-200";
-        else if(tk.prioridad === 'Baja') colorPrio = "bg-blue-100 text-blue-700 border-blue-200";
-        const esAbierto = tk.estado === 'Abierto';
-        const claseFila = esAbierto ? "bg-white" : "bg-slate-50 opacity-60";
-        const badgeEstado = esAbierto ? `<span class="flex items-center gap-1.5 text-orange-600 font-bold"><span class="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span> Abierto</span>` : `<span class="text-green-600 font-bold">Resuelto</span>`;
-        const msgs = (tk.seguimiento && tk.seguimiento.length > 0) ? `<span class="ml-2 bg-blue-100 text-blue-700 text-[9px] px-1.5 py-0.5 rounded-full font-bold">${tk.seguimiento.length}</span>` : '';
-        tabla.innerHTML += `<tr class="border-b border-slate-100 transition hover:bg-slate-50 cursor-pointer ${claseFila}" onclick="abrirModalTicketAdmin(${tk.id})"><td class="px-4 py-4"><span class="px-2.5 py-1 rounded-md text-[10px] font-black uppercase border ${colorPrio}">${tk.prioridad}</span></td><td class="px-4 py-4"><p class="font-mono text-xs font-bold text-blue-600">#${tk.id}</p><p class="text-[9px] text-slate-400 mt-0.5">${fecha}</p></td><td class="px-4 py-4 text-xs font-bold text-[#1a1f2e]">${nombreEmpresa}</td><td class="px-4 py-4 text-xs text-slate-600 truncate max-w-xs"><strong>${tk.asunto}</strong> ${msgs}</td><td class="px-4 py-4 text-[10px] uppercase tracking-widest">${badgeEstado}</td><td class="px-4 py-4 text-right"><button class="text-[9px] font-bold px-3 py-1.5 rounded-lg border bg-white shadow-sm hover:bg-blue-600 hover:text-white transition">Abrir Chat</button></td></tr>`;
-    });
-}
-
-async function abrirModalTicketAdmin(id) {
-    document.getElementById('modal-ver-ticket-admin').classList.remove('hidden');
-    const { data: tk } = await adminSupabase.from('tickets').select('*').eq('id', id).single();
-    if(!tk) return;
-    document.getElementById('vtaTicketId').value = tk.id;
-    document.getElementById('vtaId').textContent = `#${tk.id}`;
-    document.getElementById('vtaEmpresa').textContent = mapaClientes[tk.email_cliente] || tk.email_cliente;
-    document.getElementById('vtaAsunto').textContent = tk.asunto;
-    document.getElementById('vtaDescripcion').textContent = tk.descripcion;
-    document.getElementById('vtaFecha').textContent = new Date(tk.created_at).toLocaleString('es-CL');
-    document.getElementById('vtaPrioridad').textContent = tk.prioridad;
-    document.getElementById('vtaPrioridad').className = `text-[10px] font-black uppercase px-2 py-1 rounded-md text-white ${tk.prioridad==='Alta'?'bg-red-500':tk.prioridad==='Media'?'bg-orange-500':'bg-blue-500'}`;
-    const est = document.getElementById('vtaEstado');
-    est.textContent = tk.estado;
-    est.className = `text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border ${tk.estado==='Abierto'?'bg-green-100 text-green-700 border-green-200':'bg-slate-100 text-slate-500 border-slate-200'} mb-2 inline-block`;
-    if(tk.url_archivo) { document.getElementById('vtaAdjuntoOriginal').classList.remove('hidden'); document.getElementById('vtaLinkAdjunto').href = tk.url_archivo; } else { document.getElementById('vtaAdjuntoOriginal').classList.add('hidden'); }
-    const btnEst = document.getElementById('btnCambiarEstadoAdmin');
-    btnEst.textContent = tk.estado === 'Abierto' ? "Marcar como Resuelto" : "Reabrir Ticket";
-    btnEst.className = tk.estado === 'Abierto' ? "text-[10px] font-bold uppercase bg-red-100 text-red-700 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-200" : "text-[10px] font-bold uppercase bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-300";
-    btnEst.onclick = () => cambiarEstadoRapido(tk.id, tk.estado, tk.email_cliente, tk.asunto, mapaClientes[tk.email_cliente]);
-    const contenedor = document.getElementById('vtaRespuestas');
-    contenedor.innerHTML = '';
-    if(tk.seguimiento && tk.seguimiento.length > 0) {
-        tk.seguimiento.forEach(msg => {
-            const esAdmin = msg.autor === 'Soporte Globalcom';
-            const colorCaja = esAdmin ? 'bg-blue-50 border-blue-100' : 'bg-white border-slate-100';
-            const colorTextoAutor = esAdmin ? 'text-blue-700' : 'text-slate-700';
-            const adjHtml = msg.adjunto ? `<a href="${msg.adjunto}" target="_blank" class="inline-flex mt-3 items-center text-[10px] font-bold text-blue-600 bg-white border border-blue-100 px-3 py-1.5 rounded-lg"><svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Archivo Adjunto</a>` : '';
-            contenedor.innerHTML += `<div class="${colorCaja} p-5 rounded-2xl shadow-sm border ml-${esAdmin?'8':'0'} mr-${esAdmin?'0':'8'}"><div class="flex justify-between items-center mb-2"><span class="text-xs font-black uppercase tracking-widest ${colorTextoAutor}">${msg.autor}</span><span class="text-[9px] text-slate-400 font-bold">${new Date(msg.fecha).toLocaleString('es-CL')}</span></div><p class="text-sm text-slate-600 whitespace-pre-wrap">${msg.mensaje}</p>${adjHtml}</div>`;
-        });
-    }
-    document.getElementById('vtaCajaRespuesta').style.display = tk.estado === 'Abierto' ? 'block' : 'none';
-}
-
-document.getElementById('formResponderTicketAdmin').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('btnResponderAdmin'); btn.textContent = "Sincronizando..."; btn.disabled = true;
-    try {
-        const id = document.getElementById('vtaTicketId').value;
-        let urlAdjunto = null;
-        const file = document.getElementById('vtaNuevoAdjunto').files[0];
-        if(file){
-            const ext = file.name.split('.').pop();
-            const fileName = `adjunto_${Date.now()}.${ext}`;
-            await adminSupabase.storage.from('tickets_adjuntos').upload(fileName, file);
-            urlAdjunto = adminSupabase.storage.from('tickets_adjuntos').getPublicUrl(fileName).data.publicUrl;
-        }
-        const { data: tk } = await adminSupabase.from('tickets').select('seguimiento, email_cliente, asunto').eq('id', id).single();
-        let seg = tk.seguimiento || [];
-        const msj = document.getElementById('vtaNuevoMensaje').value;
-        seg.push({ autor: 'Soporte Globalcom', fecha: new Date().toISOString(), mensaje: msj, adjunto: urlAdjunto });
-        await adminSupabase.from('tickets').update({ seguimiento: seg }).eq('id', id);
-        
-        // NOTIFICACIÓN DE RESPUESTA
-        await adminSupabase.functions.invoke('notify-ticket-update', { body: { idTicket: id, emailCliente: tk.email_cliente, asunto: tk.asunto, mensaje: msj, autor: 'Soporte Globalcom', tipo: 'respuesta' } });
-        
-        document.getElementById('formResponderTicketAdmin').reset(); abrirModalTicketAdmin(id); cargarTicketsAdmin();
-    } catch (err) { alert("Error: " + err.message); } finally { btn.textContent = "Añadir Respuesta Técnica"; btn.disabled = false; }
-});
-
-async function cambiarEstadoRapido(id, estadoActual, emailCliente, asunto, empresa) {
-    const nuevoEstado = estadoActual === 'Abierto' ? 'Resuelto' : 'Abierto';
-    if (!confirm(`¿Marcar este ticket como ${nuevoEstado}?`)) return;
-    await adminSupabase.from('tickets').update({ estado: nuevoEstado }).eq('id', id);
-    
-    // NOTIFICACIÓN DE CAMBIO DE ESTADO
-    await adminSupabase.functions.invoke('notify-ticket-update', { body: { idTicket: id, emailCliente: emailCliente, empresa: empresa, asunto: asunto, nuevoEstado: nuevoEstado, autor: 'Soporte Globalcom', tipo: 'estado' } });
-    
-    abrirModalTicketAdmin(id); cargarTicketsAdmin();
-}
-
-async function gestionarCliente(rut) {
-    const modal = document.getElementById('modal-detalle'); modal.classList.remove('hidden');
-    const { data: cliente } = await adminSupabase.from('clientes').select('*').eq('rut', rut).single();
-    if(!cliente) return;
-    
-    document.getElementById('detEmpresa').textContent = cliente.empresa;
-    document.getElementById('detEmail').textContent = cliente.email;
-    document.getElementById('detIniciales').textContent = cliente.empresa.substring(0,1).toUpperCase();
-    
-    document.getElementById('editRutOriginal').value = cliente.rut; 
-    document.getElementById('editEmailOriginal').value = cliente.email;
-    
-    document.getElementById('eEmpresa').value = cliente.empresa || '';
-    document.getElementById('eRut').value = cliente.rut || '';
-    document.getElementById('eContacto').value = cliente.contacto || '';
-    document.getElementById('eContactoFact').value = cliente.contacto_facturacion || '';
-    document.getElementById('eEmailFact').value = cliente.correo_facturacion || '';
-    document.getElementById('eFecha').value = cliente.fecha_inicio || '';
-    document.getElementById('eDireccion').value = cliente.direccion || '';
-    document.getElementById('eDiasPago').value = cliente.dias_pago || 30; 
-    document.getElementById('eMeses').value = cliente.contrato_meses || 12;
-    document.getElementById('eIp').value = cliente.ip || '';
-    document.getElementById('ePlan').value = cliente.plan || 'Internet Dedicado 100 Mbps';
-    document.getElementById('eDashboard').value = cliente.url_dashboard || '';
-    document.getElementById('eUserNoc').value = cliente.user_noc || '';
-    document.getElementById('ePassNoc').value = cliente.pass_noc || '';
-    
-    const btnContrato = document.getElementById('btnVerContratoActual');
-    if (cliente.url_contrato && cliente.url_contrato !== '') {
-        btnContrato.href = cliente.url_contrato;
-        btnContrato.classList.remove('hidden');
-    } else {
-        btnContrato.classList.add('hidden');
-    }
-
-    actualizarBotonEstado(cliente.estado || 'Activo');
-
-    const { data: huellas } = await adminSupabase.from('registro_accesos').select('*').eq('email_cliente', cliente.email).order('created_at', { ascending: false }).limit(5);
-    const containerAcc = document.getElementById('listaAccesos'); containerAcc.innerHTML = '';
-    if (huellas && huellas.length > 0) {
-        huellas.forEach(h => {
-            const fechaStr = new Date(h.created_at).toLocaleString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-            const dispositivo = h.navegador.includes('Mobile') ? '📱 Móvil' : '💻 Escritorio';
-            containerAcc.innerHTML += `<div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-slate-100 text-[11px]"><span class="text-slate-600 font-medium">${fechaStr}</span><span class="text-slate-400 font-bold uppercase">${dispositivo}</span></div>`;
-        });
-    } else { containerAcc.innerHTML = '<p class="text-[11px] text-slate-400 italic">Sin ingresos registrados.</p>'; }
-    
-    cargarFacturasDetalle(cliente.email, cliente.dias_pago || 30);
-}
-
-document.getElementById('formEditarCliente').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = e.target.querySelector('button[type="submit"]'); const originalText = btn.textContent; btn.textContent = "Guardando..."; btn.disabled = true;
-    try {
-        const rutOriginal = document.getElementById('editRutOriginal').value;
-        let urlContratoNuevo = undefined;
-        const archivo = document.getElementById('eArchivoContrato').files[0];
-        
-        if (archivo) {
-            const fName = `contrato_${rutOriginal}_${Date.now()}.pdf`;
-            await adminSupabase.storage.from('contratos').upload(fName, archivo);
-            urlContratoNuevo = adminSupabase.storage.from('contratos').getPublicUrl(fName).data.publicUrl;
-        }
-
-        const updateData = { 
-            empresa: document.getElementById('eEmpresa').value, 
-            rut: document.getElementById('eRut').value, 
-            contacto: document.getElementById('eContacto').value, 
-            contacto_facturacion: document.getElementById('eContactoFact').value, 
-            correo_facturacion: document.getElementById('eEmailFact').value, 
-            fecha_inicio: document.getElementById('eFecha').value,
-            direccion: document.getElementById('eDireccion').value, 
-            dias_pago: parseInt(document.getElementById('eDiasPago').value) || 30, 
-            contrato_meses: document.getElementById('eMeses').value,
-            ip: document.getElementById('eIp').value, 
-            plan: document.getElementById('ePlan').value, 
-            url_dashboard: document.getElementById('eDashboard').value, 
-            user_noc: document.getElementById('eUserNoc').value, 
-            pass_noc: document.getElementById('ePassNoc').value 
-        };
-        if (urlContratoNuevo) updateData.url_contrato = urlContratoNuevo;
-
-        await adminSupabase.from('clientes').update(updateData).eq('rut', rutOriginal);
-        alert("Cliente actualizado correctamente."); 
-        document.getElementById('modal-detalle').classList.add('hidden'); 
-        cargarListaClientes(); cargarDashboard();
-    } catch (err) { alert("Error: " + err.message); } finally { btn.textContent = originalText; btn.disabled = false; }
-});
-
-async function toggleEstadoCliente() {
-    const btn = document.getElementById('btnEstadoCliente'); const rutOriginal = document.getElementById('editRutOriginal').value;
-    const nuevoEstado = btn.dataset.estado === 'Activo' ? 'Suspendido' : 'Activo';
-    if(!confirm(`¿Desea cambiar el estado a ${nuevoEstado}?`)) return;
-    await adminSupabase.from('clientes').update({ estado: nuevoEstado }).eq('rut', rutOriginal);
-    actualizarBotonEstado(nuevoEstado); cargarListaClientes();
-}
-
-function actualizarBotonEstado(estado) {
-    const btn = document.getElementById('btnEstadoCliente'); btn.dataset.estado = estado;
-    btn.className = estado === 'Activo' ? "text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-700 transition shadow-sm border border-green-200" : "text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest bg-red-100 text-red-700 hover:bg-green-100 hover:text-green-700 transition shadow-sm border border-red-200";
-    btn.innerHTML = estado === 'Activo' ? `<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> ACTIVO</span>` : `<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500"></span> SUSPENDIDO</span>`;
-}
-
-async function cargarFacturasDetalle(email, diasPagoCliente) {
-    const contenedor = document.getElementById('listaFacturasDetalle'); contenedor.innerHTML = '<p class="text-xs italic">Cargando...</p>';
-    const { data: facturas } = await adminSupabase.from('facturas').select('*').eq('email_cliente', email).order('created_at', { ascending: false });
-    contenedor.innerHTML = '';
-    if (!facturas || facturas.length === 0) { contenedor.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-10">No hay facturas registradas.</p>'; return; }
-    const hoy = new Date();
-    facturas.forEach(fact => {
-        const fechaEmision = fact.fecha_emision ? new Date(fact.fecha_emision) : new Date(fact.created_at);
-        const fechaVencimiento = new Date(fechaEmision); fechaVencimiento.setDate(fechaVencimiento.getDate() + Number(diasPagoCliente)); fechaVencimiento.setHours(23, 59, 59, 999);
-        let badgeEstado = ''; let textoDias = '';
-        const diffTime = fechaVencimiento - hoy;
-        const diasRestantes = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
-        let estadoCalculado = fact.estado;
-        if (estadoCalculado !== 'Pagada') estadoCalculado = (diasRestantes < 0) ? 'Vencida' : 'Pendiente';
-
-        if (estadoCalculado === 'Pagada') {
-            badgeEstado = `<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest border border-green-200">Pagada</span>`;
-        } else if (estadoCalculado === 'Vencida') {
-            badgeEstado = `<span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest shadow-sm border border-red-200">Vencida</span>`;
-            textoDias = `<p class="text-red-500 text-[10px] font-bold mt-1">⚠️ Atrasada por ${Math.abs(diasRestantes)} días</p>`;
-        } else {
-            badgeEstado = `<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest border border-blue-200">Pendiente</span>`;
-            textoDias = `<p class="text-blue-500 text-[10px] font-bold mt-1">Vence en ${diasRestantes} días</p>`;
-        }
-
-        const neto = fact.valor_neto || 0;
-        const total = fact.valor_total || 0;
-        const iva = total - neto;
-
-        const btnMarcar = estadoCalculado === 'Pagada' 
-            ? `<button onclick="cambiarEstadoFactura('${fact.id}', 'Pendiente', '${email}', ${diasPagoCliente})" class="text-[10px] font-bold text-slate-500 hover:text-orange-500 transition underline tracking-widest">Marcar Pendiente</button>` 
-            : `<button onclick="cambiarEstadoFactura('${fact.id}', 'Pagada', '${email}', ${diasPagoCliente})" class="text-[10px] font-bold text-slate-500 hover:text-green-600 transition underline tracking-widest">Marcar Pagada</button>`;
-            
-        const btnDel = `<button onclick="eliminarFactura('${fact.id}', '${email}', ${diasPagoCliente})" class="p-2 text-red-500 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`;
-
-        contenedor.innerHTML += `
-        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-2">
-            <div class="flex items-center justify-between mb-2">
-                <div><span class="text-xs font-black uppercase text-[#1a1f2e]">${fact.mes_anio}</span>${textoDias}</div>
-                <div>${badgeEstado}</div>
+    <nav class="bg-[#1a1f2e] text-white py-4 px-6 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <span class="font-black text-xl tracking-tight">GLOBALCOM ADMIN</span>
+                <span class="bg-red-500 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-widest">NOC & CRM</span>
             </div>
-            <div class="bg-white p-3 rounded-lg border border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-2 text-[10px]">
-                <div><p class="text-slate-400 font-bold uppercase tracking-widest">Emisión</p><p class="font-mono text-slate-700">${fechaEmision.toLocaleDateString('es-CL')}</p></div>
-                <div><p class="text-slate-400 font-bold uppercase tracking-widest">Neto</p><p class="font-mono text-slate-700">${fm(neto)}</p></div>
-                <div><p class="text-slate-400 font-bold uppercase tracking-widest">IVA</p><p class="font-mono text-slate-700">${fm(iva)}</p></div>
-                <div><p class="text-slate-400 font-bold uppercase tracking-widest">Total</p><p class="font-mono font-black text-blue-600">${fm(total)}</p></div>
+            <div class="flex items-center space-x-6">
+                <span id="adminUserEmail" class="text-[10px] font-bold text-slate-400 hidden md:inline">admin@globalcomfibra.cl</span>
+                <button onclick="cerrarSesion()" class="text-sm font-bold text-slate-300 hover:text-white transition">Salir</button>
             </div>
-            <div class="flex justify-between items-center mt-2">
-                ${btnMarcar}
-                <div class="flex gap-2">
-                    <a href="${fact.url_archivo}" target="_blank" class="p-2 text-blue-600 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></a>
-                    ${btnDel}
+        </div>
+    </nav>
+
+    <section class="max-w-7xl mx-auto px-6 pt-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Recaudación (Pagado)</p>
+                <h3 id="statTotalPagado" class="text-2xl font-black text-green-600">$0</h3>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Por Recaudar (Al día)</p>
+                <h3 id="statTotalPendiente" class="text-2xl font-black text-blue-500">$0</h3>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-red-200 bg-red-50/30">
+                <p class="text-[10px] font-black text-red-400 uppercase tracking-widest mb-1">Deuda Vencida</p>
+                <h3 id="statTotalVencido" class="text-2xl font-black text-red-600">$0</h3>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Tickets Críticos (Alta)</p>
+                <h3 id="statTicketsAlta" class="text-2xl font-black text-orange-500">0</h3>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-6 py-10">
+        <div class="grid lg:grid-cols-2 gap-8">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                <h2 class="text-2xl font-black text-[#1a1f2e] mb-6 border-b border-slate-100 pb-4">Alta de Nuevo Cliente</h2>
+                <form id="formCrearCliente" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Razón Social</label><input type="text" id="cEmpresa" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">RUT (sin puntos ni guion)</label><input type="text" id="cRut" required placeholder="76123456K" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contacto Técnico</label><input type="text" id="cContacto" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contacto Facturación</label><input type="text" id="cContactoFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Portal</label><input type="email" id="cEmail" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div><label class="text-[10px] font-bold text-orange-600 uppercase tracking-widest">Clave Portal</label><input type="password" id="cPassword" required class="w-full mt-1 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-500"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Facturación</label><input type="email" id="cEmailFact" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fecha Habilitación</label><input type="date" id="cFecha" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="col-span-2"><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Dirección Instalación</label><input type="text" id="cDireccion" required class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Días Pago</label><input type="number" id="cDiasPago" required value="30" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Meses Contrato</label><input type="number" id="cContratoMeses" required value="12" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">IP Pública</label><input type="text" id="cIp" placeholder="0.0.0.0" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Plan</label><select id="cPlan" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"><option>Internet Dedicado 100 Mbps</option><option>Internet Dedicado 500 Mbps</option><option>Internet Dedicado 1 Gbps</option><option>Fibra Oscura / Capa 2</option></select></div>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-xl border border-blue-100 space-y-4">
+                        <div><label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Link NOC (PurpleHackers)</label><input type="url" id="cDashboard" placeholder="https://app.purplehackers.com/..." class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Usuario NOC</label><input type="text" id="cUserNoc" placeholder="Ej: admin_cliente" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                            <div><label class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Clave NOC</label><input type="text" id="cPassNoc" placeholder="***" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        </div>
+                    </div>
+                    <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contrato PDF</label><input type="file" id="cArchivoContrato" accept=".pdf" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    <button type="submit" id="btnCrearCliente" class="w-full bg-[#1a1f2e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition shadow-lg">Crear Cliente y Cuenta</button>
+                </form>
+            </div>
+
+            <div class="space-y-8">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-black text-[#1a1f2e]">Carga Inteligente de Facturas</h2></div>
+                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
+                        <p class="text-[10px] font-bold text-blue-800 uppercase tracking-widest mb-1">Extracción Automática DTE</p>
+                        <p class="text-xs text-blue-600">Nombre Obligatorio: <strong>RUT_MESAÑO.pdf</strong> (Ej: 76123456K_Abril2026.pdf).</p>
+                    </div>
+                    <form id="formFacturaMasiva" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Tipo de Servicio</label>
+                                <select id="fTipoServicio" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500" onchange="toggleOtroServicio()">
+                                    <option value="Servicio Mensual">Servicio Mensual</option>
+                                    <option value="Habilitación">Habilitación</option>
+                                    <option value="Otros">Otros servicios</option>
+                                </select>
+                            </div>
+                            <div id="boxOtroServicio" class="hidden">
+                                <label class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Especificar (Máx 20 chars)</label>
+                                <input type="text" id="fNombreOtro" maxlength="20" placeholder="Ej: Visita Técnica" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition relative">
+                            <input type="file" id="inpArchivosMasivos" accept=".pdf" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            <svg class="w-10 h-10 mx-auto text-slate-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                            <p class="text-sm font-bold text-slate-600" id="lblArchivosSeleccionados">Selecciona hasta 20 PDFs</p>
+                        </div>
+                        <div id="progresoFacturas" class="hidden space-y-2">
+                            <ul id="logProcesamiento" class="h-32 overflow-y-auto bg-slate-900 text-green-400 font-mono text-[10px] p-3 rounded-lg mt-2"></ul>
+                        </div>
+                        <button type="submit" id="btnProcesarMasivo" class="w-full bg-[#1a1f2e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition shadow-lg mt-2">Analizar DTE y Enviar Facturas</button>
+                    </form>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <h2 class="text-2xl font-black text-[#1a1f2e] mb-6 border-b border-slate-100 pb-4">Gestión de Clientes</h2>
+                    <div class="overflow-hidden rounded-xl border border-slate-100">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-slate-50 text-[10px] font-black uppercase text-slate-400 tracking-widest"><tr><th class="px-4 py-3">Empresa</th><th class="px-4 py-3 text-right">Acción</th></tr></thead>
+                            <tbody id="tablaClientesBody" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-black text-[#1a1f2e]">Carga Histórica (Silenciosa)</h2></div>
+                    <p class="text-xs text-slate-500 mb-6">Usa este formulario para registrar deudas o ingresos pasados. <strong>NO se enviará ningún correo</strong> al cliente.</p>
+                    <form id="formCargaHistorica" class="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Cliente</label><select id="hCliente" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"><option value="">Seleccione un cliente...</option></select></div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Concepto / Mes</label><input type="text" id="hMes" required placeholder="Ej: Febrero 2026" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fecha de Emisión</label><input type="date" id="hFecha" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Valor Neto</label><input type="number" id="hNeto" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Valor Total</label><input type="number" id="hTotal" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Estado</label><select id="hEstado" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"><option value="Pagada">Pagada</option><option value="Pendiente">Pendiente / Vencida</option></select></div>
+                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">PDF (Opcional)</label><input type="file" id="hArchivo" accept=".pdf" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        </div>
+                        <button type="submit" id="btnGuardarHistorico" class="w-full bg-slate-800 text-white font-bold py-3 rounded-lg hover:bg-slate-900 transition shadow-md mt-4">Guardar Factura Histórica</button>
+                    </form>
                 </div>
             </div>
-        </div>`;
-    });
-}
 
-window.cambiarEstadoFactura = async function(id, nuevoEstado, email, diasPagoCliente) { await adminSupabase.from('facturas').update({ estado: nuevoEstado }).eq('id', id); cargarFacturasDetalle(email, diasPagoCliente); cargarDashboard(); }
-window.eliminarFactura = async function(id, email, diasPagoCliente) { if (!confirm('¿Eliminar esta factura?')) return; await adminSupabase.from('facturas').delete().eq('id', id); cargarFacturasDetalle(email, diasPagoCliente); cargarDashboard(); }
-window.cerrarSesion = async function() { await adminSupabase.auth.signOut(); window.location.href = 'index.html'; }
-</script>
+            <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mt-4">
+                <div class="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
+                    <h2 class="text-2xl font-black text-[#1a1f2e]">Módulo de Soporte y Tracking NOC</h2>
+                    <button onclick="cargarTicketsAdmin()" class="text-[10px] font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg uppercase tracking-widest hover:bg-blue-100 transition">Actualizar Tabla</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm border-collapse min-w-[700px]">
+                        <thead class="bg-slate-50 text-[10px] font-black uppercase text-slate-400 tracking-widest"><tr><th class="px-4 py-3 rounded-tl-xl">Prioridad</th><th class="px-4 py-3">ID / Fecha</th><th class="px-4 py-3">Cliente</th><th class="px-4 py-3 w-1/4">Asunto</th><th class="px-4 py-3">Estado</th><th class="px-4 py-3 text-right rounded-tr-xl">Acción</th></tr></thead>
+                        <tbody id="tablaTicketsAdmin" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                    <div id="msgNoTicketsAdmin" class="py-10 text-center hidden"><p class="text-slate-400 italic text-sm">No hay tickets registrados.</p></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="modal-detalle" class="hidden fixed inset-0 bg-[#1a1f2e]/90 backdrop-blur-md z-[100] flex justify-center items-center p-4">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-6xl max-h-[95vh] overflow-y-auto shadow-2xl relative">
+            <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition z-10"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            <div class="p-10">
+                <div class="flex items-center justify-between mb-8 border-b border-slate-100 pb-6">
+                    <div class="flex items-center gap-6">
+                        <div id="detIniciales" class="h-16 w-16 rounded-3xl bg-blue-600 text-white flex items-center justify-center text-2xl font-black shadow-lg">?</div>
+                        <div><h2 id="detEmpresa" class="text-3xl font-black text-[#1a1f2e]">Nombre Empresa</h2><p id="detEmail" class="text-slate-500 text-sm">email@cliente.cl</p></div>
+                    </div>
+                    <button id="btnEstadoCliente" onclick="toggleEstadoCliente()" data-estado="Activo" class="text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest transition shadow-sm border border-transparent">Activo</button>
+                </div>
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div class="space-y-6">
+                        <h3 class="text-xs font-black uppercase tracking-widest text-blue-600">Configuración Completa</h3>
+                        <form id="formEditarCliente" class="bg-slate-50 rounded-3xl p-6 border border-slate-100 space-y-4">
+                            <input type="hidden" id="editRutOriginal">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Razón Social</label><input type="text" id="eEmpresa" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">RUT</label><input type="text" id="eRut" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Contacto Técnico</label><input type="text" id="eContacto" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Cont. Facturación</label><input type="text" id="eContactoFact" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Email Facturación</label><input type="email" id="eEmailFact" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Fecha Habilitación</label><input type="date" id="eFecha" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="col-span-2"><label class="text-[9px] font-bold text-slate-500 uppercase">Dirección Instalación</label><input type="text" id="eDireccion" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3">
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Días Pago</label><input type="number" id="eDiasPago" required class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Meses Contrato</label><input type="number" id="eMeses" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">IP Pública</label><input type="text" id="eIp" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                            </div>
+                            <div><label class="text-[9px] font-bold text-slate-500 uppercase">Plan</label><select id="ePlan" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"><option>Internet Dedicado 100 Mbps</option><option>Internet Dedicado 500 Mbps</option><option>Internet Dedicado 1 Gbps</option><option>Fibra Oscura / Capa 2</option></select></div>
+                            <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 mt-2 space-y-2">
+                                <div><label class="text-[9px] font-bold text-blue-700 uppercase">Link NOC</label><input type="text" id="eDashboard" class="w-full bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div><label class="text-[9px] font-bold text-blue-700 uppercase">Usuario NOC</label><input type="text" id="eUserNoc" class="w-full bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                    <div><label class="text-[9px] font-bold text-blue-700 uppercase">Clave NOC</label><input type="text" id="ePassNoc" class="w-full bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                </div>
+                            </div>
+                            <div class="border-t border-slate-200 pt-4 mt-2">
+                                <label class="text-[9px] font-bold text-slate-500 uppercase">Subir/Reemplazar Contrato PDF</label>
+                                <input type="file" id="eArchivoContrato" accept=".pdf" class="w-full mt-1 text-[10px] bg-white border border-slate-200 rounded-lg px-2 py-1 outline-none focus:ring-1 focus:ring-blue-500">
+                                <a id="btnVerContratoActual" href="#" target="_blank" class="hidden mt-2 inline-block text-blue-600 text-[10px] font-bold underline hover:text-blue-800">Ver contrato actual cargado</a>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-blue-700 transition shadow-md mt-4">Guardar Cambios de Cliente</button>
+                        </form>
+                        <div class="mt-6 border-t border-slate-200 pt-6">
+                            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> Historial de Accesos (Huella Digital)</h3>
+                            <div id="listaAccesos" class="space-y-2"><p class="text-[11px] text-slate-400 italic">Cargando ingresos...</p></div>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Historial de Facturas</h3>
+                        <div id="listaFacturasDetalle" class="space-y-3 max-h-[500px] overflow-y-auto pr-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-ver-ticket-admin" class="hidden fixed inset-0 bg-[#1a1f2e]/80 backdrop-blur-md z-[100] flex justify-center items-center p-4">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl relative border border-slate-200">
+            <button onclick="document.getElementById('modal-ver-ticket-admin').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-red-500 transition z-10"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            <div class="p-8 border-b border-slate-100 flex justify-between items-end">
+                <div>
+                    <div class="flex items-center mb-2"><span id="vtaPrioridad" class="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md text-white bg-blue-500">ALTA</span><span id="vtaId" class="text-xs font-bold text-slate-400 ml-2">#123</span><span id="vtaEmpresa" class="text-xs font-bold text-slate-700 ml-4 border-l border-slate-300 pl-4">Empresa</span></div>
+                    <h3 id="vtaAsunto" class="text-2xl font-black text-[#1a1f2e]">Asunto</h3>
+                </div>
+                <div class="text-right">
+                    <span id="vtaEstado" class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border mb-2 inline-block">ABIERTO</span><br>
+                    <button id="btnCambiarEstadoAdmin" class="text-[10px] font-bold uppercase tracking-widest bg-red-100 text-red-700 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-200 transition">Marcar como Resuelto</button>
+                </div>
+            </div>
+            
+            <div class="p-8 overflow-y-auto flex-grow space-y-6 bg-slate-50" id="vtaConversacion">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-black uppercase text-slate-700 tracking-widest">Descripción del Cliente</span>
+                        <span id="vtaFecha" class="text-[10px] text-slate-400 font-medium">--</span>
+                    </div>
+                    <p id="vtaDescripcion" class="text-sm text-slate-600 whitespace-pre-wrap">...</p>
+                    <div id="vtaAdjuntoOriginal" class="mt-4 hidden"><a id="vtaLinkAdjunto" href="#" target="_blank" class="inline-flex items-center text-xs font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Archivo de Respaldo</a></div>
+                </div>
+                <div id="vtaRespuestas" class="space-y-4"></div>
+            </div>
+
+            <div class="p-6 border-t border-slate-100 bg-white rounded-b-[2.5rem]" id="vtaCajaRespuesta">
+                <form id="formResponderTicketAdmin" class="space-y-3">
+                    <input type="hidden" id="vtaTicketId">
+                    <textarea id="vtaNuevoMensaje" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Respuesta oficial del NOC..."></textarea>
+                    <div class="flex justify-between items-center">
+                        <input type="file" id="vtaNuevoAdjunto" accept="image/*,.pdf,.doc,.docx" class="text-xs w-1/2 text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        <button type="submit" id="btnResponderAdmin" class="bg-blue-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-blue-700 transition shadow-md text-xs">Añadir Respuesta Técnica</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        const SUPABASE_URL = 'https://eejsdoeuovcrjicrgxmo.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlanNkb2V1b3ZjcmppY3JneG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzgxMjgsImV4cCI6MjA5MTc1NDEyOH0.enGQwKTh9tR59bP7TBjliAgiCuAqvG5d7pfLkinXNho';
+        const adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const ADMIN_EMAIL = 'contacto@globalcomfibra.cl'; 
+        let mapaClientes = {}; 
+        let mapaDiasPago = {};
+        const fm = (v) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(v);
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const { data: { session } } = await adminSupabase.auth.getSession();
+            if (!session || session.user.email !== ADMIN_EMAIL) { window.location.href = 'login.html'; return; }
+            document.getElementById('adminBody').classList.remove('hidden');
+            await cargarListaClientes();
+            await cargarTicketsAdmin();
+            await cargarDashboard(); 
+        });
+
+        function toggleOtroServicio() {
+            const select = document.getElementById('fTipoServicio');
+            const box = document.getElementById('boxOtroServicio');
+            if (select.value === 'Otros') {
+                box.classList.remove('hidden');
+                document.getElementById('fNombreOtro').required = true;
+            } else {
+                box.classList.add('hidden');
+                document.getElementById('fNombreOtro').required = false;
+            }
+        }
+
+        async function cargarListaClientes() {
+            const { data: clientes } = await adminSupabase.from('clientes').select('*').order('empresa', { ascending: true });
+            const tabla = document.getElementById('tablaClientesBody');
+            const selectH = document.getElementById('hCliente');
+            tabla.innerHTML = ''; selectH.innerHTML = '<option value="">Seleccione un cliente...</option>';
+            mapaClientes = {};
+            mapaDiasPago = {};
+            if(clientes){
+                clientes.forEach(c => {
+                    mapaClientes[c.email] = c.empresa;
+                    mapaDiasPago[c.email] = c.dias_pago || 30;
+                    const statusDot = (!c.estado || c.estado === 'Activo') ? '<span class="w-2 h-2 rounded-full bg-green-500 inline-block mr-2"></span>' : '<span class="w-2 h-2 rounded-full bg-red-500 inline-block mr-2"></span>';
+                    tabla.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-slate-100 last:border-0"><td class="px-4 py-4 font-bold text-[#1a1f2e] text-xs flex items-center">${statusDot} ${c.empresa}</td><td class="px-4 py-4 text-right"><button onclick="gestionarCliente('${c.rut}')" class="text-[9px] font-black uppercase bg-white border border-slate-200 text-slate-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 px-3 py-1.5 rounded-lg transition tracking-widest shadow-sm">Editar / Gestionar</button></td></tr>`;
+                    selectH.innerHTML += `<option value="${c.email}">${c.empresa}</option>`;
+                });
+            }
+        }
+
+        async function cargarDashboard() {
+            if (Object.keys(mapaDiasPago).length === 0) await cargarListaClientes();
+            const { data: facturas, error } = await adminSupabase.from('facturas').select('*');
+            if (error) console.error("Error cargando facturas:", error);
+            
+            let pagado = 0; let pendiente = 0; let vencido = 0;
+            const hoy = new Date();
+            
+            if(facturas) {
+                facturas.forEach(f => {
+                    const monto = Number(f.valor_total || 0);
+                    if(f.estado === 'Pagada') {
+                        pagado += monto;
+                    } else {
+                        const dp = Number(mapaDiasPago[f.email_cliente] || 30);
+                        const fechaEmision = f.fecha_emision ? new Date(f.fecha_emision) : new Date(f.created_at || new Date());
+                        const fechaVencimiento = new Date(fechaEmision);
+                        fechaVencimiento.setDate(fechaVencimiento.getDate() + dp);
+                        fechaVencimiento.setHours(23, 59, 59, 999);
+                        if (hoy > fechaVencimiento) vencido += monto; 
+                        else pendiente += monto; 
+                    }
+                });
+            }
+            document.getElementById('statTotalPagado').textContent = fm(pagado);
+            document.getElementById('statTotalPendiente').textContent = fm(pendiente);
+            document.getElementById('statTotalVencido').textContent = fm(vencido);
+            const { count: ticketsAlta } = await adminSupabase.from('tickets').select('*', { count: 'exact', head: true }).eq('prioridad', 'Alta').eq('estado', 'Abierto');
+            document.getElementById('statTicketsAlta').textContent = ticketsAlta || 0;
+        }
+
+        document.getElementById('formCrearCliente').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnCrearCliente');
+            const originalText = btn.textContent;
+            btn.textContent = "Sincronizando..."; btn.disabled = true;
+            try {
+                const email = document.getElementById('cEmail').value.trim().toLowerCase();
+                const password = document.getElementById('cPassword').value;
+                let urlContrato = "";
+                const archivo = document.getElementById('cArchivoContrato').files[0];
+                if (archivo) {
+                    const fileName = `contrato_${email}_${Date.now()}.pdf`;
+                    await adminSupabase.storage.from('contratos').upload(fileName, archivo);
+                    urlContrato = adminSupabase.storage.from('contratos').getPublicUrl(fileName).data.publicUrl;
+                }
+                const { error } = await adminSupabase.functions.invoke('create-client', { body: { email, password, clientData: { empresa: document.getElementById('cEmpresa').value, rut: document.getElementById('cRut').value, contacto: document.getElementById('cContacto').value, contacto_facturacion: document.getElementById('cContactoFact').value, correo_facturacion: document.getElementById('cEmailFact').value.trim().toLowerCase(), fecha_inicio: document.getElementById('cFecha').value, direccion: document.getElementById('cDireccion').value, contrato_meses: document.getElementById('cContratoMeses').value, dias_pago: parseInt(document.getElementById('cDiasPago').value) || 30, ip: document.getElementById('cIp').value, plan: document.getElementById('cPlan').value, url_dashboard: document.getElementById('cDashboard').value, user_noc: document.getElementById('cUserNoc').value, pass_noc: document.getElementById('cPassNoc').value, url_contrato: urlContrato, estado: 'Activo', id_cliente: 'GCOM-' + Math.floor(1000 + Math.random() * 9000) } } });
+                if (error) throw error;
+                alert("Éxito al crear cliente."); document.getElementById('formCrearCliente').reset(); cargarListaClientes();
+            } catch (err) { alert(err.message); } finally { btn.textContent = originalText; btn.disabled = false; }
+        });
+
+        const inputArchivos = document.getElementById('inpArchivosMasivos');
+        const lblSeleccionados = document.getElementById('lblArchivosSeleccionados');
+
+        inputArchivos.addEventListener('change', () => { 
+            if (inputArchivos.files.length > 20) {
+                alert("Por seguridad del servidor, el máximo permitido es de 20 archivos por subida.");
+                inputArchivos.value = "";
+                lblSeleccionados.textContent = "0 archivos seleccionados";
+                return;
+            }
+            lblSeleccionados.textContent = `${inputArchivos.files.length} archivos listos para procesar`; 
+        });
+
+        const fileToBase64 = (file) => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = error => reject(error);
+        });
+
+        function extraerFechaDTE(texto) {
+            const regex = /Fecha Emisi[óo]n:?\s*(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}|\d{1,2}\s+de\s+[a-zA-Z]+\.?\s+(?:de\s+)?\d{4})/i;
+            const match = texto.match(regex);
+            if(!match) return new Date().toISOString().split('T')[0];
+            let d = match[1].toLowerCase();
+            let partes = d.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+            if(partes) return `${partes[3]}-${partes[2].padStart(2,'0')}-${partes[1].padStart(2,'0')}`;
+            const meses = {ene:'01',feb:'02',mar:'03',abr:'04',may:'05',jun:'06',jul:'07',ago:'08',sep:'09',oct:'10',nov:'11',dic:'12'};
+            partes = d.match(/(\d{1,2})\s+de\s+([a-z]{3})[a-z]*\.?\s+(?:de\s+)?(\d{4})/);
+            if(partes) { let m = meses[partes[2]]; if(m) return `${partes[3]}-${m}-${partes[1].padStart(2,'0')}`; }
+            return new Date().toISOString().split('T')[0];
+        }
+
+        document.getElementById('formFacturaMasiva').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const archivos = inputArchivos.files;
+            if (archivos.length === 0) return alert("Selecciona al menos una factura.");
+            if (archivos.length > 20) return alert("Máximo 20 archivos por subida.");
+            
+            const tipoServicio = document.getElementById('fTipoServicio').value;
+            const servicioEspecifico = document.getElementById('fNombreOtro').value;
+            const servicioFinal = tipoServicio === 'Otros' ? servicioEspecifico : tipoServicio;
+
+            const log = document.getElementById('logProcesamiento'); 
+            const btn = document.getElementById('btnProcesarMasivo'); 
+            const boxProgreso = document.getElementById('progresoFacturas');
+            
+            boxProgreso.classList.remove('hidden'); log.innerHTML = ''; 
+            btn.disabled = true; btn.textContent = "Extrayendo Datos...";
+            
+            let procesadas = 0; let errores = 0;
+
+            for (let archivo of archivos) {
+                log.innerHTML += `<li>[>] Procesando: ${archivo.name}...</li>`;
+                log.scrollTop = log.scrollHeight;
+                
+                try {
+                    const nombreSinExt = archivo.name.replace(/\.pdf$/i, '');
+                    const partes = nombreSinExt.split('_');
+                    if (partes.length < 2) throw new Error("Nombre debe ser RUT_MESAÑO.pdf");
+                    
+                    const rutExtraido = partes[0].toUpperCase();
+                    const mesAnioExtraido = `${partes[1]} (${servicioFinal})`;
+
+                    const arrayBuffer = await archivo.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+                    let texto = "";
+                    for(let i=1; i<=pdf.numPages; i++){
+                        const pag = await pdf.getPage(i);
+                        const cont = await pag.getTextContent();
+                        texto += cont.items.map(it => it.str).join(" ");
+                    }
+
+                    const mTotal = texto.match(/Total\s*\$?\s*([\d\.]+)/i);
+                    const mNeto = texto.match(/Monto Neto\s*\$?\s*([\d\.]+)/i);
+                    const totalExt = mTotal ? mTotal[1].replace(/\./g, '') : 0;
+                    const netoExt = mNeto ? mNeto[1].replace(/\./g, '') : 0;
+                    const fechaDTE = extraerFechaDTE(texto);
+
+                    const base64Texto = await fileToBase64(archivo);
+
+                    const response = await adminSupabase.functions.invoke('process-invoice', {
+                        body: { fileName: archivo.name, fileBase64: base64Texto, rut: rutExtraido, mes: mesAnioExtraido, neto: netoExt, total: totalExt, fecha: fechaDTE }
+                    });
+
+                    const res = response.data;
+                    if (response.error || (res && res.error)) { throw new Error((res && res.error) || response.error?.message || "Error desconocido"); }
+
+                    log.innerHTML += `<li class="text-green-400">[OK] Detectado: ${fm(totalExt)} CLP. Cliente: ${res.empresa}.</li>`;
+                    procesadas++;
+                } catch (err) {
+                    log.innerHTML += `<li class="text-red-400">[ERROR] ${archivo.name}: ${err.message}</li>`;
+                    errores++;
+                }
+                log.scrollTop = log.scrollHeight;
+            }
+
+            btn.disabled = false; btn.textContent = "Analizar DTE y Enviar Facturas";
+            log.innerHTML += `<li class="text-blue-400 font-bold mt-2">=== TERMINADO ===</li>`;
+            log.innerHTML += `<li class="text-blue-400">Exitosas: ${procesadas} | Errores: ${errores}</li>`;
+            log.scrollTop = log.scrollHeight;
+            
+            document.getElementById('formFacturaMasiva').reset(); 
+            lblSeleccionados.textContent = "0 archivos seleccionados";
+            document.getElementById('boxOtroServicio').classList.add('hidden');
+            cargarDashboard(); 
+        });
+
+        document.getElementById('formCargaHistorica').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnGuardarHistorico');
+            btn.disabled = true; btn.textContent = "Guardando...";
+            try {
+                const email = document.getElementById('hCliente').value;
+                let urlArchivo = "#";
+                const archivo = document.getElementById('hArchivo').files[0];
+                if (archivo) {
+                    const fileName = `factura_historica_${email}_${Date.now()}.pdf`;
+                    await adminSupabase.storage.from('facturas').upload(fileName, archivo);
+                    urlArchivo = adminSupabase.storage.from('facturas').getPublicUrl(fileName).data.publicUrl;
+                }
+
+                const { error: dbError } = await adminSupabase.from('facturas').insert({
+                    email_cliente: email, mes_anio: document.getElementById('hMes').value,
+                    fecha_emision: document.getElementById('hFecha').value, valor_neto: document.getElementById('hNeto').value,
+                    valor_total: document.getElementById('hTotal').value, estado: document.getElementById('hEstado').value,
+                    url_archivo: urlArchivo
+                });
+                if (dbError) throw dbError;
+
+                alert("Factura histórica registrada con éxito (Sin notificar al cliente).");
+                document.getElementById('formCargaHistorica').reset();
+                cargarDashboard();
+            } catch(err) { alert("Error: " + err.message); } finally { btn.disabled = false; btn.textContent = "Guardar Factura Histórica"; }
+        });
+
+        async function cargarTicketsAdmin() {
+            const tabla = document.getElementById('tablaTicketsAdmin');
+            const msgVacio = document.getElementById('msgNoTicketsAdmin');
+            tabla.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-xs italic text-slate-400">Cargando...</td></tr>';
+            const { data: tickets, error } = await adminSupabase.from('tickets').select('*');
+            if (error || !tickets || tickets.length === 0) { tabla.innerHTML = ''; msgVacio.classList.remove('hidden'); return; }
+            msgVacio.classList.add('hidden');
+            tickets.sort((a, b) => {
+                if (a.estado === 'Abierto' && b.estado !== 'Abierto') return -1;
+                if (a.estado !== 'Abierto' && b.estado === 'Abierto') return 1;
+                const prioridades = { 'Alta': 3, 'Media': 2, 'Baja': 1 };
+                if ((prioridades[a.prioridad]||0) !== (prioridades[b.prioridad]||0)) return (prioridades[b.prioridad]||0) - (prioridades[a.prioridad]||0);
+                return new Date(b.created_at) - new Date(a.created_at);
+            });
+            tabla.innerHTML = '';
+            tickets.forEach(tk => {
+                const nombreEmpresa = mapaClientes[tk.email_cliente] || tk.email_cliente;
+                const fecha = new Date(tk.created_at).toLocaleDateString('es-CL');
+                let colorPrio = "bg-slate-100 text-slate-600";
+                if(tk.prioridad === 'Alta') colorPrio = "bg-red-100 text-red-700 border-red-200";
+                else if(tk.prioridad === 'Media') colorPrio = "bg-orange-100 text-orange-700 border-orange-200";
+                else if(tk.prioridad === 'Baja') colorPrio = "bg-blue-100 text-blue-700 border-blue-200";
+                const esAbierto = tk.estado === 'Abierto';
+                const claseFila = esAbierto ? "bg-white" : "bg-slate-50 opacity-60";
+                const badgeEstado = esAbierto ? `<span class="flex items-center gap-1.5 text-orange-600 font-bold"><span class="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span> Abierto</span>` : `<span class="text-green-600 font-bold">Resuelto</span>`;
+                const msgs = (tk.seguimiento && tk.seguimiento.length > 0) ? `<span class="ml-2 bg-blue-100 text-blue-700 text-[9px] px-1.5 py-0.5 rounded-full font-bold">${tk.seguimiento.length}</span>` : '';
+                tabla.innerHTML += `<tr class="border-b border-slate-100 transition hover:bg-slate-50 cursor-pointer ${claseFila}" onclick="abrirModalTicketAdmin(${tk.id})"><td class="px-4 py-4"><span class="px-2.5 py-1 rounded-md text-[10px] font-black uppercase border ${colorPrio}">${tk.prioridad}</span></td><td class="px-4 py-4"><p class="font-mono text-xs font-bold text-blue-600">#${tk.id}</p><p class="text-[9px] text-slate-400 mt-0.5">${fecha}</p></td><td class="px-4 py-4 text-xs font-bold text-[#1a1f2e]">${nombreEmpresa}</td><td class="px-4 py-4 text-xs text-slate-600 truncate max-w-xs"><strong>${tk.asunto}</strong> ${msgs}</td><td class="px-4 py-4 text-[10px] uppercase tracking-widest">${badgeEstado}</td><td class="px-4 py-4 text-right"><button class="text-[9px] font-bold px-3 py-1.5 rounded-lg border bg-white shadow-sm hover:bg-blue-600 hover:text-white transition">Abrir Chat</button></td></tr>`;
+            });
+        }
+
+        async function abrirModalTicketAdmin(id) {
+            document.getElementById('modal-ver-ticket-admin').classList.remove('hidden');
+            const { data: tk } = await adminSupabase.from('tickets').select('*').eq('id', id).single();
+            if(!tk) return;
+            document.getElementById('vtaTicketId').value = tk.id;
+            document.getElementById('vtaId').textContent = `#${tk.id}`;
+            document.getElementById('vtaEmpresa').textContent = mapaClientes[tk.email_cliente] || tk.email_cliente;
+            document.getElementById('vtaAsunto').textContent = tk.asunto;
+            document.getElementById('vtaDescripcion').textContent = tk.descripcion;
+            document.getElementById('vtaFecha').textContent = new Date(tk.created_at).toLocaleString('es-CL');
+            document.getElementById('vtaPrioridad').textContent = tk.prioridad;
+            document.getElementById('vtaPrioridad').className = `text-[10px] font-black uppercase px-2 py-1 rounded-md text-white ${tk.prioridad==='Alta'?'bg-red-500':tk.prioridad==='Media'?'bg-orange-500':'bg-blue-500'}`;
+            const est = document.getElementById('vtaEstado');
+            est.textContent = tk.estado;
+            est.className = `text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border ${tk.estado==='Abierto'?'bg-green-100 text-green-700 border-green-200':'bg-slate-100 text-slate-500 border-slate-200'} mb-2 inline-block`;
+            if(tk.url_archivo) { document.getElementById('vtaAdjuntoOriginal').classList.remove('hidden'); document.getElementById('vtaLinkAdjunto').href = tk.url_archivo; } else { document.getElementById('vtaAdjuntoOriginal').classList.add('hidden'); }
+            
+            const btnEst = document.getElementById('btnCambiarEstadoAdmin');
+            btnEst.textContent = tk.estado === 'Abierto' ? "Marcar como Resuelto" : "Reabrir Ticket";
+            btnEst.className = tk.estado === 'Abierto' ? "text-[10px] font-bold uppercase bg-red-100 text-red-700 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-200" : "text-[10px] font-bold uppercase bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-300";
+            btnEst.onclick = () => cambiarEstadoRapido(tk.id, tk.estado, tk.email_cliente, tk.asunto, mapaClientes[tk.email_cliente]);
+            
+            const contenedor = document.getElementById('vtaRespuestas');
+            contenedor.innerHTML = '';
+            if(tk.seguimiento && tk.seguimiento.length > 0) {
+                tk.seguimiento.forEach((msg, index) => {
+                    const esAdmin = msg.autor === 'Soporte Globalcom';
+                    const colorCaja = esAdmin ? 'bg-blue-50 border-blue-100' : 'bg-white border-slate-100';
+                    const colorTextoAutor = esAdmin ? 'text-blue-700' : 'text-slate-700';
+                    const adjHtml = msg.adjunto ? `<a href="${msg.adjunto}" target="_blank" class="inline-flex mt-3 items-center text-[10px] font-bold text-blue-600 bg-white border border-blue-100 px-3 py-1.5 rounded-lg"><svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Archivo Adjunto</a>` : '';
+                    
+                    // BOTÓN DE BORRADO SILENCIOSO (Solo para el Admin)
+                    const btnBorrar = `<button onclick="eliminarMensajeTicket(${tk.id}, ${index})" class="ml-3 text-red-400 hover:text-red-600 transition" title="Eliminar mensaje ocultamente"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`;
+
+                    contenedor.innerHTML += `
+                        <div class="${colorCaja} p-5 rounded-2xl shadow-sm border ml-${esAdmin?'8':'0'} mr-${esAdmin?'0':'8'}">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-black uppercase tracking-widest ${colorTextoAutor}">${msg.autor}</span>
+                                <div class="flex items-center">
+                                    <span class="text-[9px] text-slate-400 font-bold">${new Date(msg.fecha).toLocaleString('es-CL')}</span>
+                                    ${btnBorrar}
+                                </div>
+                            </div>
+                            <p class="text-sm text-slate-600 whitespace-pre-wrap">${msg.mensaje}</p>
+                            ${adjHtml}
+                        </div>`;
+                });
+            }
+            document.getElementById('vtaCajaRespuesta').style.display = tk.estado === 'Abierto' ? 'block' : 'none';
+        }
+
+        // NUEVA FUNCIÓN: Eliminar Mensaje Silenciosamente
+        window.eliminarMensajeTicket = async function(id, index) {
+            if(!confirm("¿Eliminar este mensaje permanentemente? El cliente no lo verá más y no dejará rastro.")) return;
+            try {
+                const { data: tk } = await adminSupabase.from('tickets').select('seguimiento').eq('id', id).single();
+                if(!tk) return;
+                let seg = tk.seguimiento || [];
+                seg.splice(index, 1); // Borramos el mensaje del array
+                await adminSupabase.from('tickets').update({ seguimiento: seg }).eq('id', id);
+                abrirModalTicketAdmin(id); // Recargar el modal
+            } catch (error) {
+                alert("Hubo un error al eliminar el mensaje: " + error.message);
+            }
+        };
+
+        document.getElementById('formResponderTicketAdmin').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnResponderAdmin'); btn.textContent = "Sincronizando..."; btn.disabled = true;
+            try {
+                const id = document.getElementById('vtaTicketId').value;
+                let urlAdjunto = null;
+                const file = document.getElementById('vtaNuevoAdjunto').files[0];
+                if(file){
+                    const ext = file.name.split('.').pop();
+                    const fileName = `adjunto_${Date.now()}.${ext}`;
+                    await adminSupabase.storage.from('tickets_adjuntos').upload(fileName, file);
+                    urlAdjunto = adminSupabase.storage.from('tickets_adjuntos').getPublicUrl(fileName).data.publicUrl;
+                }
+                const { data: tk } = await adminSupabase.from('tickets').select('seguimiento, email_cliente, asunto').eq('id', id).single();
+                let seg = tk.seguimiento || [];
+                const msj = document.getElementById('vtaNuevoMensaje').value;
+                seg.push({ autor: 'Soporte Globalcom', fecha: new Date().toISOString(), mensaje: msj, adjunto: urlAdjunto });
+                await adminSupabase.from('tickets').update({ seguimiento: seg }).eq('id', id);
+                
+                await adminSupabase.functions.invoke('notify-ticket-update', { body: { idTicket: id, emailCliente: tk.email_cliente, asunto: tk.asunto, mensaje: msj, autor: 'Soporte Globalcom', tipo: 'respuesta' } });
+                
+                document.getElementById('formResponderTicketAdmin').reset(); abrirModalTicketAdmin(id); cargarTicketsAdmin();
+            } catch (err) { alert("Error: " + err.message); } finally { btn.textContent = "Añadir Respuesta Técnica"; btn.disabled = false; }
+        });
+
+        async function cambiarEstadoRapido(id, estadoActual, emailCliente, asunto, empresa) {
+            const nuevoEstado = estadoActual === 'Abierto' ? 'Resuelto' : 'Abierto';
+            if (!confirm(`¿Marcar este ticket como ${nuevoEstado}?`)) return;
+            await adminSupabase.from('tickets').update({ estado: nuevoEstado }).eq('id', id);
+            
+            await adminSupabase.functions.invoke('notify-ticket-update', { body: { idTicket: id, emailCliente: emailCliente, empresa: empresa, asunto: asunto, nuevoEstado: nuevoEstado, autor: 'Soporte Globalcom', tipo: 'estado' } });
+            
+            abrirModalTicketAdmin(id); cargarTicketsAdmin();
+        }
+
+        async function gestionarCliente(rut) {
+            const modal = document.getElementById('modal-detalle'); modal.classList.remove('hidden');
+            const { data: cliente } = await adminSupabase.from('clientes').select('*').eq('rut', rut).single();
+            if(!cliente) return;
+            
+            document.getElementById('detEmpresa').textContent = cliente.empresa;
+            document.getElementById('detEmail').textContent = cliente.email;
+            document.getElementById('detIniciales').textContent = cliente.empresa.substring(0,1).toUpperCase();
+            
+            document.getElementById('editRutOriginal').value = cliente.rut; 
+            document.getElementById('editEmailOriginal').value = cliente.email;
+            
+            document.getElementById('eEmpresa').value = cliente.empresa || '';
+            document.getElementById('eRut').value = cliente.rut || '';
+            document.getElementById('eContacto').value = cliente.contacto || '';
+            document.getElementById('eContactoFact').value = cliente.contacto_facturacion || '';
+            document.getElementById('eEmailFact').value = cliente.correo_facturacion || '';
+            document.getElementById('eFecha').value = cliente.fecha_inicio || '';
+            document.getElementById('eDireccion').value = cliente.direccion || '';
+            document.getElementById('eDiasPago').value = cliente.dias_pago || 30; 
+            document.getElementById('eMeses').value = cliente.contrato_meses || 12;
+            document.getElementById('eIp').value = cliente.ip || '';
+            document.getElementById('ePlan').value = cliente.plan || 'Internet Dedicado 100 Mbps';
+            document.getElementById('eDashboard').value = cliente.url_dashboard || '';
+            document.getElementById('eUserNoc').value = cliente.user_noc || '';
+            document.getElementById('ePassNoc').value = cliente.pass_noc || '';
+            
+            const btnContrato = document.getElementById('btnVerContratoActual');
+            if (cliente.url_contrato && cliente.url_contrato !== '') {
+                btnContrato.href = cliente.url_contrato;
+                btnContrato.classList.remove('hidden');
+            } else {
+                btnContrato.classList.add('hidden');
+            }
+
+            actualizarBotonEstado(cliente.estado || 'Activo');
+
+            const { data: huellas } = await adminSupabase.from('registro_accesos').select('*').eq('email_cliente', cliente.email).order('created_at', { ascending: false }).limit(5);
+            const containerAcc = document.getElementById('listaAccesos'); containerAcc.innerHTML = '';
+            if (huellas && huellas.length > 0) {
+                huellas.forEach(h => {
+                    const fechaStr = new Date(h.created_at).toLocaleString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    const dispositivo = h.navegador.includes('Mobile') ? '📱 Móvil' : '💻 Escritorio';
+                    containerAcc.innerHTML += `<div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-slate-100 text-[11px]"><span class="text-slate-600 font-medium">${fechaStr}</span><span class="text-slate-400 font-bold uppercase">${dispositivo}</span></div>`;
+                });
+            } else { containerAcc.innerHTML = '<p class="text-[11px] text-slate-400 italic">Sin ingresos registrados.</p>'; }
+            
+            cargarFacturasDetalle(cliente.email, cliente.dias_pago || 30);
+        }
+
+        document.getElementById('formEditarCliente').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]'); const originalText = btn.textContent; btn.textContent = "Guardando..."; btn.disabled = true;
+            try {
+                const rutOriginal = document.getElementById('editRutOriginal').value;
+                let urlContratoNuevo = undefined;
+                const archivo = document.getElementById('eArchivoContrato').files[0];
+                
+                if (archivo) {
+                    const fName = `contrato_${rutOriginal}_${Date.now()}.pdf`;
+                    await adminSupabase.storage.from('contratos').upload(fName, archivo);
+                    urlContratoNuevo = adminSupabase.storage.from('contratos').getPublicUrl(fName).data.publicUrl;
+                }
+
+                const updateData = { 
+                    empresa: document.getElementById('eEmpresa').value, 
+                    rut: document.getElementById('eRut').value, 
+                    contacto: document.getElementById('eContacto').value, 
+                    contacto_facturacion: document.getElementById('eContactoFact').value, 
+                    correo_facturacion: document.getElementById('eEmailFact').value, 
+                    fecha_inicio: document.getElementById('eFecha').value,
+                    direccion: document.getElementById('eDireccion').value, 
+                    dias_pago: parseInt(document.getElementById('eDiasPago').value) || 30, 
+                    contrato_meses: document.getElementById('eMeses').value,
+                    ip: document.getElementById('eIp').value, 
+                    plan: document.getElementById('ePlan').value, 
+                    url_dashboard: document.getElementById('eDashboard').value, 
+                    user_noc: document.getElementById('eUserNoc').value, 
+                    pass_noc: document.getElementById('ePassNoc').value 
+                };
+                if (urlContratoNuevo) updateData.url_contrato = urlContratoNuevo;
+
+                await adminSupabase.from('clientes').update(updateData).eq('rut', rutOriginal);
+                alert("Cliente actualizado correctamente."); 
+                document.getElementById('modal-detalle').classList.add('hidden'); 
+                cargarListaClientes(); cargarDashboard();
+            } catch (err) { alert("Error: " + err.message); } finally { btn.textContent = originalText; btn.disabled = false; }
+        });
+
+        async function toggleEstadoCliente() {
+            const btn = document.getElementById('btnEstadoCliente'); const rutOriginal = document.getElementById('editRutOriginal').value;
+            const nuevoEstado = btn.dataset.estado === 'Activo' ? 'Suspendido' : 'Activo';
+            if(!confirm(`¿Desea cambiar el estado a ${nuevoEstado}?`)) return;
+            await adminSupabase.from('clientes').update({ estado: nuevoEstado }).eq('rut', rutOriginal);
+            actualizarBotonEstado(nuevoEstado); cargarListaClientes();
+        }
+
+        function actualizarBotonEstado(estado) {
+            const btn = document.getElementById('btnEstadoCliente'); btn.dataset.estado = estado;
+            btn.className = estado === 'Activo' ? "text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-700 transition shadow-sm border border-green-200" : "text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest bg-red-100 text-red-700 hover:bg-green-100 hover:text-green-700 transition shadow-sm border border-red-200";
+            btn.innerHTML = estado === 'Activo' ? `<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> ACTIVO</span>` : `<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500"></span> SUSPENDIDO</span>`;
+        }
+
+        async function cargarFacturasDetalle(email, diasPagoCliente) {
+            const contenedor = document.getElementById('listaFacturasDetalle'); contenedor.innerHTML = '<p class="text-xs italic">Cargando...</p>';
+            const { data: facturas } = await adminSupabase.from('facturas').select('*').eq('email_cliente', email).order('created_at', { ascending: false });
+            contenedor.innerHTML = '';
+            if (!facturas || facturas.length === 0) { contenedor.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-10">No hay facturas registradas.</p>'; return; }
+            const hoy = new Date();
+            facturas.forEach(fact => {
+                const fechaEmision = fact.fecha_emision ? new Date(fact.fecha_emision) : new Date(fact.created_at);
+                const fechaVencimiento = new Date(fechaEmision); fechaVencimiento.setDate(fechaVencimiento.getDate() + Number(diasPagoCliente)); fechaVencimiento.setHours(23, 59, 59, 999);
+                let badgeEstado = ''; let textoDias = '';
+                const diffTime = fechaVencimiento - hoy;
+                const diasRestantes = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                let estadoCalculado = fact.estado;
+                if (estadoCalculado !== 'Pagada') estadoCalculado = (diasRestantes < 0) ? 'Vencida' : 'Pendiente';
+
+                if (estadoCalculado === 'Pagada') {
+                    badgeEstado = `<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest border border-green-200">Pagada</span>`;
+                } else if (estadoCalculado === 'Vencida') {
+                    badgeEstado = `<span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest shadow-sm border border-red-200">Vencida</span>`;
+                    textoDias = `<p class="text-red-500 text-[10px] font-bold mt-1">⚠️ Atrasada por ${Math.abs(diasRestantes)} días</p>`;
+                } else {
+                    badgeEstado = `<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest border border-blue-200">Pendiente</span>`;
+                    textoDias = `<p class="text-blue-500 text-[10px] font-bold mt-1">Vence en ${diasRestantes} días</p>`;
+                }
+
+                const neto = fact.valor_neto || 0;
+                const total = fact.valor_total || 0;
+                const iva = total - neto;
+
+                const btnMarcar = estadoCalculado === 'Pagada' 
+                    ? `<button onclick="cambiarEstadoFactura('${fact.id}', 'Pendiente', '${email}', ${diasPagoCliente})" class="text-[10px] font-bold text-slate-500 hover:text-orange-500 transition underline tracking-widest">Marcar Pendiente</button>` 
+                    : `<button onclick="cambiarEstadoFactura('${fact.id}', 'Pagada', '${email}', ${diasPagoCliente})" class="text-[10px] font-bold text-slate-500 hover:text-green-600 transition underline tracking-widest">Marcar Pagada</button>`;
+                    
+                const btnDel = `<button onclick="eliminarFactura('${fact.id}', '${email}', ${diasPagoCliente})" class="p-2 text-red-500 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`;
+
+                contenedor.innerHTML += `
+                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-2">
+                    <div class="flex items-center justify-between mb-2">
+                        <div><span class="text-xs font-black uppercase text-[#1a1f2e]">${fact.mes_anio}</span>${textoDias}</div>
+                        <div>${badgeEstado}</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-2 text-[10px]">
+                        <div><p class="text-slate-400 font-bold uppercase tracking-widest">Emisión</p><p class="font-mono text-slate-700">${fechaEmision.toLocaleDateString('es-CL')}</p></div>
+                        <div><p class="text-slate-400 font-bold uppercase tracking-widest">Neto</p><p class="font-mono text-slate-700">${fm(neto)}</p></div>
+                        <div><p class="text-slate-400 font-bold uppercase tracking-widest">IVA</p><p class="font-mono text-slate-700">${fm(iva)}</p></div>
+                        <div><p class="text-slate-400 font-bold uppercase tracking-widest">Total</p><p class="font-mono font-black text-blue-600">${fm(total)}</p></div>
+                    </div>
+                    <div class="flex justify-between items-center mt-2">
+                        ${btnMarcar}
+                        <div class="flex gap-2">
+                            <a href="${fact.url_archivo}" target="_blank" class="p-2 text-blue-600 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></a>
+                            ${btnDel}
+                        </div>
+                    </div>
+                </div>`;
+            });
+        }
+
+        window.cambiarEstadoFactura = async function(id, nuevoEstado, email, diasPagoCliente) { await adminSupabase.from('facturas').update({ estado: nuevoEstado }).eq('id', id); cargarFacturasDetalle(email, diasPagoCliente); cargarDashboard(); }
+        window.eliminarFactura = async function(id, email, diasPagoCliente) { if (!confirm('¿Eliminar esta factura?')) return; await adminSupabase.from('facturas').delete().eq('id', id); cargarFacturasDetalle(email, diasPagoCliente); cargarDashboard(); }
+        window.cerrarSesion = async function() { await adminSupabase.auth.signOut(); window.location.href = 'index.html'; }
+    </script>
 </body>
 </html>
