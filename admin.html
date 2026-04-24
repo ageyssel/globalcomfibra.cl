@@ -143,9 +143,9 @@
 
 <div id="modal-ver-ticket-admin" class="hidden fixed inset-0 bg-[#1a1f2e]/80 backdrop-blur-md z-[100] flex justify-center items-center p-4">
 <div class="bg-white rounded-[2.5rem] w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl relative border border-slate-200">
-<button onclick="document.getElementById('modal-ver-ticket-admin').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-red-500 transition z-10"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg></button>
+<button onclick="document.getElementById('modal-ver-ticket-admin').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-red-500 transition z-10"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
 <div class="p-8 border-b border-slate-100 flex justify-between items-end"><div><div class="flex items-center mb-2"><span id="vtaPrioridad" class="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md text-white bg-blue-500">ALTA</span><span id="vtaId" class="text-xs font-bold text-slate-400 ml-2">#123</span><span id="vtaEmpresa" class="text-xs font-bold text-slate-700 ml-4 border-l border-slate-300 pl-4">Empresa</span></div><h3 id="vtaAsunto" class="text-2xl font-black text-[#1a1f2e]">Asunto</h3></div><div class="text-right"><span id="vtaEstado" class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border mb-2 inline-block">ABIERTO</span><br><button id="btnCambiarEstadoAdmin" class="text-[10px] font-bold uppercase tracking-widest bg-red-100 text-red-700 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-200 transition">Marcar como Resuelto</button></div></div>
-<div class="p-8 overflow-y-auto flex-grow space-y-6 bg-slate-50" id="vtaConversacion"><div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100"><div class="flex justify-between items-center mb-3"><span class="text-xs font-black uppercase text-slate-700 tracking-widest">Descripción del Cliente</span><span id="vtaFecha" class="text-[10px] text-slate-400 font-medium">--</span></div><p id="vtaDescripcion" class="text-sm text-slate-600 whitespace-pre-wrap">...</p><div id="vtaAdjuntoOriginal" class="mt-4 hidden"><a id="vtaLinkAdjunto" href="#" target="_blank" class="inline-flex items-center text-xs font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Archivo de Respaldo</a></div></div><div id="vtaRespuestas" class="space-y-4"></div></div>
+<div class="p-8 overflow-y-auto flex-grow space-y-6 bg-slate-50" id="vtaConversacion"><div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100"><div class="flex justify-between items-center mb-3"><span class="text-xs font-black uppercase text-slate-700 tracking-widest">Descripción del Cliente</span><span id="vtaFecha" class="text-[10px] text-slate-400 font-medium">--</span></div><p id="vtaDescripcion" class="text-sm text-slate-600 whitespace-pre-wrap">...</p><div id="vtaAdjuntoOriginal" class="mt-4 hidden"><a id="vtaLinkAdjunto" href="#" target="_blank" class="inline-flex items-center text-xs font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Archivo de Respaldo</a></div></div><div id="vtaRespuestas" class="space-y-4"></div></div>
 <div class="p-6 border-t border-slate-100 bg-white rounded-b-[2.5rem]" id="vtaCajaRespuesta"><form id="formResponderTicketAdmin" class="space-y-3"><input type="hidden" id="vtaTicketId"><textarea id="vtaNuevoMensaje" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Respuesta oficial del NOC..."></textarea><div class="flex justify-between items-center"><input type="file" id="vtaNuevoAdjunto" accept="image/*,.pdf,.doc,.docx" class="text-xs w-1/2 text-slate-500"><button type="submit" id="btnResponderAdmin" class="bg-blue-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-blue-700 transition shadow-md text-xs">Añadir Respuesta Técnica</button></div></form></div>
 </div>
 </div>
@@ -157,6 +157,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const ADMIN_EMAIL = 'contacto@globalcomfibra.cl'; 
 let mapaClientes = {}; 
+let mapaDiasPago = {};
 const fm = (v) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(v);
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -180,20 +181,42 @@ function toggleOtroServicio() {
     }
 }
 
+async function cargarListaClientes() {
+    const { data: clientes } = await adminSupabase.from('clientes').select('*').order('empresa', { ascending: true });
+    const tabla = document.getElementById('tablaClientesBody');
+    const selectH = document.getElementById('hCliente');
+    tabla.innerHTML = ''; selectH.innerHTML = '<option value="">Seleccione un cliente...</option>';
+    mapaClientes = {};
+    mapaDiasPago = {};
+    if(clientes){
+        clientes.forEach(c => {
+            mapaClientes[c.email] = c.empresa;
+            mapaDiasPago[c.email] = c.dias_pago || 30;
+            const statusDot = (!c.estado || c.estado === 'Activo') ? '<span class="w-2 h-2 rounded-full bg-green-500 inline-block mr-2"></span>' : '<span class="w-2 h-2 rounded-full bg-red-500 inline-block mr-2"></span>';
+            tabla.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-slate-100 last:border-0"><td class="px-4 py-4 font-bold text-[#1a1f2e] text-xs flex items-center">${statusDot} ${c.empresa}</td><td class="px-4 py-4 text-right"><button onclick="gestionarCliente('${c.rut}')" class="text-[9px] font-black uppercase bg-white border border-slate-200 text-slate-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 px-3 py-1.5 rounded-lg transition tracking-widest shadow-sm">Editar / Gestionar</button></td></tr>`;
+            selectH.innerHTML += `<option value="${c.email}">${c.empresa}</option>`;
+        });
+    }
+}
+
 async function cargarDashboard() {
-    const { data: facturas } = await adminSupabase.from('facturas').select('valor_total, estado, fecha_emision, clientes(dias_pago)');
+    if (Object.keys(mapaDiasPago).length === 0) await cargarListaClientes();
+    const { data: facturas, error } = await adminSupabase.from('facturas').select('*');
+    if (error) console.error("Error cargando facturas:", error);
+    
     let pagado = 0; let pendiente = 0; let vencido = 0;
     const hoy = new Date();
     
     if(facturas) {
         facturas.forEach(f => {
             const monto = Number(f.valor_total || 0);
-            if(f.estado === 'Pagada') pagado += monto;
-            else {
-                const diasPago = Number(f.clientes?.dias_pago || 30);
-                const fechaEmision = f.fecha_emision ? new Date(f.fecha_emision) : new Date();
+            if(f.estado === 'Pagada') {
+                pagado += monto;
+            } else {
+                const dp = Number(mapaDiasPago[f.email_cliente] || 30);
+                const fechaEmision = f.fecha_emision ? new Date(f.fecha_emision) : new Date(f.created_at || new Date());
                 const fechaVencimiento = new Date(fechaEmision);
-                fechaVencimiento.setDate(fechaVencimiento.getDate() + diasPago);
+                fechaVencimiento.setDate(fechaVencimiento.getDate() + dp);
                 fechaVencimiento.setHours(23, 59, 59, 999);
                 if (hoy > fechaVencimiento) vencido += monto; 
                 else pendiente += monto; 
@@ -205,22 +228,6 @@ async function cargarDashboard() {
     document.getElementById('statTotalVencido').textContent = fm(vencido);
     const { count: ticketsAlta } = await adminSupabase.from('tickets').select('*', { count: 'exact', head: true }).eq('prioridad', 'Alta').eq('estado', 'Abierto');
     document.getElementById('statTicketsAlta').textContent = ticketsAlta || 0;
-}
-
-async function cargarListaClientes() {
-    const { data: clientes } = await adminSupabase.from('clientes').select('*').order('empresa', { ascending: true });
-    const tabla = document.getElementById('tablaClientesBody');
-    const selectH = document.getElementById('hCliente');
-    tabla.innerHTML = ''; selectH.innerHTML = '<option value="">Seleccione un cliente...</option>';
-    mapaClientes = {};
-    if(clientes){
-        clientes.forEach(c => {
-            mapaClientes[c.email] = c.empresa;
-            const statusDot = (!c.estado || c.estado === 'Activo') ? '<span class="w-2 h-2 rounded-full bg-green-500 inline-block mr-2"></span>' : '<span class="w-2 h-2 rounded-full bg-red-500 inline-block mr-2"></span>';
-            tabla.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-slate-100 last:border-0"><td class="px-4 py-4 font-bold text-[#1a1f2e] text-xs flex items-center">${statusDot} ${c.empresa}</td><td class="px-4 py-4 text-right"><button onclick="gestionarCliente('${c.rut}')" class="text-[9px] font-black uppercase bg-white border border-slate-200 text-slate-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 px-3 py-1.5 rounded-lg transition tracking-widest shadow-sm">Editar / Gestionar</button></td></tr>`;
-            selectH.innerHTML += `<option value="${c.email}">${c.empresa}</option>`;
-        });
-    }
 }
 
 document.getElementById('formCrearCliente').addEventListener('submit', async (e) => {
@@ -437,7 +444,7 @@ async function abrirModalTicketAdmin(id) {
             const esAdmin = msg.autor === 'Soporte Globalcom';
             const colorCaja = esAdmin ? 'bg-blue-50 border-blue-100' : 'bg-white border-slate-100';
             const colorTextoAutor = esAdmin ? 'text-blue-700' : 'text-slate-700';
-            const adjHtml = msg.adjunto ? `<a href="${msg.adjunto}" target="_blank" class="inline-flex mt-3 items-center text-[10px] font-bold text-blue-600 bg-white border border-blue-100 px-3 py-1.5 rounded-lg"><svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Archivo Adjunto</a>` : '';
+            const adjHtml = msg.adjunto ? `<a href="${msg.adjunto}" target="_blank" class="inline-flex mt-3 items-center text-[10px] font-bold text-blue-600 bg-white border border-blue-100 px-3 py-1.5 rounded-lg"><svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Archivo Adjunto</a>` : '';
             contenedor.innerHTML += `<div class="${colorCaja} p-5 rounded-2xl shadow-sm border ml-${esAdmin?'8':'0'} mr-${esAdmin?'0':'8'}"><div class="flex justify-between items-center mb-2"><span class="text-xs font-black uppercase tracking-widest ${colorTextoAutor}">${msg.autor}</span><span class="text-[9px] text-slate-400 font-bold">${new Date(msg.fecha).toLocaleString('es-CL')}</span></div><p class="text-sm text-slate-600 whitespace-pre-wrap">${msg.mensaje}</p>${adjHtml}</div>`;
         });
     }
@@ -457,10 +464,15 @@ document.getElementById('formResponderTicketAdmin').addEventListener('submit', a
             await adminSupabase.storage.from('tickets_adjuntos').upload(fileName, file);
             urlAdjunto = adminSupabase.storage.from('tickets_adjuntos').getPublicUrl(fileName).data.publicUrl;
         }
-        const { data: tk } = await adminSupabase.from('tickets').select('seguimiento').eq('id', id).single();
+        const { data: tk } = await adminSupabase.from('tickets').select('seguimiento, email_cliente, asunto').eq('id', id).single();
         let seg = tk.seguimiento || [];
-        seg.push({ autor: 'Soporte Globalcom', fecha: new Date().toISOString(), mensaje: document.getElementById('vtaNuevoMensaje').value, adjunto: urlAdjunto });
+        const msj = document.getElementById('vtaNuevoMensaje').value;
+        seg.push({ autor: 'Soporte Globalcom', fecha: new Date().toISOString(), mensaje: msj, adjunto: urlAdjunto });
         await adminSupabase.from('tickets').update({ seguimiento: seg }).eq('id', id);
+        
+        // NOTIFICACIÓN DE RESPUESTA
+        await adminSupabase.functions.invoke('notify-ticket-update', { body: { idTicket: id, emailCliente: tk.email_cliente, asunto: tk.asunto, mensaje: msj, autor: 'Soporte Globalcom', tipo: 'respuesta' } });
+        
         document.getElementById('formResponderTicketAdmin').reset(); abrirModalTicketAdmin(id); cargarTicketsAdmin();
     } catch (err) { alert("Error: " + err.message); } finally { btn.textContent = "Añadir Respuesta Técnica"; btn.disabled = false; }
 });
@@ -469,7 +481,10 @@ async function cambiarEstadoRapido(id, estadoActual, emailCliente, asunto, empre
     const nuevoEstado = estadoActual === 'Abierto' ? 'Resuelto' : 'Abierto';
     if (!confirm(`¿Marcar este ticket como ${nuevoEstado}?`)) return;
     await adminSupabase.from('tickets').update({ estado: nuevoEstado }).eq('id', id);
-    if (nuevoEstado === 'Resuelto') await adminSupabase.functions.invoke('notify-ticket-resolved', { body: { emailCliente, empresa, asunto, idTicket: id } });
+    
+    // NOTIFICACIÓN DE CAMBIO DE ESTADO
+    await adminSupabase.functions.invoke('notify-ticket-update', { body: { idTicket: id, emailCliente: emailCliente, empresa: empresa, asunto: asunto, nuevoEstado: nuevoEstado, autor: 'Soporte Globalcom', tipo: 'estado' } });
+    
     abrirModalTicketAdmin(id); cargarTicketsAdmin();
 }
 
@@ -483,6 +498,7 @@ async function gestionarCliente(rut) {
     document.getElementById('detIniciales').textContent = cliente.empresa.substring(0,1).toUpperCase();
     
     document.getElementById('editRutOriginal').value = cliente.rut; 
+    document.getElementById('editEmailOriginal').value = cliente.email;
     
     document.getElementById('eEmpresa').value = cliente.empresa || '';
     document.getElementById('eRut').value = cliente.rut || '';
@@ -618,7 +634,7 @@ async function cargarFacturasDetalle(email, diasPagoCliente) {
                 <div>${badgeEstado}</div>
             </div>
             <div class="bg-white p-3 rounded-lg border border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-2 text-[10px]">
-                <div><p class="text-slate-400 font-bold uppercase tracking-widest">Emisión</p><p class="font-mono text-slate-700">${fEmision.toLocaleDateString('es-CL')}</p></div>
+                <div><p class="text-slate-400 font-bold uppercase tracking-widest">Emisión</p><p class="font-mono text-slate-700">${fechaEmision.toLocaleDateString('es-CL')}</p></div>
                 <div><p class="text-slate-400 font-bold uppercase tracking-widest">Neto</p><p class="font-mono text-slate-700">${fm(neto)}</p></div>
                 <div><p class="text-slate-400 font-bold uppercase tracking-widest">IVA</p><p class="font-mono text-slate-700">${fm(iva)}</p></div>
                 <div><p class="text-slate-400 font-bold uppercase tracking-widest">Total</p><p class="font-mono font-black text-blue-600">${fm(total)}</p></div>
@@ -634,19 +650,8 @@ async function cargarFacturasDetalle(email, diasPagoCliente) {
     });
 }
 
-window.cambiarEstadoFactura = async function(id, nuevoEstado, email, diasPagoCliente) { 
-    await adminSupabase.from('facturas').update({ estado: nuevoEstado }).eq('id', id); 
-    cargarFacturasDetalle(email, diasPagoCliente); 
-    cargarDashboard(); 
-}
-
-window.eliminarFactura = async function(id, email, diasPagoCliente) { 
-    if (!confirm('¿Eliminar esta factura?')) return; 
-    await adminSupabase.from('facturas').delete().eq('id', id); 
-    cargarFacturasDetalle(email, diasPagoCliente); 
-    cargarDashboard(); 
-}
-
+window.cambiarEstadoFactura = async function(id, nuevoEstado, email, diasPagoCliente) { await adminSupabase.from('facturas').update({ estado: nuevoEstado }).eq('id', id); cargarFacturasDetalle(email, diasPagoCliente); cargarDashboard(); }
+window.eliminarFactura = async function(id, email, diasPagoCliente) { if (!confirm('¿Eliminar esta factura?')) return; await adminSupabase.from('facturas').delete().eq('id', id); cargarFacturasDetalle(email, diasPagoCliente); cargarDashboard(); }
 window.cerrarSesion = async function() { await adminSupabase.auth.signOut(); window.location.href = 'index.html'; }
 </script>
 </body>
