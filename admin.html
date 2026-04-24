@@ -91,11 +91,12 @@
 
             <div class="space-y-8">
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                    <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-black text-[#1a1f2e]">Carga Inteligente de Facturas</h2></div>
-                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
-                        <p class="text-[10px] font-bold text-blue-800 uppercase tracking-widest mb-1">Extracción Automática DTE</p>
-                        <p class="text-xs text-blue-600">Nombre Obligatorio: <strong>RUT_MESAÑO.pdf</strong> (Ej: 76123456K_Abril2026.pdf).</p>
+                    <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-black text-[#1a1f2e]">Facturación Automatizada</h2></div>
+                    <div class="bg-green-50 border border-green-100 rounded-xl p-4 mb-6">
+                        <p class="text-[10px] font-bold text-green-800 uppercase tracking-widest mb-1">Carga Inteligente Gratis</p>
+                        <p class="text-[11px] text-green-600">Nombre Obligatorio: <strong>RUT_MESAÑO.pdf</strong> (Ej: 76123456K_Abril2026.pdf). El navegador extraerá el dinero automáticamente.</p>
                     </div>
+
                     <form id="formFacturaMasiva" class="space-y-4">
                         <div class="grid grid-cols-2 gap-4 mb-4">
                             <div>
@@ -108,18 +109,20 @@
                             </div>
                             <div id="boxOtroServicio" class="hidden">
                                 <label class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Especificar (Máx 20 chars)</label>
-                                <input type="text" id="fNombreOtro" maxlength="20" placeholder="Ej: Visita Técnica" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="fNombreOtro" maxlength="20" placeholder="Ej: Cambio Router" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                         </div>
+
                         <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition relative">
                             <input type="file" id="inpArchivosMasivos" accept=".pdf" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                            <svg class="w-10 h-10 mx-auto text-slate-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                            <p class="text-sm font-bold text-slate-600" id="lblArchivosSeleccionados">Selecciona hasta 20 PDFs</p>
+                            <svg class="w-10 h-10 mx-auto text-slate-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                            <p class="text-sm font-bold text-slate-600">Haz clic o arrastra PDFs aquí</p>
+                            <p class="text-xs text-slate-400 mt-1" id="lblArchivosSeleccionados">0 archivos seleccionados</p>
                         </div>
                         <div id="progresoFacturas" class="hidden space-y-2">
                             <ul id="logProcesamiento" class="h-32 overflow-y-auto bg-slate-900 text-green-400 font-mono text-[10px] p-3 rounded-lg mt-2"></ul>
                         </div>
-                        <button type="submit" id="btnProcesarMasivo" class="w-full bg-[#1a1f2e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition shadow-lg mt-2">Analizar DTE y Enviar Facturas</button>
+                        <button type="submit" id="btnProcesarMasivo" class="w-full bg-[#1a1f2e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition shadow-lg mt-2">Analizar y Enviar Facturas</button>
                     </form>
                 </div>
 
@@ -139,16 +142,16 @@
                     <form id="formCargaHistorica" class="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-100">
                         <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Cliente</label><select id="hCliente" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"><option value="">Seleccione un cliente...</option></select></div>
                         <div class="grid grid-cols-2 gap-4">
-                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Concepto / Mes</label><input type="text" id="hMes" required placeholder="Ej: Febrero 2026" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fecha de Emisión</label><input type="date" id="hFecha" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Concepto / Mes</label><input type="text" id="hMes" required placeholder="Ej: Febrero 2026" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none"></div>
+                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fecha de Emisión</label><input type="date" id="hFecha" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none"></div>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
-                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Valor Neto</label><input type="number" id="hNeto" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
-                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Valor Total</label><input type="number" id="hTotal" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
+                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Valor Neto</label><input type="number" id="hNeto" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none"></div>
+                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Valor Total</label><input type="number" id="hTotal" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none"></div>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
-                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Estado</label><select id="hEstado" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"><option value="Pagada">Pagada</option><option value="Pendiente">Pendiente / Vencida</option></select></div>
-                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">PDF (Opcional)</label><input type="file" id="hArchivo" accept=".pdf" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs outline-none focus:ring-2 focus:ring-blue-500"></div>
+                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Estado</label><select id="hEstado" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none"><option value="Pagada">Pagada</option><option value="Pendiente">Pendiente / Vencida</option></select></div>
+                            <div><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">PDF (Opcional)</label><input type="file" id="hArchivo" accept=".pdf" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs outline-none"></div>
                         </div>
                         <button type="submit" id="btnGuardarHistorico" class="w-full bg-slate-800 text-white font-bold py-3 rounded-lg hover:bg-slate-900 transition shadow-md mt-4">Guardar Factura Histórica</button>
                     </form>
@@ -172,53 +175,54 @@
     </main>
 
     <div id="modal-detalle" class="hidden fixed inset-0 bg-[#1a1f2e]/90 backdrop-blur-md z-[100] flex justify-center items-center p-4">
-        <div class="bg-white rounded-[2.5rem] w-full max-w-6xl max-h-[95vh] overflow-y-auto shadow-2xl relative">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-5xl max-h-[95vh] overflow-y-auto shadow-2xl relative border border-slate-200">
             <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition z-10"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
             <div class="p-10">
-                <div class="flex items-center justify-between mb-8 border-b border-slate-100 pb-6">
+                <div class="flex items-center justify-between mb-8">
                     <div class="flex items-center gap-6">
                         <div id="detIniciales" class="h-16 w-16 rounded-3xl bg-blue-600 text-white flex items-center justify-center text-2xl font-black shadow-lg">?</div>
-                        <div><h2 id="detEmpresa" class="text-3xl font-black text-[#1a1f2e]">Nombre Empresa</h2><p id="detEmail" class="text-slate-500 text-sm">email@cliente.cl</p></div>
+                        <div><h2 id="detEmpresa" class="text-3xl font-black text-[#1a1f2e]">Nombre Empresa</h2><p id="detEmail" class="text-slate-500 font-medium text-sm">correo@cliente.cl</p></div>
                     </div>
                     <button id="btnEstadoCliente" onclick="toggleEstadoCliente()" data-estado="Activo" class="text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest transition shadow-sm border border-transparent">Activo</button>
                 </div>
                 <div class="grid md:grid-cols-2 gap-10">
                     <div class="space-y-6">
-                        <h3 class="text-xs font-black uppercase tracking-widest text-blue-600">Configuración Completa</h3>
+                        <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Datos y Configuración Completa</h3>
                         <form id="formEditarCliente" class="bg-slate-50 rounded-3xl p-6 border border-slate-100 space-y-4">
                             <input type="hidden" id="editRutOriginal">
-                            <input type="hidden" id="editEmailOriginal">
+                            <input type="hidden" id="editEmailOriginal"> 
+                            
                             <div class="grid grid-cols-2 gap-3">
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Razón Social</label><input type="text" id="eEmpresa" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">RUT</label><input type="text" id="eRut" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Razón Social</label><input type="text" id="eEmpresa" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">RUT</label><input type="text" id="eRut" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Contacto Técnico</label><input type="text" id="eContacto" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Cont. Facturación</label><input type="text" id="eContactoFact" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Contacto Técnico</label><input type="text" id="eContacto" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Cont. Facturación</label><input type="text" id="eContactoFact" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Email Facturación</label><input type="email" id="eEmailFact" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Fecha Habilitación</label><input type="date" id="eFecha" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Email Facturación</label><input type="email" id="eEmailFact" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Fecha Habilitación</label><input type="date" id="eFecha" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
-                                <div class="col-span-2"><label class="text-[9px] font-bold text-slate-500 uppercase">Dirección Instalación</label><input type="text" id="eDireccion" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                <div class="col-span-2"><label class="text-[9px] font-bold text-slate-500 uppercase">Dirección Instalación</label><input type="text" id="eDireccion" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
                             </div>
                             <div class="grid grid-cols-3 gap-3">
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Días Pago</label><input type="number" id="eDiasPago" required class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Meses Contrato</label><input type="number" id="eMeses" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
-                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">IP Pública</label><input type="text" id="eIp" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Días Pago</label><input type="number" id="eDiasPago" required class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">Meses Contrato</label><input type="number" id="eMeses" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
+                                <div><label class="text-[9px] font-bold text-slate-500 uppercase">IP Pública</label><input type="text" id="eIp" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
                             </div>
-                            <div><label class="text-[9px] font-bold text-slate-500 uppercase">Plan</label><select id="ePlan" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"><option>Internet Dedicado 100 Mbps</option><option>Internet Dedicado 500 Mbps</option><option>Internet Dedicado 1 Gbps</option><option>Fibra Oscura / Capa 2</option></select></div>
+                            <div><label class="text-[9px] font-bold text-slate-500 uppercase">Plan</label><select id="ePlan" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"><option>Internet Dedicado 100 Mbps</option><option>Internet Dedicado 500 Mbps</option><option>Internet Dedicado 1 Gbps</option><option>Fibra Oscura / Capa 2</option></select></div>
                             <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 mt-2 space-y-2">
-                                <div><label class="text-[9px] font-bold text-blue-700 uppercase">Link NOC</label><input type="text" id="eDashboard" class="w-full bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                <div><label class="text-[9px] font-bold text-blue-700 uppercase">Link NOC</label><input type="text" id="eDashboard" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
                                 <div class="grid grid-cols-2 gap-3">
-                                    <div><label class="text-[9px] font-bold text-blue-700 uppercase">Usuario NOC</label><input type="text" id="eUserNoc" class="w-full bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
-                                    <div><label class="text-[9px] font-bold text-blue-700 uppercase">Clave NOC</label><input type="text" id="ePassNoc" class="w-full bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500"></div>
+                                    <div><label class="text-[9px] font-bold text-blue-700 uppercase">Usuario NOC</label><input type="text" id="eUserNoc" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
+                                    <div><label class="text-[9px] font-bold text-blue-700 uppercase">Clave NOC</label><input type="text" id="ePassNoc" class="w-full mt-1 bg-white border border-blue-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:ring-1"></div>
                                 </div>
                             </div>
                             <div class="border-t border-slate-200 pt-4 mt-2">
                                 <label class="text-[9px] font-bold text-slate-500 uppercase">Subir/Reemplazar Contrato PDF</label>
-                                <input type="file" id="eArchivoContrato" accept=".pdf" class="w-full mt-1 text-[10px] bg-white border border-slate-200 rounded-lg px-2 py-1 outline-none focus:ring-1 focus:ring-blue-500">
+                                <input type="file" id="eArchivoContrato" accept=".pdf" class="w-full mt-1 text-[10px] bg-white border border-slate-200 rounded-lg px-2 py-1">
                                 <a id="btnVerContratoActual" href="#" target="_blank" class="hidden mt-2 inline-block text-blue-600 text-[10px] font-bold underline hover:text-blue-800">Ver contrato actual cargado</a>
                             </div>
                             <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-blue-700 transition shadow-md mt-4">Guardar Cambios de Cliente</button>
@@ -229,8 +233,8 @@
                         </div>
                     </div>
                     <div class="space-y-6">
-                        <h3 class="text-xs font-black uppercase tracking-widest text-blue-600">Estado de Cuenta Dinámico</h3>
-                        <div id="listaFacturasDetalle" class="space-y-4 max-h-[600px] overflow-y-auto pr-2"></div>
+                        <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Historial de Facturas</h3>
+                        <div id="listaFacturasDetalle" class="space-y-3 max-h-[500px] overflow-y-auto pr-2"></div>
                     </div>
                 </div>
             </div>
@@ -487,18 +491,17 @@
             cargarDashboard(); 
         });
 
+        // CARGA MANUAL CORREGIDA CON #RUT
         document.getElementById('formCargaHistorica').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnGuardarHistorico');
             btn.disabled = true; btn.textContent = "Guardando...";
             try {
-                // Obtener RUT y Email para vincular correctamente y usar el filtro Inteligente
                 const opt = document.getElementById('hCliente').selectedOptions[0];
                 const rutCliente = opt.value;
                 const emailCliente = opt.dataset.email;
                 
-                // AQUÍ ESTÁ EL BLINDAJE PARA EL MULTI-EMPRESA MANUAL
-                let urlArchivo = `#RUT-${rutCliente}`;
+                let urlArchivo = `#RUT-${rutCliente}`; // <--- ETIQUETA OCULTA
                 
                 const archivo = document.getElementById('hArchivo').files[0];
                 if (archivo) {
@@ -582,7 +585,6 @@
                     const colorTextoAutor = esAdmin ? 'text-blue-700' : 'text-slate-700';
                     const adjHtml = msg.adjunto ? `<a href="${msg.adjunto}" target="_blank" class="inline-flex mt-3 items-center text-[10px] font-bold text-blue-600 bg-white border border-blue-100 px-3 py-1.5 rounded-lg"><svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> Archivo Adjunto</a>` : '';
                     
-                    // BOTÓN DE BORRADO SILENCIOSO
                     const btnBorrar = `<button onclick="eliminarMensajeTicket(${tk.id}, ${index})" class="ml-3 text-red-400 hover:text-red-600 transition" title="Eliminar mensaje permanentemente"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`;
 
                     contenedor.innerHTML += `
@@ -754,23 +756,48 @@
             btn.innerHTML = estado === 'Activo' ? `<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> ACTIVO</span>` : `<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500"></span> SUSPENDIDO</span>`;
         }
 
+        // CARGA DETALLE FACTURAS: Filtro Inteligente Reparado
         async function cargarFacturasDetalle(rut, email, diasPagoCliente) {
-            const contenedor = document.getElementById('listaFacturasDetalle'); contenedor.innerHTML = '<p class="text-xs italic">Cargando...</p>';
+            const contenedor = document.getElementById('listaFacturasDetalle'); 
+            contenedor.innerHTML = '<p class="text-xs italic">Cargando...</p>';
+            
+            const { data: empCheck } = await adminSupabase.from('clientes').select('rut').eq('email', email);
+            const esMulti = empCheck && empCheck.length > 1;
+
             const { data: facturasRaw } = await adminSupabase.from('facturas').select('*').eq('email_cliente', email).order('created_at', { ascending: false });
             
-            // EL FILTRO MAESTRO REPARADO: Funciona para PDFs y cargas manuales ocultas
-            const rutLimpio = rut.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-            const facturas = facturasRaw ? facturasRaw.filter(f => {
-                const archivoStr = f.url_archivo || "";
-                return archivoStr.toUpperCase().replace(/[^A-Z0-9]/g, '').includes(rutLimpio);
-            }) : [];
+            let facturas = facturasRaw || [];
+            
+            if (esMulti && rut) {
+                const rutLimpio = rut.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                const emailLimpio = email.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                
+                facturas = facturas.filter(f => {
+                    const archivoStr = (f.url_archivo || "").toUpperCase().replace(/[^A-Z0-9]/g, '');
+                    
+                    // 1. Archivo PDF con RUT o Carga manual con etiqueta #RUT
+                    if (archivoStr.includes(rutLimpio)) return true;
+                    
+                    // 2. Si es una carga manual antigua (#) o vacía
+                    if (f.url_archivo === "#" || f.url_archivo === "") return true;
+                    
+                    // 3. Rescate: Si la factura antigua se subió con el EMAIL en vez del RUT
+                    if (archivoStr.includes(emailLimpio) && !archivoStr.includes("RUT")) return true;
+
+                    return false;
+                });
+            }
             
             contenedor.innerHTML = '';
             if (!facturas || facturas.length === 0) { contenedor.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-10">No hay facturas registradas para esta empresa.</p>'; return; }
+            
             const hoy = new Date();
             facturas.forEach(fact => {
                 const fechaEmision = fact.fecha_emision ? new Date(fact.fecha_emision) : new Date(fact.created_at);
-                const fechaVencimiento = new Date(fechaEmision); fechaVencimiento.setDate(fechaVencimiento.getDate() + Number(diasPagoCliente)); fechaVencimiento.setHours(23, 59, 59, 999);
+                const fechaVencimiento = new Date(fechaEmision); 
+                fechaVencimiento.setDate(fechaVencimiento.getDate() + Number(diasPagoCliente)); 
+                fechaVencimiento.setHours(23, 59, 59, 999);
+                
                 let badgeEstado = ''; let textoDias = '';
                 const diffTime = fechaVencimiento - hoy;
                 const diasRestantes = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -795,12 +822,12 @@
                 const btnMarcar = estadoCalculado === 'Pagada' 
                     ? `<button onclick="cambiarEstadoFactura('${fact.id}', 'Pendiente', '${rut}', '${email}', ${diasPagoCliente})" class="text-[10px] font-bold text-slate-500 hover:text-orange-500 transition underline tracking-widest">Marcar Pendiente</button>` 
                     : `<button onclick="cambiarEstadoFactura('${fact.id}', 'Pagada', '${rut}', '${email}', ${diasPagoCliente})" class="text-[10px] font-bold text-slate-500 hover:text-green-600 transition underline tracking-widest">Marcar Pagada</button>`;
-                
-                // Carga histórica manual (Sin PDF) bloquea el botón
-                const btnDel = (fact.url_archivo && !fact.url_archivo.startsWith("#") && fact.url_archivo !== "")
-                    ? `<a href="${fact.url_archivo}" target="_blank" class="p-2 text-blue-600 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></a>
-                       <button onclick="eliminarFactura('${fact.id}', '${rut}', '${email}', ${diasPagoCliente})" class="p-2 text-red-500 hover:bg-white rounded-lg transition shadow-sm border border-slate-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`
-                    : `<button onclick="eliminarFactura('${fact.id}', '${rut}', '${email}', ${diasPagoCliente})" class="p-2 text-red-500 hover:bg-white rounded-lg transition shadow-sm border border-slate-100 w-full col-span-2 flex justify-center"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`;
+                    
+                const btnDescarga = (fact.url_archivo && !fact.url_archivo.startsWith("#") && fact.url_archivo !== "") 
+                    ? `<a href="${fact.url_archivo}" target="_blank" class="p-2 text-blue-600 hover:bg-white rounded-lg transition shadow-sm border border-slate-100" title="Ver PDF"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></a>`
+                    : `<button disabled class="p-2 text-slate-300 bg-slate-50 rounded-lg border border-slate-100 cursor-not-allowed" title="Sin archivo PDF"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg></button>`;
+
+                const btnDel = `<button onclick="eliminarFactura('${fact.id}', '${rut}', '${email}', ${diasPagoCliente})" class="p-2 text-red-500 hover:bg-white rounded-lg transition shadow-sm border border-slate-100" title="Eliminar"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`;
 
                 contenedor.innerHTML += `
                 <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-2">
@@ -817,6 +844,7 @@
                     <div class="flex justify-between items-center mt-2">
                         ${btnMarcar}
                         <div class="flex gap-2 w-auto">
+                            ${btnDescarga}
                             ${btnDel}
                         </div>
                     </div>
