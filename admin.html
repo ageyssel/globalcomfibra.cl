@@ -182,9 +182,12 @@
             <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition z-10"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg></button>
             
             <div class="p-10">
-                <div class="flex items-center gap-6 mb-8 border-b border-slate-100 pb-6">
-                    <div id="detIniciales" class="h-16 w-16 rounded-3xl bg-blue-600 text-white flex items-center justify-center text-2xl font-black shadow-lg">?</div>
-                    <div><h2 id="detEmpresa" class="text-3xl font-black text-[#1a1f2e]">Nombre Empresa</h2><p id="detEmail" class="text-slate-500 text-sm">email@cliente.cl</p></div>
+                <div class="flex items-center justify-between mb-8 border-b border-slate-100 pb-6">
+                    <div class="flex items-center gap-6">
+                        <div id="detIniciales" class="h-16 w-16 rounded-3xl bg-blue-600 text-white flex items-center justify-center text-2xl font-black shadow-lg">?</div>
+                        <div><h2 id="detEmpresa" class="text-3xl font-black text-[#1a1f2e]">Nombre Empresa</h2><p id="detEmail" class="text-slate-500 text-sm">email@cliente.cl</p></div>
+                    </div>
+                    <button id="btnEstadoCliente" onclick="toggleEstadoCliente()" data-estado="Activo" class="text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest transition shadow-sm border border-transparent">Activo</button>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-10">
