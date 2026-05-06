@@ -189,9 +189,12 @@
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Destinatario</label>
                             <select id="mailDestinatarioSelect" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500" onchange="toggleMailManual()">
                                 <option value="">Seleccione un cliente registrado...</option>
-                                <option value="MANUAL" class="font-bold text-blue-600">Ingresar correo manualmente...</option>
+                                <option value="MANUAL" class="font-bold text-blue-600">Ingresar correo(s) manualmente...</option>
                             </select>
-                            <input type="email" id="mailDestinatarioManual" placeholder="correo@ejemplo.com" class="hidden w-full mt-2 bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                            
+                            <!-- MODIFICACION MULTI-EMAIL MANUAL -->
+                            <input type="text" id="mailDestinatarioManual" placeholder="Ej: a@b.cl, c@d.cl (Separa con comas)" class="hidden w-full mt-2 bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                            <p id="mailManualHint" class="hidden text-[9px] text-slate-400 mt-1">Para enviar a múltiples destinatarios a la vez, sepáralos por comas (,).</p>
                         </div>
                     </div>
 
@@ -408,20 +411,23 @@
             await cargarDashboard(); 
         });
 
-        // ------------------ MODULO MAILING CON COBRANZA INTELIGENTE Y FIRMA CORPORATIVA ------------------
+        // ------------------ MODULO MAILING CON COBRANZA Y FIRMA MULTI-DESTINATARIO ------------------
 
         function toggleMailManual() {
             const val = document.getElementById('mailDestinatarioSelect').value;
             const inputManual = document.getElementById('mailDestinatarioManual');
+            const hintManual = document.getElementById('mailManualHint');
             const toolbar = document.getElementById('toolbarVariables');
 
             if (val === "MANUAL") {
                 inputManual.classList.remove('hidden');
+                hintManual.classList.remove('hidden');
                 inputManual.required = true;
                 toolbar.style.opacity = "0.3"; 
                 toolbar.style.pointerEvents = "none";
             } else {
                 inputManual.classList.add('hidden');
+                hintManual.classList.add('hidden');
                 inputManual.required = false;
                 toolbar.style.opacity = "1";
                 toolbar.style.pointerEvents = "auto";
@@ -439,7 +445,7 @@
         }
 
         let ultimoCorreoHTMLGenerado = "";
-        let ultimoDestinatario = "";
+        let ultimoDestinatario = [];
 
         async function previsualizarCorreo() {
             const btn = document.getElementById('btnPreview');
@@ -454,14 +460,18 @@
             
             try {
                 if (selectDest === "MANUAL") {
-                    ultimoDestinatario = document.getElementById('mailDestinatarioManual').value;
-                    if (!ultimoDestinatario) return alert("Por favor ingrese el correo manual.");
+                    const manualRaw = document.getElementById('mailDestinatarioManual').value;
+                    if (!manualRaw) return alert("Por favor ingrese al menos un correo manual.");
+                    
+                    ultimoDestinatario = manualRaw.split(',').map(e => e.trim()).filter(e => e !== "");
+                    if (ultimoDestinatario.length === 0) return alert("Por favor ingrese un correo válido.");
+
                     if(cuerpoRaw.includes('[') && cuerpoRaw.includes(']')) {
                         if(!confirm("Cuidado: Estás usando variables en un envío manual. Estas NO se reemplazarán. ¿Deseas continuar?")) return;
                     }
                 } else {
                     if (!selectDest) return alert("Seleccione un destinatario.");
-                    ultimoDestinatario = selectDest; 
+                    ultimoDestinatario = [selectDest]; 
                     
                     const cData = listaClientesCompleta.find(c => c.email === selectDest);
                     if (cData) {
@@ -550,7 +560,7 @@
                 if (depto.includes("Facturación")) headerColor = "#2563eb"; 
                 if (depto.includes("Soporte")) headerColor = "#f97316"; 
 
-                // NUEVA FIRMA CORPORATIVA CON LOGO GLOBALCOM Y SIN BOTON ARTIFICIAL
+                // NUEVA FIRMA CORPORATIVA CON LOGO GLOBALCOM
                 ultimoCorreoHTMLGenerado = `
                     <div style="font-family: Arial, sans-serif; color: #334155; max-w: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
                         <div style="background-color: ${headerColor}; padding: 20px; text-align: center;">
@@ -582,9 +592,8 @@
                     </div>
                 `;
 
-                // NOMBRE INVERTIDO Y FORMATEADO
                 document.getElementById('prevFrom').textContent = `Globalcom | ${depto} <contacto@globalcomfibra.cl>`;
-                document.getElementById('prevTo').textContent = ultimoDestinatario;
+                document.getElementById('prevTo').textContent = ultimoDestinatario.join(', ');
                 document.getElementById('prevSubject').textContent = asunto;
                 document.getElementById('prevHTMLContent').innerHTML = ultimoCorreoHTMLGenerado;
 
@@ -651,7 +660,7 @@
             
             tabla.innerHTML = ''; 
             selectH.innerHTML = '<option value="">Seleccione un cliente...</option>';
-            selectMailing.innerHTML = '<option value="">Seleccione un cliente registrado...</option><option value="MANUAL" class="font-bold text-blue-600">Ingresar correo manualmente...</option>';
+            selectMailing.innerHTML = '<option value="">Seleccione un cliente registrado...</option><option value="MANUAL" class="font-bold text-blue-600">Ingresar correo(s) manualmente...</option>';
             
             mapaClientes = {};
             mapaDiasPago = {};

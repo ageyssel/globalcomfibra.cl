@@ -13,6 +13,9 @@ serve(async (req) => {
   try {
     const { to, subject, htmlBody, deptoNombre } = await req.json()
 
+    // Soporte inteligente para 1 o múltiples destinatarios simultáneos
+    const destinatarios = Array.isArray(to) ? to : [to];
+
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -21,7 +24,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         from: `Globalcom | ${deptoNombre} <contacto@globalcomfibra.cl>`,
-        to: [to],
+        to: destinatarios,
         bcc: ['contacto@globalcomfibra.cl'],
         reply_to: 'contacto@globalcomfibra.cl',
         subject: subject,
