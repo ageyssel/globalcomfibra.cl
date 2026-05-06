@@ -20,12 +20,15 @@ serve(async (req) => {
         'Authorization': `Bearer ${EMAIL_API_KEY}`
       },
       body: JSON.stringify({
-        from: `${deptoNombre} | Globalcom <contacto@globalcomfibra.cl>`,
+        from: `Globalcom | ${deptoNombre} <contacto@globalcomfibra.cl>`,
         to: [to],
         bcc: ['contacto@globalcomfibra.cl'],
-        reply_to: 'contacto@globalcomfibra.cl', // <-- INSTRUCCIÓN ESTRICTA DE RESPUESTA
+        reply_to: 'contacto@globalcomfibra.cl',
         subject: subject,
-        html: htmlBody
+        html: htmlBody,
+        headers: {
+          "Disposition-Notification-To": "contacto@globalcomfibra.cl"
+        }
       })
     })
 

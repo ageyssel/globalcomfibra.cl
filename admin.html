@@ -305,7 +305,7 @@
                     <div class="space-y-6">
                         <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-2">
                             <h3 class="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Historial de Facturas</h3>
-                            <!-- BOTON AVISO COBRO -->
+                            <!-- BOTON AVISO COBRO AUTOMATICO -->
                             <button id="btnEnviarCobranza" onclick="enviarAvisoCobranza()" class="hidden text-[10px] font-bold bg-orange-100 text-orange-700 border border-orange-200 px-3 py-1.5 rounded-lg hover:bg-orange-200 transition shadow-sm flex items-center gap-2">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                 Enviar Aviso de Cobro
@@ -318,7 +318,7 @@
         </div>
     </div>
 
-    <!-- MODAL PREVISUALIZACION MAILING CON BOTON RESPONDER -->
+    <!-- MODAL PREVISUALIZACION MAILING CON FIRMA CORPORATIVA Y RUTAS CORREGIDAS -->
     <div id="modal-preview-email" class="hidden fixed inset-0 bg-[#1a1f2e]/90 backdrop-blur-md z-[200] flex justify-center items-center p-4">
         <div class="bg-white rounded-3xl w-full max-w-2xl shadow-2xl relative border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
             <div class="bg-[#1a1f2e] px-6 py-4 flex justify-between items-center">
@@ -408,7 +408,7 @@
             await cargarDashboard(); 
         });
 
-        // ------------------ MODULO MAILING CON COBRANZA INTELIGENTE Y BOTON RESPONDER ------------------
+        // ------------------ MODULO MAILING CON COBRANZA INTELIGENTE Y FIRMA CORPORATIVA ------------------
 
         function toggleMailManual() {
             const val = document.getElementById('mailDestinatarioSelect').value;
@@ -550,7 +550,7 @@
                 if (depto.includes("Facturación")) headerColor = "#2563eb"; 
                 if (depto.includes("Soporte")) headerColor = "#f97316"; 
 
-                // AQUI AGREGAMOS EL BOTON DE RESPONDER
+                // NUEVA FIRMA CORPORATIVA CON LOGO GLOBALCOM Y SIN BOTON ARTIFICIAL
                 ultimoCorreoHTMLGenerado = `
                     <div style="font-family: Arial, sans-serif; color: #334155; max-w: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
                         <div style="background-color: ${headerColor}; padding: 20px; text-align: center;">
@@ -561,20 +561,29 @@
                         <div style="padding: 30px; font-size: 14px; line-height: 1.6;">
                             ${cuerpoHTML}
                             
-                            <div style="text-align: center; margin-top: 35px; margin-bottom: 10px;">
-                                <a href="mailto:contacto@globalcomfibra.cl?subject=RE:%20${encodeURIComponent(asunto)}" style="background-color: ${headerColor}; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 13px; display: inline-block;">Responder a este mensaje</a>
-                            </div>
-
-                            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-                                <p style="margin: 0; font-size: 12px; color: #64748b;">Atentamente,</p>
-                                <p style="margin: 5px 0 0 0; font-weight: bold; color: #1e293b; font-size: 14px;">${depto}</p>
-                                <p style="margin: 2px 0 0 0; font-size: 12px; color: #64748b;">Globalcom Telecomunicaciones</p>
+                            <div style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="width: 130px; border-right: 2px solid #e2e8f0; padding-right: 15px; vertical-align: middle;">
+                                            <img src="https://globalcomfibra.cl/img/logo.png" alt="Globalcom" style="max-width: 100%; height: auto; display: block;">
+                                        </td>
+                                        <td style="padding-left: 15px; vertical-align: middle;">
+                                            <p style="margin: 0; font-weight: 900; color: #1e293b; font-size: 14px; text-transform: uppercase;">${depto}</p>
+                                            <p style="margin: 2px 0; font-size: 12px; color: ${headerColor}; font-weight: bold;">Globalcom Telecomunicaciones</p>
+                                            <p style="margin: 4px 0 0 0; font-size: 11px; color: #64748b;">
+                                                <a href="mailto:contacto@globalcomfibra.cl" style="color: #64748b; text-decoration: none;">contacto@globalcomfibra.cl</a><br>
+                                                <a href="https://globalcomfibra.cl" style="color: #64748b; text-decoration: none;">www.globalcomfibra.cl</a>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
                 `;
 
-                document.getElementById('prevFrom').textContent = `${depto} <contacto@globalcomfibra.cl>`;
+                // NOMBRE INVERTIDO Y FORMATEADO
+                document.getElementById('prevFrom').textContent = `Globalcom | ${depto} <contacto@globalcomfibra.cl>`;
                 document.getElementById('prevTo').textContent = ultimoDestinatario;
                 document.getElementById('prevSubject').textContent = asunto;
                 document.getElementById('prevHTMLContent').innerHTML = ultimoCorreoHTMLGenerado;
