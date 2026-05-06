@@ -13,31 +13,36 @@ serve(async (req) => {
   try {
     const { to, subject, htmlBody, deptoNombre } = await req.json()
 
-    // Soporte inteligente para 1 o múltiples destinatarios simultáneos
+    // Soporte inteligente: Convierte todo en un Array
     const destinatarios = Array.isArray(to) ? to : [to];
 
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${EMAIL_API_KEY}`
-      },
-      body: JSON.stringify({
+    // Crea un paquete de correos INDIVIDUALES para evitar el "Spam Look"
+    const emails = destinatarios.map(dest => ({
         from: `Globalcom | ${deptoNombre} <contacto@globalcomfibra.cl>`,
-        to: destinatarios,
-        bcc: ['contacto@globalcomfibra.cl'],
+        to: [dest],
+        bcc: ['contacto@globalcomfibra.cl'], // Tu respaldo
         reply_to: 'contacto@globalcomfibra.cl',
         subject: subject,
         html: htmlBody,
-        headers: {
-          "Disposition-Notification-To": "contacto@globalcomfibra.cl"
-        }
-      })
-    })
+        headers: { "Disposition-Notification-To": "contacto@globalcomfibra.cl" }
+    }));
 
-    if (!res.ok) {
-        const errText = await res.text()
-        throw new Error(`Error enviando correo custom: ${errText}`)
+    // Envía usando la Batch API de Resend (hasta 100 por segundo)
+    for (let i = 0; i < emails.length; i += 100) {
+        const batch = emails.slice(i, i + 100);
+        const res = await fetch('https://api.resend.com/emails/batch', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${EMAIL_API_KEY}`
+          },
+          body: JSON.stringify(batch)
+        });
+
+        if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(`Error enviando lote masivo: ${errText}`);
+        }
     }
 
     return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })

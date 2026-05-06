@@ -170,15 +170,26 @@
                         Central de Comunicaciones (Mailing)
                     </h2>
                 </div>
-                <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
-                    <p class="text-xs text-blue-800">Redacta correos con el formato corporativo de Globalcom. Puedes usar variables automáticas si seleccionas un cliente registrado.</p>
+                
+                <!-- GESTOR DE PLANTILLAS -->
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6 flex flex-col sm:flex-row items-end gap-4 shadow-sm">
+                    <div class="flex-grow w-full">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Mis Plantillas Guardadas</label>
+                        <select id="selPlantilla" onchange="cargarPlantilla()" class="w-full mt-1 bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">-- Redactar correo nuevo --</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <button type="button" onclick="guardarPlantilla()" class="w-full sm:w-auto bg-green-100 text-green-700 font-bold px-4 py-2 rounded-lg text-xs hover:bg-green-200 transition border border-green-200">Guardar Actual</button>
+                        <button type="button" onclick="eliminarPlantilla()" class="w-full sm:w-auto bg-red-100 text-red-700 font-bold px-4 py-2 rounded-lg text-xs hover:bg-red-200 transition border border-red-200">Eliminar</button>
+                    </div>
                 </div>
 
                 <form id="formComunicaciones" class="space-y-5">
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Departamento / Firma</label>
-                            <select id="mailDepto" class="w-full mt-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                            <select id="mailDepto" class="w-full mt-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="Gerencia Comercial">Gerencia Comercial (Ventas y Contratos)</option>
                                 <option value="Soporte Técnico - NOC">Soporte Técnico (NOC)</option>
                                 <option value="Facturación y Cobranza">Facturación y Cobranza</option>
@@ -192,9 +203,10 @@
                                 <option value="MANUAL" class="font-bold text-blue-600">Ingresar correo(s) manualmente...</option>
                             </select>
                             
-                            <!-- MODIFICACION MULTI-EMAIL MANUAL -->
-                            <input type="text" id="mailDestinatarioManual" placeholder="Ej: a@b.cl, c@d.cl (Separa con comas)" class="hidden w-full mt-2 bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
-                            <p id="mailManualHint" class="hidden text-[9px] text-slate-400 mt-1">Para enviar a múltiples destinatarios a la vez, sepáralos por comas (,).</p>
+                            <input type="text" id="mailDestinatarioManual" placeholder="Ej: a@b.cl, c@d.cl (Separa con comas)" class="hidden w-full mt-2 bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 shadow-inner">
+                            <p id="mailManualHint" class="hidden text-[10px] text-blue-600 mt-2 font-bold leading-tight bg-blue-50 p-2 rounded border border-blue-100">
+                                🔥 Modo Masivo Activado: Separa los correos por comas (,). Cada cliente recibirá un correo personalizado y oculto, sin ver a los demás destinatarios en la lista.
+                            </p>
                         </div>
                     </div>
 
@@ -399,6 +411,7 @@
         let mapaClientes = {}; 
         let mapaDiasPago = {};
         let listaClientesCompleta = []; 
+        let plantillasMail = [];
 
         const fm = (v) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(v);
 
@@ -406,10 +419,65 @@
             const { data: { session } } = await adminSupabase.auth.getSession();
             if (!session || session.user.email !== ADMIN_EMAIL) { window.location.href = 'login.html'; return; }
             document.getElementById('adminBody').classList.remove('hidden');
+            
+            if(localStorage.getItem('gc_plantillas')) {
+                plantillasMail = JSON.parse(localStorage.getItem('gc_plantillas'));
+                renderizarPlantillas();
+            }
+
             await cargarListaClientes();
             await cargarTicketsAdmin();
             await cargarDashboard(); 
         });
+
+        // ------------------ SISTEMA DE PLANTILLAS ------------------
+        function renderizarPlantillas() {
+            const sel = document.getElementById('selPlantilla');
+            sel.innerHTML = '<option value="">-- Redactar correo nuevo --</option>';
+            plantillasMail.forEach((p, i) => {
+                sel.innerHTML += `<option value="${i}">${p.nombre}</option>`;
+            });
+        }
+
+        window.guardarPlantilla = function() {
+            const asunto = document.getElementById('mailAsunto').value.trim();
+            const cuerpo = document.getElementById('mailCuerpo').value.trim();
+            if(!asunto || !cuerpo) return alert("Por favor escribe un asunto y un mensaje antes de guardar la plantilla.");
+            
+            const nombre = prompt("Asigna un nombre a esta plantilla (Ej: Prospección Clientes Nuevos):");
+            if(!nombre) return;
+
+            plantillasMail.push({ nombre, asunto, cuerpo });
+            localStorage.setItem('gc_plantillas', JSON.stringify(plantillasMail));
+            renderizarPlantillas();
+            document.getElementById('selPlantilla').value = plantillasMail.length - 1;
+            alert("Plantilla guardada exitosamente.");
+        }
+
+        window.cargarPlantilla = function() {
+            const index = document.getElementById('selPlantilla').value;
+            if(index === "") {
+                document.getElementById('mailAsunto').value = "";
+                document.getElementById('mailCuerpo').value = "";
+                return;
+            }
+            const p = plantillasMail[index];
+            document.getElementById('mailAsunto').value = p.asunto;
+            document.getElementById('mailCuerpo').value = p.cuerpo;
+        }
+
+        window.eliminarPlantilla = function() {
+            const index = document.getElementById('selPlantilla').value;
+            if(index === "") return alert("Selecciona una plantilla de la lista para poder eliminarla.");
+            if(!confirm("¿Estás seguro de que deseas eliminar esta plantilla de forma permanente?")) return;
+
+            plantillasMail.splice(index, 1);
+            localStorage.setItem('gc_plantillas', JSON.stringify(plantillasMail));
+            renderizarPlantillas();
+            document.getElementById('mailAsunto').value = "";
+            document.getElementById('mailCuerpo').value = "";
+        }
+
 
         // ------------------ MODULO MAILING CON COBRANZA Y FIRMA MULTI-DESTINATARIO ------------------
 
@@ -467,7 +535,7 @@
                     if (ultimoDestinatario.length === 0) return alert("Por favor ingrese un correo válido.");
 
                     if(cuerpoRaw.includes('[') && cuerpoRaw.includes(']')) {
-                        if(!confirm("Cuidado: Estás usando variables en un envío manual. Estas NO se reemplazarán. ¿Deseas continuar?")) return;
+                        if(!confirm("Cuidado: Estás usando variables en un envío manual masivo. Estas NO se reemplazarán. ¿Deseas continuar?")) return;
                     }
                 } else {
                     if (!selectDest) return alert("Seleccione un destinatario.");
@@ -503,7 +571,7 @@
                                 });
                             }
 
-                            // ORDENAR FACTURAS POR FECHA DE EMISIÓN (O CREACIÓN) DE MAS NUEVA A MAS ANTIGUA
+                            // ORDENAR FACTURAS POR FECHA DE EMISIÓN DE MAS NUEVA A MAS ANTIGUA
                             facturasFiltradas.sort((a, b) => new Date(b.fecha_emision || b.created_at) - new Date(a.fecha_emision || a.created_at));
 
                             const hoy = new Date();
