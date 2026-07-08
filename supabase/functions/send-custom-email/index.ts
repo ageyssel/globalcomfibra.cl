@@ -1,53 +1,12 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
-
-const EMAIL_API_KEY = Deno.env.get('RESEND_API_KEY')
-
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { audit, email, errorResponse, handleOptions, htmlEscape, HttpError, json, requireIdentity, sendEmail, text } from "../_shared/platform.ts";
 serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
-
+  const preflight = handleOptions(req); if (preflight) return preflight;
+  if (req.method !== "POST") return json(req,{error:"Método no permitido."},405);
   try {
-    const { to, subject, htmlBody, deptoNombre } = await req.json()
-
-    // Soporte inteligente: Convierte todo en un Array
-    const destinatarios = Array.isArray(to) ? to : [to];
-
-    // Crea un paquete de correos INDIVIDUALES para evitar el "Spam Look"
-    const emails = destinatarios.map(dest => ({
-        from: `Globalcom | ${deptoNombre} <contacto@globalcomfibra.cl>`,
-        to: [dest],
-        bcc: ['contacto@globalcomfibra.cl'], // Tu respaldo
-        reply_to: 'contacto@globalcomfibra.cl',
-        subject: subject,
-        html: htmlBody,
-        headers: { "Disposition-Notification-To": "contacto@globalcomfibra.cl" }
-    }));
-
-    // Envía usando la Batch API de Resend (hasta 100 por segundo)
-    for (let i = 0; i < emails.length; i += 100) {
-        const batch = emails.slice(i, i + 100);
-        const res = await fetch('https://api.resend.com/emails/batch', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${EMAIL_API_KEY}`
-          },
-          body: JSON.stringify(batch)
-        });
-
-        if (!res.ok) {
-            const errText = await res.text();
-            throw new Error(`Error enviando lote masivo: ${errText}`);
-        }
-    }
-
-    return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
-
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 })
-  }
-})
+    const { user, admin } = await requireIdentity(req,["superadmin","admin","finance","commercial","support"]); const body=await req.json(); const to=email(body.to ?? body.email); const subject=text(body.subject ?? body.asunto,180); const message=text(body.message ?? body.mensaje,5000);
+    if(subject.length<3 || message.length<1) throw new HttpError(400,"Asunto y mensaje son obligatorios.");
+    await sendEmail({to,subject,html:`<div style="font-family:Arial,sans-serif;line-height:1.6">${htmlEscape(message).replaceAll("\n","<br>")}</div>`});
+    await audit(admin,user,"send_email","communications",{record_type:"email",record_label:subject,to}); return json(req,{success:true});
+  } catch(cause){return errorResponse(req,cause);}
+});

@@ -1,21 +1,30 @@
 {
-  "name": "globalcom-portal",
-  "version": "0.1.0",
+  "name": "globalcom-fibra-platform",
+  "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
+    "test:e2e": "node scripts/smoke-test.mjs",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "security:audit": "npm audit --omit=dev"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.10.2",
-    "@supabase/supabase-js": "^2.103.0",
-    "next": "16.2.3",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "resend": "^6.11.0"
+    "@supabase/ssr": "0.12.0",
+    "@supabase/supabase-js": "2.110.1",
+    "next": "16.2.10",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "resend": "6.17.1",
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@opennextjs/cloudflare": "^1.19.1",
@@ -24,8 +33,14 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.3",
+    "eslint-config-next": "16.2.10",
+    "supabase": "^2.109.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.108.0"
+  },
+  "type": "module",
+  "overrides": {
+    "postcss": "8.5.10"
   }
 }
