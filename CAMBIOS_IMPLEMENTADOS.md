@@ -45,3 +45,12 @@
 - Siete pruebas automatizadas aprobadas.
 - Smoke HTTP aprobado en siete rutas públicas.
 - Dependencias de producción actualizadas; sin avisos altos o críticos en auditoría final.
+
+## Finanzas y comunicaciones v2
+
+- Recuperación de facturación de clientes con historial, carga masiva, estados de pago, referencia de pago, descarga y reenvío.
+- Nueva central de comunicaciones con plantillas compartidas, variables por cliente, firma Globalcom, historial y copia oculta corporativa.
+- Estado de cuenta consolidado por proveedor.
+- Registro de pagos parciales o múltiples con código `PAG-AAAA-NNNNNN`, método, operación bancaria, referencia contable, comprobante y reversa auditada.
+- Importación conciliable desde CSV/TSV exportado desde Excel o Registro de Compras.
+- Preparación de lotes de importación, detección de duplicados y creación opcional de proveedores.

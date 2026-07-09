@@ -4,15 +4,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { Building2, CircleDollarSign, Headphones, History, LayoutDashboard, LogOut, Menu, X } from "@/components/icons";
+import { Building2, CircleDollarSign, FileText, Headphones, History, LayoutDashboard, LogOut, Menu, Send, WalletCards, X } from "@/components/icons";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import type { AppRole } from "@/lib/types";
 
 const items: Array<{ href: string; label: string; icon: typeof LayoutDashboard; roles: AppRole[] }> = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, roles: ["superadmin","admin","finance","commercial","support","readonly"] },
   { href: "/admin/clientes", label: "Clientes", icon: Building2, roles: ["superadmin","admin","finance","commercial","support","readonly"] },
+  { href: "/admin/facturacion-clientes", label: "Facturación clientes", icon: FileText, roles: ["superadmin","admin","finance","readonly"] },
+  { href: "/admin/cuentas-por-pagar", label: "Cuentas por pagar", icon: WalletCards, roles: ["superadmin","admin","finance","readonly"] },
+  { href: "/admin/comunicaciones", label: "Comunicaciones", icon: Send, roles: ["superadmin","admin","finance","commercial","support","readonly"] },
   { href: "/admin/soporte", label: "Soporte", icon: Headphones, roles: ["superadmin","admin","support","readonly"] },
-  { href: "/admin/finanzas", label: "Finanzas", icon: CircleDollarSign, roles: ["superadmin","admin","finance"] },
+  { href: "/admin/finanzas", label: "Finanzas proveedores", icon: CircleDollarSign, roles: ["superadmin","admin","finance"] },
   { href: "/admin/auditoria", label: "Auditoría", icon: History, roles: ["superadmin","admin"] }
 ];
 
