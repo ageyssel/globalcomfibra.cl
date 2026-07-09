@@ -54,3 +54,18 @@
 - Registro de pagos parciales o múltiples con código `PAG-AAAA-NNNNNN`, método, operación bancaria, referencia contable, comprobante y reversa auditada.
 - Importación conciliable desde CSV/TSV exportado desde Excel o Registro de Compras.
 - Preparación de lotes de importación, detección de duplicados y creación opcional de proveedores.
+
+## Importación directa de historial DTE del SII
+
+- Carga nativa del archivo `.xlsx` original descargado desde el SII.
+- Lectura de bloques repetidos `TipoDTE` y consolidación de filas `DETALLE`.
+- Vista previa obligatoria antes de insertar.
+- Detección de duplicados contra el portal.
+- Creación opcional de proveedores faltantes.
+- Facturas tipo 30, 32, 33, 34, 45 y 46 generan cuentas por pagar.
+- Notas de crédito tipo 60 y 61 se registran como documentos financieros separados.
+- Las notas de crédito se asignan automáticamente a facturas abiertas del mismo proveedor, priorizando coincidencia exacta de saldo y cercanía de fecha.
+- Todo crédito no asignado queda como saldo disponible y también reduce la deuda consolidada del proveedor.
+- Las guías de despacho tipo 50 y 52 se excluyen de deuda.
+- Las facturas sin vencimiento pueden quedar pendientes de revisión o usar una regla configurable de días.
+- El saldo por factura muestra total, créditos aplicados, pagos y saldo restante.

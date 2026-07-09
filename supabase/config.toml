@@ -499,3 +499,9 @@ verify_jwt = true
 verify_jwt = true
 [functions.document-sign]
 verify_jwt = true
+
+[functions.import-sii-dte-excel]
+enabled = true
+verify_jwt = true
+import_map = "./functions/import-sii-dte-excel/deno.json"
+entrypoint = "./functions/import-sii-dte-excel/index.ts"

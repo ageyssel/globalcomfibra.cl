@@ -1,22 +1,24 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { CheckCircle2, Download, ExternalLink, FilePlus2, LoaderCircle, RefreshCw, Search, WalletCards } from "@/components/icons";
+import { CheckCircle2, Download, ExternalLink, LoaderCircle, RefreshCw, Search, WalletCards } from "@/components/icons";
 import { formatClp, formatDate } from "@/lib/format";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { SupplierSiiExcelImporter } from "@/components/admin/supplier-sii-excel-importer";
 
 type Account = {
   supplier_id: string; legal_name: string; trade_name: string | null; rut: string;
   contact_name: string | null; contact_email: string | null; payment_email: string | null;
   bank_name: string | null; bank_account_type: string | null; bank_account_number: string | null;
-  invoice_count: number; total_invoiced: number; total_paid: number; balance_due: number;
+  invoice_count: number; credit_note_count: number; total_invoiced: number; total_credits: number;
+  applied_credits: number; available_credit: number; total_paid: number; balance_due: number;
   overdue_balance: number; due_next_30_days: number; last_invoice_date: string | null;
 };
 
 type Invoice = {
   id: string; supplier_id: string; supplier_name: string; supplier_rut: string;
-  document_type: string; folio: string; issue_date: string; due_date: string;
-  total_amount: number; paid_amount: number; balance_due: number; status: string;
+  document_type: string; folio: string; issue_date: string; due_date: string | null;
+  total_amount: number; paid_amount: number; credited_amount: number; balance_due: number; status: string;
   storage_path: string | null; description: string | null;
 };
 
@@ -28,33 +30,12 @@ type Payment = {
   allocations: Array<{ invoice_id: string; document_type: string; folio: string; allocated_amount: number }>;
 };
 
-type ImportRow = Record<string, string>;
 
 const today = new Date().toISOString().slice(0, 10);
 const methods = ["Transferencia bancaria", "Pago automático", "Tarjeta", "Cheque", "Efectivo", "Compensación", "Nota de crédito", "Otro"];
 
 function statusName(value: string) {
   return ({ received: "Recibida", under_review: "En revisión", approved: "Aprobada", pending_payment: "Pendiente", partial: "Pago parcial", paid: "Pagada", overdue: "Vencida", observed: "Observada", rejected: "Rechazada", void: "Anulada" } as Record<string, string>)[value] ?? value;
-}
-
-function parseDelimited(text: string) {
-  const lines = text.replace(/^\uFEFF/, "").split(/\r?\n/).filter((line) => line.trim());
-  if (lines.length < 2) throw new Error("El archivo no contiene filas para importar.");
-  const delimiter = (lines[0].match(/;/g)?.length ?? 0) >= (lines[0].match(/,/g)?.length ?? 0) ? ";" : ",";
-  const parseLine = (line: string) => {
-    const values: string[] = []; let current = ""; let quoted = false;
-    for (let index = 0; index < line.length; index++) {
-      const char = line[index];
-      if (char === '"') {
-        if (quoted && line[index + 1] === '"') { current += '"'; index++; } else quoted = !quoted;
-      } else if (char === delimiter && !quoted) { values.push(current.trim()); current = ""; }
-      else current += char;
-    }
-    values.push(current.trim());
-    return values;
-  };
-  const headers = parseLine(lines[0]).map((value) => value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "_"));
-  return lines.slice(1).map((line) => Object.fromEntries(headers.map((header, index) => [header, parseLine(line)[index] ?? ""])));
 }
 
 export function SupplierAccountsManager() {
@@ -68,9 +49,6 @@ export function SupplierAccountsManager() {
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [paymentForm, setPaymentForm] = useState({ paymentDate: today, method: methods[0], bank: "", sourceAccount: "", operationNumber: "", accountingReference: "", providerReference: "", notes: "" });
   const [receipt, setReceipt] = useState<File | null>(null);
-  const [importRows, setImportRows] = useState<ImportRow[]>([]);
-  const [importFilename, setImportFilename] = useState("");
-  const [createMissing, setCreateMissing] = useState(true);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -105,10 +83,11 @@ export function SupplierAccountsManager() {
   const selectedTotal = selectedInvoices.reduce((sum, item) => sum + Number(item.balance_due), 0);
   const accountTotals = useMemo(() => accounts.reduce((result, item) => ({
     invoiced: result.invoiced + Number(item.total_invoiced),
+    credits: result.credits + Number(item.total_credits),
     paid: result.paid + Number(item.total_paid),
     pending: result.pending + Number(item.balance_due),
     overdue: result.overdue + Number(item.overdue_balance),
-  }), { invoiced: 0, paid: 0, pending: 0, overdue: 0 }), [accounts]);
+  }), { invoiced: 0, credits: 0, paid: 0, pending: 0, overdue: 0 }), [accounts]);
 
   function toggleInvoice(invoice: Invoice) {
     if (invoice.balance_due <= 0) return;
@@ -174,20 +153,6 @@ export function SupplierAccountsManager() {
     window.open(data.signedUrl, "_blank", "noopener,noreferrer");
   }
 
-  async function importData() {
-    if (!importRows.length) return;
-    setSaving(true); setError(""); setSuccess("");
-    const { data, error: invokeError } = await getSupabaseBrowserClient().functions.invoke("import-supplier-invoices", {
-      body: { rows: importRows, filename: importFilename, source: "csv", createMissingSuppliers: createMissing },
-    });
-    if (invokeError || data?.error) setError(data?.error ?? invokeError?.message ?? "No fue posible importar.");
-    else {
-      setSuccess(`Importación terminada: ${data.imported} nuevas, ${data.duplicates} duplicadas y ${data.rejected} rechazadas.`);
-      setImportRows([]); setImportFilename(""); await load();
-    }
-    setSaving(false);
-  }
-
   function exportStatement() {
     const rows = filteredInvoices.map((item) => [
       item.supplier_name, item.supplier_rut, item.document_type, item.folio, item.issue_date, item.due_date,
@@ -214,6 +179,7 @@ export function SupplierAccountsManager() {
     <div className="metric-grid">
       {[
         ["Total facturado", accountTotals.invoiced, "bg-slate-100 text-slate-700"],
+        ["Notas de crédito", accountTotals.credits, "bg-emerald-50 text-emerald-700"],
         ["Total pagado", accountTotals.paid, "bg-emerald-50 text-emerald-700"],
         ["Saldo pendiente", accountTotals.pending, "bg-blue-50 text-blue-700"],
         ["Saldo vencido", accountTotals.overdue, "bg-red-50 text-red-700"],
@@ -232,14 +198,14 @@ export function SupplierAccountsManager() {
           <div className="field"><label htmlFor="pay-supplier">Proveedor</label><select id="pay-supplier" value={supplierId} onChange={(event) => { setSupplierId(event.target.value); setSelected(new Set()); }}><option>Todos</option>{accounts.map((account) => <option key={account.supplier_id} value={account.supplier_id}>{account.legal_name}</option>)}</select></div>
         </div>
       </section>
-      <div className="table-wrap"><table className="data-table"><thead><tr><th></th><th>Proveedor</th><th>Documento</th><th>Fechas</th><th>Total / pagado / saldo</th><th>Estado</th><th></th></tr></thead><tbody>
+      <div className="table-wrap"><table className="data-table"><thead><tr><th></th><th>Proveedor</th><th>Documento</th><th>Fechas</th><th>Total / créditos / pagado / saldo</th><th>Estado</th><th></th></tr></thead><tbody>
         {filteredInvoices.length === 0 ? <tr><td colSpan={7} className="py-12 text-center text-slate-500">No hay facturas para los filtros seleccionados.</td></tr> :
         filteredInvoices.map((invoice) => <tr key={invoice.id}>
           <td><input type="checkbox" checked={selected.has(invoice.id)} disabled={invoice.balance_due <= 0} onChange={() => toggleInvoice(invoice)} aria-label={`Seleccionar factura ${invoice.folio}`}/></td>
           <td><strong className="block">{invoice.supplier_name}</strong><span className="font-mono text-xs text-slate-500">{invoice.supplier_rut}</span></td>
           <td><strong>{invoice.document_type}</strong><span className="block text-xs text-slate-500">Folio {invoice.folio}</span></td>
           <td><span className="block text-sm">Emisión: {formatDate(invoice.issue_date)}</span><span className="block text-xs text-slate-500">Vence: {formatDate(invoice.due_date)}</span></td>
-          <td><strong className="block">{formatClp(invoice.total_amount)}</strong><span className="block text-xs text-emerald-600">Pagado: {formatClp(invoice.paid_amount)}</span><span className={`block text-xs font-black ${invoice.balance_due ? "text-red-600" : "text-emerald-600"}`}>Saldo: {formatClp(invoice.balance_due)}</span></td>
+          <td><strong className="block">{formatClp(invoice.total_amount)}</strong><span className="block text-xs text-blue-700">Créditos: {formatClp(invoice.credited_amount)}</span><span className="block text-xs text-emerald-600">Pagado: {formatClp(invoice.paid_amount)}</span><span className={`block text-xs font-black ${invoice.balance_due ? "text-red-600" : "text-emerald-600"}`}>Saldo: {formatClp(invoice.balance_due)}</span></td>
           <td><span className={`badge ${invoice.status === "paid" ? "badge-green" : invoice.status === "overdue" ? "badge-red" : invoice.status === "partial" ? "badge-orange" : "badge-blue"}`}>{statusName(invoice.status)}</span></td>
           <td>{invoice.storage_path && <button className="button-secondary !w-auto !px-3 !py-2" onClick={() => void openStorage("supplier-invoices", invoice.storage_path)}><ExternalLink size={15}/></button>}</td>
         </tr>)}
@@ -257,19 +223,7 @@ export function SupplierAccountsManager() {
         <td><span className={`badge ${payment.reversed_at ? "badge-red" : "badge-green"}`}>{payment.reversed_at ? "Reversado" : "Vigente"}</span></td>
         <td><div className="flex gap-2">{payment.receipt_storage_path && <button className="button-secondary !w-auto !px-3 !py-2" onClick={() => void openStorage("payment-receipts", payment.receipt_storage_path)}><ExternalLink size={15}/></button>}{!payment.reversed_at && <button className="button-secondary !w-auto !px-3 !py-2" disabled={saving} onClick={() => void reversePayment(payment)}>Reversar</button>}</div></td>
       </tr>)}
-    </tbody></table></div> : <section className="surface p-6">
-      <div className="max-w-3xl">
-        <p className="eyebrow">Importación conciliable</p><h2 className="mt-2 text-2xl font-black">Cargar Registro de Compras o planilla Excel</h2>
-        <p className="mt-2 text-sm text-slate-600">Exporta el archivo como CSV o TSV. Columnas reconocidas: rut_proveedor, proveedor, tipo_documento, folio, fecha_emision, fecha_vencimiento, neto, exento, iva, otros_impuestos, total, mes_contable y descripcion.</p>
-        <div className="mt-5 field"><label htmlFor="supplier-import">Archivo CSV/TSV</label><input id="supplier-import" type="file" accept=".csv,.tsv,.txt" onChange={async (event) => {
-          const file = event.target.files?.[0]; if (!file) return;
-          try { setImportRows(parseDelimited(await file.text())); setImportFilename(file.name); setError(""); }
-          catch (cause) { setError(cause instanceof Error ? cause.message : "Archivo inválido."); setImportRows([]); }
-        }}/></div>
-        <label className="mt-4 flex items-center gap-2 text-sm font-bold"><input type="checkbox" checked={createMissing} onChange={(event) => setCreateMissing(event.target.checked)}/> Crear automáticamente proveedores que no existan</label>
-        {importRows.length > 0 && <><div className="mt-5 alert alert-success">{importRows.length} filas listas para validar. El sistema detectará duplicados antes de insertar.</div><div className="mt-4 max-h-80 overflow-auto rounded-xl border border-slate-200"><table className="data-table"><thead><tr>{Object.keys(importRows[0]).slice(0,8).map((key) => <th key={key}>{key}</th>)}</tr></thead><tbody>{importRows.slice(0,20).map((row,index) => <tr key={index}>{Object.keys(importRows[0]).slice(0,8).map((key) => <td key={key}>{row[key]}</td>)}</tr>)}</tbody></table></div><button className="button-primary mt-5 !w-auto" disabled={saving} onClick={() => void importData()}>{saving ? <><LoaderCircle className="animate-spin" size={17}/> Importando…</> : <><FilePlus2 size={17}/> Validar e importar</>}</button></>}
-      </div>
-    </section>}
+    </tbody></table></div> : <SupplierSiiExcelImporter onImported={load} />}
 
     {paymentOpen && <div className="modal-backdrop"><div className="modal-card !max-w-3xl"><div className="modal-header"><div><p className="eyebrow">Registro de pago</p><h2 className="mt-2 text-2xl font-black">{formatClp(selectedTotal)}</h2><p className="text-sm text-slate-500">{selectedInvoices.length} factura(s)</p></div><button className="button-secondary !w-auto" onClick={() => setPaymentOpen(false)}>Cerrar</button></div>
       <form className="modal-body grid gap-4" onSubmit={registerPayment}><div className="grid gap-4 md:grid-cols-2">
