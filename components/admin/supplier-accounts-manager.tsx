@@ -1,10 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { CheckCircle2, Download, ExternalLink, LoaderCircle, RefreshCw, Search, WalletCards } from "@/components/icons";
+import { CheckCircle2, ExternalLink, LoaderCircle, RefreshCw, Search, WalletCards } from "@/components/icons";
 import { formatClp, formatDate } from "@/lib/format";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { SupplierSiiExcelImporter } from "@/components/admin/supplier-sii-excel-importer";
+import {
+  FinancialPaymentReports,
+  type FinancialReportEntity,
+  type FinancialReportRow,
+} from "@/components/admin/financial-payment-reports";
 
 type Account = {
   supplier_id: string; legal_name: string; trade_name: string | null; rut: string;
@@ -30,6 +35,12 @@ type Payment = {
   allocations: Array<{ invoice_id: string; document_type: string; folio: string; allocated_amount: number }>;
 };
 
+type CreditNote = {
+  id: string; supplier_id: string; supplier_name: string; supplier_rut: string;
+  document_type: string; folio: string; issue_date: string; total_amount: number;
+  applied_amount: number; available_amount: number; status: string;
+};
+
 
 const today = new Date().toISOString().slice(0, 10);
 const methods = ["Transferencia bancaria", "Pago automático", "Tarjeta", "Cheque", "Efectivo", "Compensación", "Nota de crédito", "Otro"];
@@ -42,6 +53,7 @@ export function SupplierAccountsManager() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
+  const [creditNotes, setCreditNotes] = useState<CreditNote[]>([]);
   const [tab, setTab] = useState<"accounts" | "payments" | "import">("accounts");
   const [supplierId, setSupplierId] = useState("Todos");
   const [search, setSearch] = useState("");
@@ -58,16 +70,18 @@ export function SupplierAccountsManager() {
   const load = useCallback(async () => {
     setLoading(true); setError("");
     const supabase = getSupabaseBrowserClient();
-    const [a, i, p] = await Promise.all([
+    const [a, i, p, c] = await Promise.all([
       supabase.from("supplier_account_summary").select("*").order("legal_name"),
       supabase.from("supplier_invoice_summary").select("*").order("due_date", { ascending: true }),
       supabase.from("supplier_payment_history").select("*").order("payment_date", { ascending: false }).limit(1000),
+      supabase.from("supplier_credit_note_summary").select("id,supplier_id,supplier_name,supplier_rut,document_type,folio,issue_date,total_amount,applied_amount,available_amount,status").order("issue_date", { ascending: false }),
     ]);
-    const first = a.error || i.error || p.error;
+    const first = a.error || i.error || p.error || c.error;
     if (first) setError(first.message);
     setAccounts((a.data ?? []) as Account[]);
     setInvoices((i.data ?? []) as Invoice[]);
     setPayments((p.data ?? []) as Payment[]);
+    setCreditNotes((c.data ?? []) as CreditNote[]);
     setLoading(false);
   }, []);
 
@@ -224,23 +238,86 @@ export function SupplierAccountsManager() {
     window.open(data.signedUrl, "_blank", "noopener,noreferrer");
   }
 
-  function exportStatement() {
-    const rows = filteredInvoices.map((item) => [
-      item.supplier_name, item.supplier_rut, item.document_type, item.folio, item.issue_date, item.due_date,
-      item.total_amount, item.paid_amount, item.balance_due, statusName(item.status),
-    ]);
-    const csv = [["Proveedor","RUT","Tipo","Folio","Emisión","Vencimiento","Total","Pagado","Saldo","Estado"], ...rows]
-      .map((row) => row.map((value) => `"${String(value ?? "").replaceAll('"', '""')}"`).join(";")).join("\n");
-    const url = URL.createObjectURL(new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" }));
-    const link = document.createElement("a"); link.href = url; link.download = `estado-cuenta-proveedores-${today}.csv`; link.click(); URL.revokeObjectURL(url);
-  }
+  const supplierReportEntities = useMemo<FinancialReportEntity[]>(
+    () => accounts.map((account) => ({
+      id: account.supplier_id,
+      name: account.legal_name,
+      rut: account.rut,
+    })),
+    [accounts],
+  );
+
+  const supplierPaymentByInvoice = useMemo(() => {
+    const result = new Map<string, Payment>();
+    for (const payment of payments) {
+      if (payment.reversed_at) continue;
+      for (const allocation of payment.allocations) {
+        if (!result.has(allocation.invoice_id)) {
+          result.set(allocation.invoice_id, payment);
+        }
+      }
+    }
+    return result;
+  }, [payments]);
+
+  const supplierReportRows = useMemo<FinancialReportRow[]>(() => {
+    const invoiceRows = invoices.map((invoice) => {
+      const payment = supplierPaymentByInvoice.get(invoice.id);
+      return {
+        id: invoice.id,
+        entityId: invoice.supplier_id,
+        entityName: invoice.supplier_name,
+        entityRut: invoice.supplier_rut,
+        documentType: invoice.document_type,
+        folio: invoice.folio,
+        issueDate: invoice.issue_date,
+        dueDate: invoice.due_date,
+        paymentDate: payment?.payment_date ?? null,
+        total: Number(invoice.total_amount || 0),
+        credits: Number(invoice.credited_amount || 0),
+        paid: Number(invoice.paid_amount || 0),
+        balance: Number(invoice.balance_due || 0),
+        status: statusName(invoice.status),
+        method: payment?.method ?? null,
+        reference: payment?.operation_number ?? payment?.accounting_reference ?? null,
+        description: invoice.description,
+      };
+    });
+
+    const creditRows = creditNotes.map((credit) => ({
+      id: `credit-${credit.id}`,
+      entityId: credit.supplier_id,
+      entityName: credit.supplier_name,
+      entityRut: credit.supplier_rut,
+      documentType: credit.document_type,
+      folio: credit.folio,
+      issueDate: credit.issue_date,
+      dueDate: null,
+      paymentDate: null,
+      total: 0,
+      credits: Number(credit.total_amount || 0),
+      paid: 0,
+      balance: 0,
+      status: statusName(credit.status),
+      method: "Nota de crédito",
+      reference: null,
+      description: `Aplicado: ${formatClp(credit.applied_amount)} · Disponible: ${formatClp(credit.available_amount)}`,
+    }));
+
+    return [...invoiceRows, ...creditRows];
+  }, [invoices, creditNotes, supplierPaymentByInvoice]);
 
   return <div className="admin-page">
     <div className="admin-heading">
       <div><h1>Cuentas por pagar</h1><p>Estado de cuenta, pagos, comprobantes e importación masiva de proveedores.</p></div>
       <div className="flex flex-wrap gap-2">
         <button className="button-secondary !w-auto" onClick={() => void load()}><RefreshCw size={17}/> Actualizar</button>
-        <button className="button-secondary !w-auto" onClick={exportStatement}><Download size={17}/> Exportar estado</button>
+        <FinancialPaymentReports
+          title="Estado de pagos de proveedores"
+          entityLabel="Proveedor"
+          entities={supplierReportEntities}
+          rows={supplierReportRows}
+        />
         <button className="button-primary !w-auto" disabled={!selectedInvoices.length} onClick={() => setPaymentOpen(true)}><WalletCards size={17}/> Pagar seleccionadas ({selectedInvoices.length})</button>
       </div>
     </div>

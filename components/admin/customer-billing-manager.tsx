@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  Download,
   ExternalLink,
   FilePlus2,
   LoaderCircle,
@@ -12,6 +11,11 @@ import {
 } from "@/components/icons";
 import { formatClp, formatDate } from "@/lib/format";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
+import {
+  FinancialPaymentReports,
+  type FinancialReportEntity,
+  type FinancialReportRow,
+} from "@/components/admin/financial-payment-reports";
 
 type Client = {
   empresa: string;
@@ -602,63 +606,42 @@ export function CustomerBillingManager() {
     }
   }
 
-  function exportCsv() {
-    const rows = filtered.map((invoice) => {
+  const clientReportEntities = useMemo<FinancialReportEntity[]>(
+    () => clients.map((client) => ({
+      id: client.rut,
+      name: client.empresa,
+      rut: client.rut,
+    })),
+    [clients],
+  );
+
+  const clientReportRows = useMemo<FinancialReportRow[]>(
+    () => invoices.map((invoice) => {
       const client = resolveClient(invoice);
-      return [
-        client?.empresa,
-        client?.rut || invoice.cliente_rut,
-        invoice.folio,
-        invoice.mes_anio,
-        invoice.fecha_emision,
-        invoice.fecha_vencimiento,
-        invoice.valor_neto,
-        invoice.valor_total,
-        invoice.estado,
-        invoice.fecha_pago,
-        invoice.metodo_pago,
-        invoice.referencia_pago,
-      ];
-    });
-
-    const csv = [
-      [
-        "Cliente",
-        "RUT",
-        "Folio",
-        "Período",
-        "Emisión",
-        "Vencimiento",
-        "Neto",
-        "Total",
-        "Estado",
-        "Fecha pago",
-        "Método",
-        "Referencia",
-      ],
-      ...rows,
-    ]
-      .map((row) =>
-        row
-          .map(
-            (value) =>
-              `"${String(value ?? "").replaceAll('"', '""')}"`,
-          )
-          .join(";"),
-      )
-      .join("\n");
-
-    const url = URL.createObjectURL(
-      new Blob(["\uFEFF" + csv], {
-        type: "text/csv;charset=utf-8",
-      }),
-    );
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = `facturacion-clientes-${today}.csv`;
-    anchor.click();
-    URL.revokeObjectURL(url);
-  }
+      const total = Number(invoice.valor_total || 0);
+      const paid = invoice.estado === "Pagada" || Boolean(invoice.fecha_pago);
+      return {
+        id: invoice.id,
+        entityId: client?.rut ?? invoice.cliente_rut ?? invoice.email_cliente,
+        entityName: client?.empresa ?? "Cliente sin asignar",
+        entityRut: client?.rut ?? invoice.cliente_rut ?? "—",
+        documentType: "Factura cliente",
+        folio: invoice.folio ?? invoice.mes_anio,
+        issueDate: invoice.fecha_emision,
+        dueDate: invoice.fecha_vencimiento,
+        paymentDate: invoice.fecha_pago,
+        total,
+        credits: 0,
+        paid: paid ? total : 0,
+        balance: paid ? 0 : total,
+        status: invoice.estado,
+        method: invoice.metodo_pago,
+        reference: invoice.referencia_pago,
+        description: invoice.mes_anio,
+      };
+    }),
+    [invoices, resolveClient],
+  );
 
   return (
     <div className="admin-page">
@@ -677,12 +660,12 @@ export function CustomerBillingManager() {
           >
             <RefreshCw size={17} /> Actualizar
           </button>
-          <button
-            className="button-secondary !w-auto"
-            onClick={exportCsv}
-          >
-            <Download size={17} /> Exportar
-          </button>
+          <FinancialPaymentReports
+            title="Estado de pagos de clientes"
+            entityLabel="Cliente"
+            entities={clientReportEntities}
+            rows={clientReportRows}
+          />
         </div>
       </div>
 

@@ -79,3 +79,17 @@
 - Conserva código de pago, auditoría e historial.
 - El movimiento puede reversarse desde `Historial de pagos`.
 - Las facturas compensadas íntegramente con notas de crédito muestran el estado `Compensada con crédito`.
+
+## Reportes de estados de pago en PDF y Excel
+
+- Reportes disponibles en `Facturación de clientes` y `Cuentas por pagar`.
+- Exportación en formato PDF y Excel `.xlsx`.
+- Reporte general de todos los clientes o proveedores.
+- Reporte individual por cliente o proveedor.
+- Histórico completo o rango de fechas.
+- Rango configurable por fecha de emisión, vencimiento o pago.
+- Filtro adicional por estado del documento.
+- Totales de documentos, facturado, notas de crédito, pagado y saldo.
+- Detalle de folio, fechas, método, referencia y descripción.
+- En proveedores incluye las notas de crédito como movimientos propios y los créditos aplicados por factura.
+- Los archivos se generan en el navegador respetando los permisos y datos visibles del usuario autenticado.
