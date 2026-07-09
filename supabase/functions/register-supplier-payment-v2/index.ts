@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
-import { audit, errorResponse, handleOptions, HttpError, json, requireIdentity, text } from "../_shared/platform.ts";
+import { audit, authenticatedClient, errorResponse, handleOptions, HttpError, json, requireIdentity, text } from "../_shared/platform.ts";
 
 serve(async (req) => {
   const preflight = handleOptions(req);
@@ -8,6 +8,7 @@ serve(async (req) => {
 
   try {
     const { user, admin } = await requireIdentity(req, ["superadmin", "admin", "finance"]);
+    const auth = authenticatedClient(req);
     const body = await req.json();
     const amount = Number(body.amount);
     const allocations = Array.isArray(body.allocations) ? body.allocations : [];
@@ -24,7 +25,7 @@ serve(async (req) => {
       throw new HttpError(400, "La distribución del pago es inválida.");
     }
 
-    const { data, error } = await admin.rpc("register_supplier_payment_v2", {
+    const { data, error } = await auth.rpc("register_supplier_payment_v2", {
       p_payment_date: text(body.paymentDate, 10),
       p_amount: amount,
       p_method: text(body.method, 80),
@@ -39,7 +40,7 @@ serve(async (req) => {
       p_payment_code: text(body.paymentCode, 80) || null,
     });
 
-    if (error) throw error;
+    if (error) throw new HttpError(400, error.message || "No fue posible registrar el pago.");
     const result = Array.isArray(data) ? data[0] : data;
 
     await audit(admin, user, "register_payment", "finance", {

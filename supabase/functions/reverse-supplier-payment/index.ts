@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
-import { audit, errorResponse, handleOptions, HttpError, json, requireIdentity, text } from "../_shared/platform.ts";
+import { audit, authenticatedClient, errorResponse, handleOptions, HttpError, json, requireIdentity, text } from "../_shared/platform.ts";
 
 serve(async (req) => {
   const preflight = handleOptions(req);
@@ -8,6 +8,7 @@ serve(async (req) => {
 
   try {
     const { user, admin } = await requireIdentity(req, ["superadmin", "admin", "finance"]);
+    const auth = authenticatedClient(req);
     const body = await req.json();
     const paymentId = text(body.paymentId, 80);
     const reason = text(body.reason, 500);
@@ -15,11 +16,11 @@ serve(async (req) => {
     if (!paymentId) throw new HttpError(400, "Pago inválido.");
     if (reason.length < 5) throw new HttpError(400, "Debe informar el motivo de la reversa.");
 
-    const { error } = await admin.rpc("reverse_supplier_payment", {
+    const { error } = await auth.rpc("reverse_supplier_payment", {
       p_payment_id: paymentId,
       p_reason: reason,
     });
-    if (error) throw error;
+    if (error) throw new HttpError(400, error.message || "No fue posible reversar el pago.");
 
     await audit(admin, user, "reverse_payment", "finance", {
       record_type: "payments",
