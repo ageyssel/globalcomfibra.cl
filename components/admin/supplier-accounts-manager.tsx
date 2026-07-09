@@ -35,7 +35,7 @@ const today = new Date().toISOString().slice(0, 10);
 const methods = ["Transferencia bancaria", "Pago automático", "Tarjeta", "Cheque", "Efectivo", "Compensación", "Nota de crédito", "Otro"];
 
 function statusName(value: string) {
-  return ({ received: "Recibida", under_review: "En revisión", approved: "Aprobada", pending_payment: "Pendiente", partial: "Pago parcial", paid: "Pagada", overdue: "Vencida", observed: "Observada", rejected: "Rechazada", void: "Anulada" } as Record<string, string>)[value] ?? value;
+  return ({ received: "Recibida", under_review: "En revisión", approved: "Aprobada", pending_payment: "Pendiente", partial: "Pago parcial", paid: "Pagada", credit_compensated: "Compensada con crédito", overdue: "Vencida", observed: "Observada", rejected: "Rechazada", void: "Anulada" } as Record<string, string>)[value] ?? value;
 }
 
 export function SupplierAccountsManager() {
@@ -51,6 +51,7 @@ export function SupplierAccountsManager() {
   const [receipt, setReceipt] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [quickPayingId, setQuickPayingId] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -136,6 +137,76 @@ export function SupplierAccountsManager() {
     } finally { setSaving(false); }
   }
 
+  async function markInvoicePaid(invoice: Invoice) {
+    const balance = Number(invoice.balance_due);
+
+    if (!Number.isFinite(balance) || balance <= 0 || quickPayingId) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `¿Marcar como pagada la ${invoice.document_type} ${invoice.folio} de ${invoice.supplier_name} por ${formatClp(balance)}?\n\nSe registrará un pago completo con fecha de hoy.`
+    );
+
+    if (!confirmed) return;
+
+    setQuickPayingId(invoice.id);
+    setError("");
+    setSuccess("");
+
+    try {
+      const { data, error: invokeError } =
+        await getSupabaseBrowserClient().functions.invoke(
+          "register-supplier-payment-v2",
+          {
+            body: {
+              paymentDate: today,
+              amount: balance,
+              method: "Marcación rápida",
+              allocations: [
+                {
+                  invoiceId: invoice.id,
+                  amount: balance,
+                },
+              ],
+              notes:
+                "Factura marcada como pagada mediante el botón rápido de Cuentas por pagar.",
+            },
+          },
+        );
+
+      if (invokeError || data?.error) {
+        throw new Error(
+          data?.error ??
+            invokeError?.message ??
+            "No fue posible marcar la factura como pagada.",
+        );
+      }
+
+      setSelected((current) => {
+        const next = new Set(current);
+        next.delete(invoice.id);
+        return next;
+      });
+
+      setSuccess(
+        `${invoice.document_type} ${invoice.folio} marcada como pagada por ${formatClp(balance)}. Pago ${data.paymentCode}.`,
+      );
+
+      await load();
+    } catch (cause) {
+      setError(
+        cause instanceof Error
+          ? cause.message
+          : "No fue posible marcar la factura como pagada.",
+      );
+
+      await load();
+    } finally {
+      setQuickPayingId("");
+    }
+  }
+
   async function reversePayment(payment: Payment) {
     const reason = window.prompt(`Motivo para reversar ${payment.payment_code}:`);
     if (!reason) return;
@@ -207,7 +278,19 @@ export function SupplierAccountsManager() {
           <td><span className="block text-sm">Emisión: {formatDate(invoice.issue_date)}</span><span className="block text-xs text-slate-500">Vence: {formatDate(invoice.due_date)}</span></td>
           <td><strong className="block">{formatClp(invoice.total_amount)}</strong><span className="block text-xs text-blue-700">Créditos: {formatClp(invoice.credited_amount)}</span><span className="block text-xs text-emerald-600">Pagado: {formatClp(invoice.paid_amount)}</span><span className={`block text-xs font-black ${invoice.balance_due ? "text-red-600" : "text-emerald-600"}`}>Saldo: {formatClp(invoice.balance_due)}</span></td>
           <td><span className={`badge ${invoice.status === "paid" ? "badge-green" : invoice.status === "overdue" ? "badge-red" : invoice.status === "partial" ? "badge-orange" : "badge-blue"}`}>{statusName(invoice.status)}</span></td>
-          <td>{invoice.storage_path && <button className="button-secondary !w-auto !px-3 !py-2" onClick={() => void openStorage("supplier-invoices", invoice.storage_path)}><ExternalLink size={15}/></button>}</td>
+          <td><div className="flex flex-wrap gap-2">
+            {invoice.balance_due > 0 && <button
+              className="button-primary !w-auto !px-3 !py-2"
+              disabled={Boolean(quickPayingId) || saving}
+              onClick={() => void markInvoicePaid(invoice)}
+              title={`Registrar pago completo por ${formatClp(invoice.balance_due)}`}
+            >
+              {quickPayingId === invoice.id
+                ? <><LoaderCircle className="animate-spin" size={15}/> Marcando…</>
+                : <><CheckCircle2 size={15}/> Marcar pagada</>}
+            </button>}
+            {invoice.storage_path && <button className="button-secondary !w-auto !px-3 !py-2" onClick={() => void openStorage("supplier-invoices", invoice.storage_path)}><ExternalLink size={15}/></button>}
+          </div></td>
         </tr>)}
       </tbody></table></div>
       {selectedInvoices.length > 0 && <div className="sticky bottom-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-blue-200 bg-blue-50 p-4 shadow-lg"><div><strong>{selectedInvoices.length} factura(s) seleccionada(s)</strong><p className="text-sm text-slate-600">Pago total propuesto: {formatClp(selectedTotal)}</p></div><button className="button-primary !w-auto" onClick={() => setPaymentOpen(true)}>Registrar pago</button></div>}

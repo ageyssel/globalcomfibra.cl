@@ -69,3 +69,13 @@
 - Las guías de despacho tipo 50 y 52 se excluyen de deuda.
 - Las facturas sin vencimiento pueden quedar pendientes de revisión o usar una regla configurable de días.
 - El saldo por factura muestra total, créditos aplicados, pagos y saldo restante.
+
+## Marcación rápida de facturas de proveedores pagadas
+
+- Botón `Marcar pagada` disponible en cada factura con saldo pendiente.
+- Utiliza el saldo real después de notas de crédito y pagos parciales.
+- Solicita confirmación antes de registrar el movimiento.
+- Registra un pago completo con fecha del día y método `Marcación rápida`.
+- Conserva código de pago, auditoría e historial.
+- El movimiento puede reversarse desde `Historial de pagos`.
+- Las facturas compensadas íntegramente con notas de crédito muestran el estado `Compensada con crédito`.
