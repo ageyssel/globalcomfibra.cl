@@ -23,6 +23,10 @@ function parseEmails(value: unknown, fallback = ''): string[] {
   return unique
 }
 
+function normalizeRut(value: unknown): string {
+  return String(value ?? '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase()
+}
+
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
 }
@@ -41,13 +45,15 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { data: cliente, error: clienteError } = await supabaseAdmin
+    const { data: clientes, error: clientesError } = await supabaseAdmin
       .from('clientes')
-      .select('email, correo_facturacion, correos_facturacion')
+      .select('email, rut, correo_facturacion, correos_facturacion')
       .eq('email', portalEmail)
-      .maybeSingle()
 
-    if (clienteError) throw clienteError
+    if (clientesError) throw clientesError
+
+    const rutObjetivo = normalizeRut(rut)
+    const cliente = (clientes || []).find(item => normalizeRut(item.rut) === rutObjetivo) || clientes?.[0]
 
     const destinatarios = parseEmails(
       cliente?.correos_facturacion?.length ? cliente.correos_facturacion : cliente?.correo_facturacion,
@@ -124,7 +130,7 @@ serve(async (req) => {
     const payload = destinatarios.map(destinatario => ({
       from: 'Cobranza Globalcom <contacto@globalcomfibra.cl>',
       to: [destinatario],
-      bcc: destinatario === 'contacto@globalcomfibra.cl' ? [] : ['contacto@globalcomfibra.cl'],
+      ...(destinatario === 'contacto@globalcomfibra.cl' ? {} : { bcc: ['contacto@globalcomfibra.cl'] }),
       reply_to: 'contacto@globalcomfibra.cl',
       subject: `Aviso de Cobro y Estado de Cuenta - ${empresa}`,
       html: htmlContent
