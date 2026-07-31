@@ -41,15 +41,17 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { data: cliente, error: clienteError } = await supabaseAdmin
+    const { data: clientes, error: clientesError } = await supabaseAdmin
       .from('clientes')
       .select('email, correos_soporte')
       .eq('email', portalEmail)
-      .maybeSingle()
 
-    if (clienteError) throw clienteError
+    if (clientesError) throw clientesError
 
-    const destinatarios = parseEmails(cliente?.correos_soporte, portalEmail)
+    const correosSoporte = (clientes || []).flatMap(cliente =>
+      Array.isArray(cliente.correos_soporte) ? cliente.correos_soporte : []
+    )
+    const destinatarios = parseEmails(correosSoporte, portalEmail)
 
     let subject = ''
     let htmlContent = ''
@@ -85,7 +87,7 @@ serve(async (req) => {
     const payload = destinatarios.map(destinatario => ({
       from: 'Soporte Globalcom <soporte@globalcomfibra.cl>',
       to: [destinatario],
-      bcc: destinatario === 'contacto@globalcomfibra.cl' ? [] : ['contacto@globalcomfibra.cl'],
+      ...(destinatario === 'contacto@globalcomfibra.cl' ? {} : { bcc: ['contacto@globalcomfibra.cl'] }),
       reply_to: 'soporte@globalcomfibra.cl',
       subject,
       html: htmlContent
