@@ -1,0 +1,40 @@
+name: Apply multi-email admin module
+
+on:
+  push:
+    branches:
+      - mejora/globalcom-produccion
+    paths:
+      - .github/workflows/apply-multi-email.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-admin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: mejora/globalcom-produccion
+          fetch-depth: 0
+
+      - name: Link multi-email module
+        run: python3 scripts/apply-multi-email.py
+
+      - name: Validate diff
+        run: git diff --check
+
+      - name: Commit generated change
+        run: |
+          if git diff --quiet; then
+            echo "No changes required."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin.html
+          git commit -m "feat: activar múltiples correos en panel administrador"
+          git push origin HEAD:mejora/globalcom-produccion
