@@ -1,4 +1,4 @@
-name: Apply multi-email admin module
+name: Validate multi-email implementation
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 jobs:
-  patch-admin:
+  validate-and-patch:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
@@ -23,6 +23,23 @@ jobs:
 
       - name: Link multi-email module
         run: python3 scripts/apply-multi-email.py
+
+      - name: Validate browser JavaScript
+        run: node --check admin-multi-email.js
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Validate Supabase Edge Functions
+        run: |
+          deno check supabase/functions/create-client/index.ts
+          deno check supabase/functions/process-invoice/index.ts
+          deno check supabase/functions/send-invoice-notification/index.ts
+          deno check supabase/functions/send-custom-email/index.ts
+          deno check supabase/functions/send-collection-email/index.ts
+          deno check supabase/functions/notify-ticket-update/index.ts
 
       - name: Validate diff
         run: git diff --check
