@@ -1,11 +1,12 @@
 name: Validate multi-email implementation
 
 on:
-  push:
+  pull_request:
     branches:
-      - mejora/globalcom-produccion
+      - main
     paths:
       - .github/workflows/apply-multi-email.yml
+      - admin.html
       - admin-multi-email.js
       - scripts/apply-multi-email.py
       - supabase/functions/**/index.ts
@@ -13,20 +14,19 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  validate-and-patch:
+  validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout branch
+      - name: Checkout pull request
         uses: actions/checkout@v4
-        with:
-          ref: mejora/globalcom-produccion
-          fetch-depth: 0
 
-      - name: Link multi-email module
-        run: python3 scripts/apply-multi-email.py
+      - name: Confirm admin module is linked
+        run: |
+          python3 scripts/apply-multi-email.py
+          git diff --exit-code -- admin.html
 
       - name: Validate browser JavaScript
         run: node --check admin-multi-email.js
@@ -45,28 +45,5 @@ jobs:
           deno check supabase/functions/send-collection-email/index.ts
           deno check supabase/functions/notify-ticket-update/index.ts
 
-      - name: Validate diff
-        run: git diff --check
-
-      - name: Write validation evidence
-        run: |
-          mkdir -p validation
-          {
-            echo "validated_commit=${GITHUB_SHA}"
-            echo "validated_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-            echo "browser_javascript=ok"
-            echo "edge_functions=ok"
-            echo "git_diff_check=ok"
-          } > validation/multi-email-validation.txt
-
-      - name: Commit generated changes and evidence
-        run: |
-          if git diff --quiet; then
-            echo "No changes required."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add admin.html validation/multi-email-validation.txt
-          git commit -m "test: registrar validación multi-email"
-          git push origin HEAD:mejora/globalcom-produccion
+      - name: Validate whitespace
+        run: git diff --check origin/main...HEAD
