@@ -1355,5 +1355,6 @@
         window.eliminarFactura = async function(id, rut, email, diasPagoCliente) { if (!confirm('¿Eliminar esta factura?')) return; await adminSupabase.from('facturas').delete().eq('id', id); cargarFacturasDetalle(rut, email, diasPagoCliente); cargarDashboard(); }
         window.cerrarSesion = async function() { await adminSupabase.auth.signOut(); window.location.href = 'index.html'; }
     </script>
+    <script src="admin-multi-email.js?v=20260731"></script>
 </body>
 </html>
