@@ -6,47 +6,80 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+const MAX_EMAILS = 10
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i
+
+function parseEmails(value: unknown): string[] {
+  const source = Array.isArray(value) ? value : String(value ?? '').split(/[;,\n\s]+/)
+  const cleaned = source.map(item => String(item ?? '').trim().toLowerCase()).filter(Boolean)
+  const invalid = cleaned.filter(email => !EMAIL_RE.test(email))
+  if (invalid.length) throw new Error(`Correo(s) inválido(s): ${invalid.join(', ')}`)
+
+  const unique = [...new Set(cleaned)]
+  if (unique.length > MAX_EMAILS) throw new Error(`Máximo ${MAX_EMAILS} correos por categoría.`)
+  return unique
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error)
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   try {
-    const { email, password, clientData } = await req.json()
+    const { email, password, clientData = {} } = await req.json()
+    const portalEmail = String(email ?? '').trim().toLowerCase()
 
-    if (!password || password.length < 6) {
-        throw new Error("La contraseña debe tener al menos 6 caracteres.");
-    }
+    if (!EMAIL_RE.test(portalEmail)) throw new Error('El Email Portal no es válido.')
+    if (!password || password.length < 6) throw new Error('La contraseña debe tener al menos 6 caracteres.')
+
+    const correosGenerales = parseEmails(clientData.correos_generales)
+    const correosFacturacion = parseEmails(
+      clientData.correos_facturacion ?? clientData.correo_facturacion
+    )
+    const correosSoporte = parseEmails(clientData.correos_soporte)
 
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    // 1. Intentar crear la cuenta en Auth
-    const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
-      email: email,
-      password: password,
+    const { error: authError } = await supabaseAdmin.auth.admin.createUser({
+      email: portalEmail,
+      password,
       email_confirm: true
     })
 
-    // Si arroja error y NO es porque el correo ya existe, bloqueamos.
-    // Si el correo ya existe (already registered), lo dejamos pasar silenciosamente.
     if (authError && !authError.message.toLowerCase().includes('already')) {
-        throw new Error(`Error de cuenta: ${authError.message}`);
+      throw new Error(`Error de cuenta: ${authError.message}`)
     }
 
-    // 2. Guardar la nueva empresa en la base de datos
     const { error: dbError } = await supabaseAdmin.from('clientes').insert({
-      email: email,
-      ...clientData
+      email: portalEmail,
+      ...clientData,
+      correo_facturacion: correosFacturacion[0] || portalEmail,
+      correos_generales: correosGenerales,
+      correos_facturacion: correosFacturacion,
+      correos_soporte: correosSoporte
     })
 
-    if (dbError) {
-        throw new Error(`Error de base de datos: ${dbError.message}`)
-    }
+    if (dbError) throw new Error(`Error de base de datos: ${dbError.message}`)
 
-    return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
-
+    return new Response(JSON.stringify({
+      success: true,
+      destinatarios: {
+        generales: correosGenerales.length,
+        facturacion: correosFacturacion.length,
+        soporte: correosSoporte.length
+      }
+    }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 })
+    return new Response(JSON.stringify({ error: errorMessage(error) }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 400
+    })
   }
 })
