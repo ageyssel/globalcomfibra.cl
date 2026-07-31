@@ -6,6 +6,10 @@ on:
       - mejora/globalcom-produccion
     paths:
       - .github/workflows/apply-multi-email.yml
+      - admin-multi-email.js
+      - scripts/apply-multi-email.py
+      - supabase/functions/**/index.ts
+      - supabase/migrations/**
   workflow_dispatch:
 
 permissions:
