@@ -48,7 +48,18 @@ jobs:
       - name: Validate diff
         run: git diff --check
 
-      - name: Commit generated change
+      - name: Write validation evidence
+        run: |
+          mkdir -p validation
+          {
+            echo "validated_commit=${GITHUB_SHA}"
+            echo "validated_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "browser_javascript=ok"
+            echo "edge_functions=ok"
+            echo "git_diff_check=ok"
+          } > validation/multi-email-validation.txt
+
+      - name: Commit generated changes and evidence
         run: |
           if git diff --quiet; then
             echo "No changes required."
@@ -56,6 +67,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add admin.html
-          git commit -m "feat: activar múltiples correos en panel administrador"
+          git add admin.html validation/multi-email-validation.txt
+          git commit -m "test: registrar validación multi-email"
           git push origin HEAD:mejora/globalcom-produccion
