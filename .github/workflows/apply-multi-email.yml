@@ -8,6 +8,7 @@ on:
       - .github/workflows/apply-multi-email.yml
       - admin.html
       - admin-multi-email.js
+      - deno.json
       - scripts/apply-multi-email.py
       - supabase/functions/**/index.ts
       - supabase/migrations/**
@@ -22,6 +23,8 @@ jobs:
     steps:
       - name: Checkout pull request
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Confirm admin module is linked
         run: |
