@@ -1,0 +1,21 @@
+name: Repository inventory
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: List repository files
+        run: |
+          echo '=== FILES ==='
+          find . -path './.git' -prune -o -type f -print | sort
+          echo '=== HTML SCRIPT REFERENCES ==='
+          grep -RIn --include='*.html' -E '<script[^>]+src=|proveedor|supplier|facturaci[oó]n' . || true
