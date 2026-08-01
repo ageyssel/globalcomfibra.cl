@@ -1,0 +1,48 @@
+name: Apply admin generated changes
+
+on:
+  push:
+    branches:
+      - mejora/globalcom-produccion
+    paths:
+      - .github/workflows/apply-admin-generated.yml
+      - scripts/apply-multi-email.py
+      - admin-finance-dashboard.js
+      - admin-multi-email.js
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: mejora/globalcom-produccion
+          fetch-depth: 0
+
+      - name: Apply admin repair
+        run: python3 scripts/apply-multi-email.py
+
+      - name: Validate generated HTML
+        run: |
+          grep -q 'id="financeDashboard"' admin.html
+          grep -q 'id="cCorreosGenerales"' admin.html
+          grep -q 'id="eCorreosGenerales"' admin.html
+          grep -q 'admin-finance-dashboard.js' admin.html
+          git diff --check
+
+      - name: Commit admin HTML
+        run: |
+          if git diff --quiet -- admin.html; then
+            echo "No generated changes required."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin.html
+          git commit -m "fix: restaurar dashboard y ficha completa del cliente"
+          git push origin HEAD:mejora/globalcom-produccion
