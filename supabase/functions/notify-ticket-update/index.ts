@@ -1,80 +1,120 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// Asegúrate de tener configurada tu API Key de envío de correos (Resend, SendGrid, etc.) en Supabase
-const EMAIL_API_KEY = Deno.env.get('RESEND_API_KEY') // Cambia a tu proveedor si es necesario
+const EMAIL_API_KEY = Deno.env.get('RESEND_API_KEY')
+const MAX_EMAILS = 10
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i
+
+function parseEmails(value: unknown, fallback = ''): string[] {
+  const source = Array.isArray(value) ? value : String(value ?? '').split(/[;,\n\s]+/)
+  const cleaned = source.map(item => String(item ?? '').trim().toLowerCase()).filter(Boolean)
+  const invalid = cleaned.filter(email => !EMAIL_RE.test(email))
+  if (invalid.length) throw new Error(`Correo(s) inválido(s): ${invalid.join(', ')}`)
+
+  const unique = [...new Set(cleaned)]
+  if (unique.length > MAX_EMAILS) throw new Error(`Máximo ${MAX_EMAILS} destinatarios de soporte.`)
+  if (!unique.length && EMAIL_RE.test(fallback)) unique.push(fallback.toLowerCase())
+  if (!unique.length) throw new Error('El cliente no tiene correos de soporte válidos.')
+  return unique
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error)
+}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   try {
+    if (!EMAIL_API_KEY) throw new Error('RESEND_API_KEY no está configurada.')
+
     const { idTicket, emailCliente, empresa, asunto, mensaje, nuevoEstado, autor, tipo } = await req.json()
+    const portalEmail = String(emailCliente ?? '').trim().toLowerCase()
 
-    let subject = ""
-    let htmlContent = ""
+    const supabaseAdmin = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    )
 
-    // 1. TICKET NUEVO CREADO POR EL CLIENTE
+    const { data: clientes, error: clientesError } = await supabaseAdmin
+      .from('clientes')
+      .select('email, correos_soporte')
+      .eq('email', portalEmail)
+
+    if (clientesError) throw clientesError
+
+    const correosSoporte = (clientes || []).flatMap(cliente =>
+      Array.isArray(cliente.correos_soporte) ? cliente.correos_soporte : []
+    )
+    const destinatarios = parseEmails(correosSoporte, portalEmail)
+
+    let subject = ''
+    let htmlContent = ''
+
     if (tipo === 'creacion') {
-        subject = `[Ticket] Nuevo requerimiento de Soporte - ${asunto}`
-        htmlContent = `
-            <h2>Nuevo ticket de Soporte</h2>
-            <p><strong>Cliente:</strong> ${empresa || emailCliente}</p>
-            <p><strong>Asunto:</strong> ${asunto}</p>
-            <p><strong>Descripción:</strong><br>${mensaje}</p>
-            <hr>
-            <p style="font-size:11px; color:#666;">Este es un correo automático de Globalcom.</p>
-        `
-    } 
-    // 2. RESPUESTA AL TICKET (DE ADMIN O CLIENTE)
-    else if (tipo === 'respuesta') {
-        subject = `[Ticket #${idTicket}] Nueva respuesta de ${autor}`
-        htmlContent = `
-            <h2>Actualización en su ticket de Soporte</h2>
-            <p><strong>Asunto original:</strong> ${asunto}</p>
-            <p><strong>Respuesta de ${autor}:</strong><br>${mensaje}</p>
-            <hr>
-            <p style="font-size:11px; color:#666;">Revise su panel privado para responder.</p>
-        `
-    } 
-    // 3. CAMBIO DE ESTADO (EJ: RESUELTO)
-    else if (tipo === 'estado') {
-        subject = `[Ticket #${idTicket}] Cambio de Estado: ${nuevoEstado}`
-        htmlContent = `
-            <h2>Actualización de Estado de Ticket</h2>
-            <p>El ticket <strong>${asunto}</strong> ha sido marcado como: <strong style="color:blue;">${nuevoEstado}</strong> por ${autor}.</p>
-            <hr>
-            <p style="font-size:11px; color:#666;">Plataforma de Soporte Técnico Globalcom.</p>
-        `
+      subject = `[Ticket] Nuevo requerimiento de Soporte - ${asunto}`
+      htmlContent = `
+        <h2>Nuevo ticket de Soporte</h2>
+        <p><strong>Cliente:</strong> ${empresa || portalEmail}</p>
+        <p><strong>Asunto:</strong> ${asunto}</p>
+        <p><strong>Descripción:</strong><br>${mensaje}</p>
+        <hr>
+        <p style="font-size:11px;color:#666;">Este es un correo automático de Globalcom.</p>`
+    } else if (tipo === 'respuesta') {
+      subject = `[Ticket #${idTicket}] Nueva respuesta de ${autor}`
+      htmlContent = `
+        <h2>Actualización en su ticket de Soporte</h2>
+        <p><strong>Asunto original:</strong> ${asunto}</p>
+        <p><strong>Respuesta de ${autor}:</strong><br>${mensaje}</p>
+        <hr>
+        <p style="font-size:11px;color:#666;">Revise su panel privado para responder.</p>`
+    } else if (tipo === 'estado') {
+      subject = `[Ticket #${idTicket}] Cambio de Estado: ${nuevoEstado}`
+      htmlContent = `
+        <h2>Actualización de Estado de Ticket</h2>
+        <p>El ticket <strong>${asunto}</strong> ha sido marcado como: <strong style="color:blue;">${nuevoEstado}</strong> por ${autor}.</p>
+        <hr>
+        <p style="font-size:11px;color:#666;">Plataforma de Soporte Técnico Globalcom.</p>`
+    } else {
+      throw new Error('Tipo de notificación de ticket no reconocido.')
     }
 
-    // LÓGICA DE ENVÍO DE CORREOS
-    const res = await fetch('https://api.resend.com/emails', {
+    const payload = destinatarios.map(destinatario => ({
+      from: 'Soporte Globalcom <soporte@globalcomfibra.cl>',
+      to: [destinatario],
+      ...(destinatario === 'contacto@globalcomfibra.cl' ? {} : { bcc: ['contacto@globalcomfibra.cl'] }),
+      reply_to: 'soporte@globalcomfibra.cl',
+      subject,
+      html: htmlContent
+    }))
+
+    const res = await fetch('https://api.resend.com/emails/batch', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${EMAIL_API_KEY}`
       },
-      body: JSON.stringify({
-        from: 'Soporte Globalcom <soporte@globalcomfibra.cl>',
-        to: [emailCliente],
-        bcc: ['contacto@globalcomfibra.cl'], // <--- COPIA OCULTA RESPALDO
-        subject: subject,
-        html: htmlContent
-      })
+      body: JSON.stringify(payload)
     })
 
-    if (!res.ok) {
-        const errText = await res.text()
-        throw new Error(`Error del servidor de correos: ${errText}`)
-    }
+    if (!res.ok) throw new Error(`Error del servidor de correos: ${await res.text()}`)
 
-    return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
-
+    return new Response(JSON.stringify({
+      success: true,
+      enviados: destinatarios.length,
+      destinatarios
+    }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 })
+    return new Response(JSON.stringify({ error: errorMessage(error) }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 400
+    })
   }
 })
