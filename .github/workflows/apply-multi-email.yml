@@ -67,3 +67,11 @@ jobs:
 
       - name: Validate whitespace
         run: git diff --check origin/main...HEAD
+
+      - name: Confirm regression repair scope
+        run: |
+          grep -q 'finClientTotal' admin.html
+          grep -q 'finSupplierTotal' admin.html
+          grep -q 'eEmailPortal' admin.html
+          grep -q 'eUserNoc' admin.html
+          grep -q 'ePassNoc' admin.html
