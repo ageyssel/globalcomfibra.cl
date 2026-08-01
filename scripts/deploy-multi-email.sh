@@ -5,6 +5,7 @@ PROJECT_REF="${SUPABASE_PROJECT_REF:-eejsdoeuovcrjicrgxmo}"
 SUPABASE=(npx --yes supabase@latest)
 FUNCTIONS=(
   create-client
+  manage-client-profile
   process-invoice
   send-invoice-notification
   send-custom-email
@@ -28,7 +29,7 @@ echo "Vinculando el repositorio al proyecto remoto..."
 "${SUPABASE[@]}" link --project-ref "${PROJECT_REF}"
 
 echo
-echo "Aplicando migración de base de datos..."
+echo "Aplicando migraciones de base de datos..."
 "${SUPABASE[@]}" db push
 
 echo
@@ -39,5 +40,5 @@ for function_name in "${FUNCTIONS[@]}"; do
 done
 
 echo
-echo "Despliegue multi-email completado."
+echo "Despliegue administrativo completado."
 echo "No se modificó la rama main ni se ejecutó el deploy del sitio web."
