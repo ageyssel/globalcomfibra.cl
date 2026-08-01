@@ -6,7 +6,7 @@ const corsHeaders = {
 }
 
 const EMAIL_API_KEY = Deno.env.get('RESEND_API_KEY')
-const MAX_EMAILS = 10
+const MAX_EMAILS = 30
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i
 
 function parseEmails(value: unknown): string[] {
