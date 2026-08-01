@@ -10,6 +10,7 @@ on:
       - admin-multi-email.js
       - deno.json
       - scripts/apply-multi-email.py
+      - scripts/deploy-multi-email.sh
       - supabase/functions/**/index.ts
       - supabase/migrations/**
   workflow_dispatch:
@@ -33,6 +34,9 @@ jobs:
 
       - name: Validate browser JavaScript
         run: node --check admin-multi-email.js
+
+      - name: Validate deployment script
+        run: bash -n scripts/deploy-multi-email.sh
 
       - name: Install Deno
         uses: denoland/setup-deno@v2
