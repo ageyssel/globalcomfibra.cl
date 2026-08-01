@@ -2,6 +2,7 @@
 set -euo pipefail
 
 PROJECT_REF="${SUPABASE_PROJECT_REF:-eejsdoeuovcrjicrgxmo}"
+SUPABASE=(npx --yes supabase@latest)
 FUNCTIONS=(
   create-client
   process-invoice
@@ -13,21 +14,28 @@ FUNCTIONS=(
 
 echo "Proyecto Supabase: ${PROJECT_REF}"
 echo "Verificando Supabase CLI..."
-npx --yes supabase@latest --version
+"${SUPABASE[@]}" --version
+
+echo
+echo "Verificando sesión de Supabase..."
+if ! "${SUPABASE[@]}" projects list >/dev/null 2>&1; then
+  echo "No existe una sesión activa. Se abrirá el inicio de sesión de Supabase."
+  "${SUPABASE[@]}" login
+fi
 
 echo
 echo "Vinculando el repositorio al proyecto remoto..."
-npx --yes supabase@latest link --project-ref "${PROJECT_REF}"
+"${SUPABASE[@]}" link --project-ref "${PROJECT_REF}"
 
 echo
 echo "Aplicando migración de base de datos..."
-npx --yes supabase@latest db push
+"${SUPABASE[@]}" db push
 
 echo
 echo "Desplegando funciones Edge..."
 for function_name in "${FUNCTIONS[@]}"; do
   echo "- ${function_name}"
-  npx --yes supabase@latest functions deploy "${function_name}" --project-ref "${PROJECT_REF}"
+  "${SUPABASE[@]}" functions deploy "${function_name}" --project-ref "${PROJECT_REF}"
 done
 
 echo
